@@ -1,0 +1,11 @@
+!new DocBook ('DocBook_35')
+!new Book ('Book_36')
+!@Book_36.title := 'SWE Foundations'
+!new Article ('Article_37')
+!@Article_37.title := 'SWE Applications'
+!new Article ('Article_38')
+!@Article_38.title := 'DB Foundations'
+!new Author ('Author_39')
+!@Author_39.name := 'Hal'
+!new Author ('Author_40')
+!@Author_40.name := 'Jan'

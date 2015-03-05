@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bibtex="http://bibtex.com">
+  <bibtex:Person name="Jan" inProc="/2 /5 /4" proc="/1"/>
+  <bibtex:Proc title="DB Applications" yearE="2002" yearP="2003" Editorship="/0">
+    <file href="#/3"/>
+  </bibtex:Proc>
+  <bibtex:InProc title="SWE Applications" booktitle="DB Applications" Authorship="/0">
+    <file href="#/3"/>
+  </bibtex:InProc>
+  <bibtex:BibTeXFile name="bibfile_ada">
+    <FileEntry xsi:type="bibtex:InProc" href="#/2"/>
+    <FileEntry xsi:type="bibtex:InProc" href="#/5"/>
+    <FileEntry xsi:type="bibtex:InProc" href="#/4"/>
+    <FileEntry xsi:type="bibtex:Proc" href="#/1"/>
+  </bibtex:BibTeXFile>
+  <bibtex:InProc title="SWE Foundations" booktitle="DB Applications" Authorship="/0">
+    <file href="#/3"/>
+  </bibtex:InProc>
+  <bibtex:InProc title="DB Foundations" booktitle="DB Applications" Authorship="/0">
+    <file href="#/3"/>
+  </bibtex:InProc>
+</xmi:XMI>

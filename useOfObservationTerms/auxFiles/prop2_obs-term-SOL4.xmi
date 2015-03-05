@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bibtex="http://bibtex.com">
+  <bibtex:Person name="Eve" inProc="/5" proc="/3"/>
+  <bibtex:Person name="Hal" inProc="/8 /7" proc="/4"/>
+  <bibtex:Person name="Jan" proc="/4"/>
+  <bibtex:Proc title="DB Foundations" yearE="2003" yearP="2003" Editorship="/0">
+    <file href="#/6"/>
+  </bibtex:Proc>
+  <bibtex:Proc title="SWE Applications" yearE="2003" yearP="2004" Editorship="/2 /1">
+    <file href="#/6"/>
+  </bibtex:Proc>
+  <bibtex:InProc title="Verify UML" booktitle="SWE Applications" Authorship="/0">
+    <file href="#/6"/>
+  </bibtex:InProc>
+  <bibtex:BibTeXFile name="bibfile_ada">
+    <FileEntry xsi:type="bibtex:InProc" href="#/5"/>
+    <FileEntry xsi:type="bibtex:InProc" href="#/8"/>
+    <FileEntry xsi:type="bibtex:InProc" href="#/7"/>
+    <FileEntry xsi:type="bibtex:Proc" href="#/4"/>
+    <FileEntry xsi:type="bibtex:Proc" href="#/3"/>
+  </bibtex:BibTeXFile>
+  <bibtex:InProc title="Validate OCL" booktitle="SWE Applications" Authorship="/1">
+    <file href="#/6"/>
+  </bibtex:InProc>
+  <bibtex:InProc title="Verify OCL" booktitle="DB Foundations" Authorship="/1">
+    <file href="#/6"/>
+  </bibtex:InProc>
+</xmi:XMI>

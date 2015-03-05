@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:bibtex="http://bibtex.com">
+  <bibtex:BibTeXFile>
+    <File_Entry
+        xsi:type="bibtex:Proc"
+        title="MODELS"
+        editor="/1"/>
+    <File_Entry
+        xsi:type="bibtex:InProc"
+        title="The most amazing paper about MTs"
+        bookTitle="MODELS"
+        author="/1 /3 /4"/>
+    <File_Entry
+        xsi:type="bibtex:InProc"
+        title="Concurrent MTs"
+        bookTitle="MODELS"
+        author="/4"/>
+    <File_Entry
+        xsi:type="bibtex:InProc"
+        title="MTs for beginners"
+        bookTitle="MODELS"
+        author="/3"/>
+    <File_Entry
+        xsi:type="bibtex:Proc"
+        title="ICMT"
+        editor="/2 /1"/>
+    <File_Entry
+        xsi:type="bibtex:InProc"
+        title="Distributed MTs"
+        bookTitle="ICMT"
+        author="/4"/>
+    <File_Entry
+        xsi:type="bibtex:InProc"
+        title="An extended version of OCL"
+        bookTitle="ICMT"
+        author="/3"/>
+  </bibtex:BibTeXFile>
+  <bibtex:Person
+      name="Martin"
+      inProc="/0/@File_Entry.1"
+      proc="/0/@File_Entry.0 /0/@File_Entry.4"/>
+  <bibtex:Person
+      name="Antonio"
+      proc="/0/@File_Entry.4"/>
+  <bibtex:Person
+      name="Frank"
+      inProc="/0/@File_Entry.3 /0/@File_Entry.1 /0/@File_Entry.6"/>
+  <bibtex:Person
+      name="Loli"
+      inProc="/0/@File_Entry.2 /0/@File_Entry.1 /0/@File_Entry.5"/>
+</xmi:XMI>

@@ -1,0 +1,9 @@
+!new DocBook ('DocBook_13')
+!new Book ('Book_14')
+!@Book_14.title := 'SWE Applications'
+!new Article ('Article_15')
+!@Article_15.title := 'Verify UML'
+!new Author ('Author_16')
+!@Author_16.name := 'Hal'
+!new Author ('Author_17')
+!@Author_17.name := 'Jan'

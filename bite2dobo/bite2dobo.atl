@@ -1,0 +1,46 @@
+-- @path MM=/bite2dobo/BibTeX.ecore
+-- @path MM1=/bite2dobo/DocBook.ecore
+
+module bite2dobo;
+create OUT : MM1 from IN : MM;
+
+helper def : getAllProc() : Sequence(MM!Proc) = MM!Proc->allInstances();
+
+
+rule bibtex2docbook {
+	from
+		b : MM!BibTeXFile
+	to 
+		d : MM1!DocBook
+}
+
+rule proc2book {
+	from
+		proc : MM!Proc
+	to 
+		book : MM1!Book (
+			title <- proc.title,
+			author <- proc.Editorship, --proc.editor->collect(e | e.name)->iterate(name; s: String = '' |	s.concat(name) ),
+			docBook <- proc.file
+		)
+}
+
+rule inproc2article {
+	from
+		ip : MM!InProc
+	to 
+		b : MM1!Article (
+			title <- ip.title,
+			author <- ip.Authorship, -- ip.author->collect(e | e.name)->iterate(name; s: String = '' |	s.concat(name) ),
+			book <- thisModule.getAllProc()->any(p | p.title = ip.booktitle)
+		)
+}
+
+rule person2author {
+	from
+		p : MM!Person
+	to
+		a : MM1!Author (
+			name <- p.name			
+		)
+}

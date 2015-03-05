@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:docbook="http://docbook">
+  <docbook:DocBook book="/2"/>
+  <docbook:Book title="DB Applications" article="/3" author="/6"/>
+  <docbook:Book title="SWE Foundations" docBook="/0" article="/4" author="/7 /5"/>
+  <docbook:Article title="SWE Applications" book="/1" author="/5"/>
+  <docbook:Article title="DB Foundations" book="/2" author="/6 /5"/>
+  <docbook:Author name="Eve"/>
+  <docbook:Author name="Hal"/>
+  <docbook:Author name="Jan"/>
+</xmi:XMI>

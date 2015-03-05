@@ -1,0 +1,17 @@
+!new DocBook ('DocBook_18')
+!new Book ('Book_19')
+!@Book_19.title := 'DB Foundations'
+!new Book ('Book_20')
+!@Book_20.title := 'SWE Applications'
+!new Article ('Article_21')
+!@Article_21.title := 'Verify UML'
+!new Article ('Article_22')
+!@Article_22.title := 'Verify OCL'
+!new Article ('Article_23')
+!@Article_23.title := 'Validate OCL'
+!new Author ('Author_24')
+!@Author_24.name := 'Eve'
+!new Author ('Author_25')
+!@Author_25.name := 'Hal'
+!new Author ('Author_26')
+!@Author_26.name := 'Jan'

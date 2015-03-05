@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:docbook="http://docbook">
+  <docbook:DocBook book="/1"/>
+  <docbook:Book title="SWE Applications" docBook="/0" article="/2" author="/4"/>
+  <docbook:Article title="Verify UML" book="/1" author="/3"/>
+  <docbook:Author name="Hal"/>
+  <docbook:Author name="Jan"/>
+</xmi:XMI>

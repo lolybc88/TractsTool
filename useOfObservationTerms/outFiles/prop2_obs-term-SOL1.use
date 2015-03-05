@@ -1,0 +1,13 @@
+!new DocBook ('DocBook_0')
+!new Book ('Book_1')
+!@Book_1.title := 'DB Applications'
+!new Book ('Book_2')
+!@Book_2.title := 'SWE Foundations'
+!new Article ('Article_3')
+!@Article_3.title := 'Verify UML'
+!new Article ('Article_4')
+!@Article_4.title := 'SWE Applications'
+!new Article ('Article_5')
+!@Article_5.title := 'DB Foundations'
+!new Author ('Author_6')
+!@Author_6.name := 'Jan'

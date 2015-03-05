@@ -1,0 +1,17 @@
+!new DocBook ('DocBook_41')
+!new Book ('Book_42')
+!@Book_42.title := 'DB Applications'
+!new Book ('Book_43')
+!@Book_43.title := 'SWE Foundations'
+!new Article ('Article_44')
+!@Article_44.title := 'SWE Applications'
+!new Article ('Article_45')
+!@Article_45.title := 'Verify UML'
+!new Article ('Article_46')
+!@Article_46.title := 'DB Foundations'
+!new Author ('Author_47')
+!@Author_47.name := 'Eve'
+!new Author ('Author_48')
+!@Author_48.name := 'Hal'
+!new Author ('Author_49')
+!@Author_49.name := 'Jan'

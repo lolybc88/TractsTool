@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:docbook="http://docbook">
+  <docbook:DocBook book="/2"/>
+  <docbook:Book title="DB Foundations" article="/4" author="/6"/>
+  <docbook:Book title="SWE Applications" docBook="/0" article="/3 /5" author="/8 /7"/>
+  <docbook:Article title="Verify UML" book="/2" author="/6"/>
+  <docbook:Article title="Verify OCL" book="/1" author="/7"/>
+  <docbook:Article title="Validate OCL" book="/2" author="/7"/>
+  <docbook:Author name="Eve"/>
+  <docbook:Author name="Hal"/>
+  <docbook:Author name="Jan"/>
+</xmi:XMI>

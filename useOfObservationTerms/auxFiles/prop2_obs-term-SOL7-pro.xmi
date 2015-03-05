@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ASCII"?><pro:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pro="http://pro/1.0" xsi:schemaLocation="http://pro/1.0 pro.ecore">
+<creates object="bibtexfile1" type="BibTeXFile"/>
+<creates object="inproc1" type="InProc"/>
+<creates object="inproc3" type="InProc"/>
+<creates object="inproc4" type="InProc"/>
+<creates object="person1" type="Person"/>
+<creates object="person2" type="Person"/>
+<creates object="person3" type="Person"/>
+<creates object="proc1" type="Proc"/>
+<creates object="proc2" type="Proc"/>
+<sets object="bibtexfile1" attribute="name" value="bibfile_ada"/>
+<inserts obj1="person1" obj2="inproc1" rel="Authorship_Person_InProc"/>
+<inserts obj1="person1" obj2="inproc4" rel="Authorship_Person_InProc"/>
+<inserts obj1="person2" obj2="inproc4" rel="Authorship_Person_InProc"/>
+<inserts obj1="person3" obj2="inproc3" rel="Authorship_Person_InProc"/>
+<inserts obj1="person2" obj2="proc2" rel="Editorship_Person_Proc"/>
+<inserts obj1="person3" obj2="proc1" rel="Editorship_Person_Proc"/>
+<sets object="proc1" attribute="yearP" value="2004"/>
+<sets object="proc2" attribute="yearP" value="2003"/>
+<inserts obj1="bibtexfile1" obj2="inproc1" rel="FileEntry_BibTeXFile_BibTeXEntry"/>
+<inserts obj1="bibtexfile1" obj2="inproc3" rel="FileEntry_BibTeXFile_BibTeXEntry"/>
+<inserts obj1="bibtexfile1" obj2="inproc4" rel="FileEntry_BibTeXFile_BibTeXEntry"/>
+<inserts obj1="bibtexfile1" obj2="proc1" rel="FileEntry_BibTeXFile_BibTeXEntry"/>
+<inserts obj1="bibtexfile1" obj2="proc2" rel="FileEntry_BibTeXFile_BibTeXEntry"/>
+<sets object="proc1" attribute="yearE" value="2003"/>
+<sets object="proc2" attribute="yearE" value="2003"/>
+<sets object="person1" attribute="name" value="Jan"/>
+<sets object="person2" attribute="name" value="Hal"/>
+<sets object="person3" attribute="name" value="Eve"/>
+<sets object="inproc1" attribute="title" value="SWE Applications"/>
+<sets object="inproc3" attribute="title" value="Verify UML"/>
+<sets object="inproc4" attribute="title" value="DB Foundations"/>
+<sets object="proc1" attribute="title" value="SWE Foundations"/>
+<sets object="proc2" attribute="title" value="DB Applications"/>
+<sets object="inproc1" attribute="booktitle" value="SWE Foundations"/>
+<sets object="inproc3" attribute="booktitle" value="DB Applications"/>
+<sets object="inproc4" attribute="booktitle" value="SWE Foundations"/>
+</pro:Model>

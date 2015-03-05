@@ -1,0 +1,164 @@
+model Bite2Dobo
+
+class BibTeXFile
+attributes
+  name:String
+end
+
+abstract class BibTeXEntry
+attributes
+  title:String
+end
+
+class InProc < BibTeXEntry
+attributes
+  booktitle:String
+end
+
+class Proc < BibTeXEntry
+attributes
+  yearE:Integer -- event
+  yearP:Integer -- publication
+end
+
+class Person
+attributes
+  name:String
+end
+
+composition File_Entry between
+  BibTeXFile  [1] role file
+  BibTeXEntry [*] role entry
+end
+
+association Editorship between
+  Person [1..*] role editor
+  Proc   [*]    role proc
+end
+
+association Authorship between
+  Person [1..*] role author
+  InProc [*]    role inProc
+end
+
+------------------------------------------------------------------------
+
+class DocBook
+end
+
+class Book
+attributes
+  title:String
+end
+
+class Article
+attributes
+  title:String
+end
+
+association DocBook_Book between
+  DocBook [1] role docBook
+  Book    [*] role book
+end
+
+association Book_Article between
+  Book    [1] role book
+  Article [*] role article
+end
+
+class PersonD
+attributes
+  name:String
+end
+
+association EditorshipD between
+  PersonD [1..*] role editor
+  Book    [*]    role book
+end
+
+association AuthorshipD between
+  PersonD [1..*] role author
+  Article [*]    role article
+end
+
+------------------------------------------------------------------------
+
+class Tract
+end
+
+association Tract_File between
+  Tract      [0..1] role tract
+  BibTeXFile [*]    role file
+end
+
+association Tract_DocBook between
+  Tract   [0..1] role tract
+  DocBook [*]    role docBook
+end
+
+------------------------------------------------------------------------
+
+constraints
+
+context Person inv isAuthorOrEditor:
+  inProc->size()+proc->size() > 0
+
+context InProc inv booktitleOccursAsProcTitle:
+  Proc.allInstances->exists(prc | prc.title=booktitle)
+
+context Person inv uniqueName:
+  Person.allInstances->isUnique(name)
+
+context Proc inv hasAtLeastOnePaper:
+  InProc.allInstances->exists(pap | pap.booktitle=title)
+
+context Proc inv uniqueTitle:
+  Proc.allInstances->isUnique(title)
+
+context Proc inv withinProcUniqueTitle:
+  InProc.allInstances->select(pap | pap.booktitle=title)->
+    forAll(pap1,pap2 | pap1<>pap2 implies pap1.title<>pap2.title)
+
+context InProc inv titleDifferentFromBooktitles:
+  Proc.allInstances->forAll(prc | prc.title<>title)
+
+------------------------------------------------------------------------
+
+-- needed because currently (min,max) for abstract classes does not work
+context BibTeXEntry inv min_max:
+  Proc.allInstances->size()+InProc.allInstances->size()<=6
+
+------------------------------------------------------------------------
+
+/*
+
+editorAlsoAuthor
+paperInSelfEditedProc
+twoPapersWithSameTitle
+allProc_YearE_EQ_YearP
+allAuthor_atMostOnePaperPerProc
+allProc_allPaper_someAuthorIsEditorElsewhere
+manusManumLavat [cliqueEx]
+
+[single|pair]AuthoredPaper
+[single|pair]EditedProceedings
+
+-- let authorAtMostOnePaperPerProc=  
+--   not InProc.allInstances->exists(pap1,pap2 | 
+--     pap1<>pap2 and pap1.author->intersection(pap2.author)->notEmpty() and
+--     pap1.booktitle=pap2.booktitle) in
+let noSelfEditedPaper=
+  not Proc.allInstances->exists(prc | InProc.allInstances->exists(pap |
+        pap.booktitle=prc.title and prc.editor->intersection(pap.author)->notEmpty)) in
+let noManusManumLavat=
+  not Person.allInstances->exists(p1,p2 | p1<>p2 and
+    p1.proc->exists(prc1 | p2.proc->exists(prc2 | prc1<>prc2 and
+      InProc.allInstances->select(booktitle=prc1.title)->exists(pap2 | pap2.author->includes(p2) and
+        InProc.allInstances->select(booktitle=prc2.title)->exists(pap1 | pap1.author->includes(p1)))))) in
+let yearE_EQ_yearP=
+  Proc.allInstances->forAll(yearE=yearP) in
+if noSelfEditedPaper then 1 else 0 endif +
+if noManusManumLavat then 2 else 0 endif +
+if yearE_EQ_yearP    then 4 else 0 endif
+
+*/
