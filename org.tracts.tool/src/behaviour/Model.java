@@ -237,7 +237,7 @@ public class Model {
 		
 	}
 	
-	private static void transformEcoreMMToUseMM(String pathEcoreMMFile, String pathUseMMFile) throws IOException, ATLCoreException {
+	public static void transformEcoreMMToUseMM(String pathEcoreMMFile, String pathUseMMFile) throws IOException, ATLCoreException {
 		EMF2USE_M2 emf2use = new EMF2USE_M2();
 		emf2use.ecore2use_M2(pathEcoreMMFile, pathUseMMFile);
 	}
