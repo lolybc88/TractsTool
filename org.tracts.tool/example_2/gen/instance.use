@@ -1,0 +1,18 @@
+!new trg_EClass0 ('EClass0_0')
+!new trg_EClass1 ('EClass1_1')
+!new trg_EClass2 ('EClass2_2')
+!new trg_EClass2 ('EClass2_3')
+!new trg_EClass2 ('EClass2_4')
+!@EClass0_0.attr0 := Set{'abc','def','ghi'}
+!@EClass0_0.attr1 := Bag{true,false}
+!insert (@EClass0_0,@EClass1_1) into trg_EReference0_EClass0_EClass1
+!insert (@EClass0_0,@EClass2_2) into trg_EReference1_EClass0_EClass2
+!insert (@EClass0_0,@EClass2_3) into trg_EReference1_EClass0_EClass2
+!insert (@EClass0_0,@EClass2_4) into trg_EReference1_EClass0_EClass2
+!@EClass1_1.EAttribute0 := Sequence{#a,#b}
+!@EClass2_2.EAttribute0 := false
+!@EClass2_2.EAttribute1 := Sequence{}
+!@EClass2_3.EAttribute0 := false
+!@EClass2_3.EAttribute1 := Sequence{10,11,12}
+!@EClass2_4.EAttribute0 := false
+!@EClass2_4.EAttribute1 := Sequence{1,2,3}

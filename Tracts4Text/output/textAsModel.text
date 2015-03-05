@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ASCII"?>
+<text:Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:text="http://text/1.0">
+  <root xsi:type="text:Folder" name="testHotel_Java" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java">
+    <content xsi:type="text:Folder" name="management" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management">
+      <content xsi:type="text:Folder" name="orders" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders">
+        <content xsi:type="text:File" name="Item" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders\Item.java" extension="java">
+          <lines text="package management.orders;"/>
+          <lines text=""/>
+          <lines text="public class Item {"/>
+          <lines text="&#x9;private double shippingWeight;"/>
+          <lines text="&#x9;private String description;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double getPriceForQuantity(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double getTax(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public boolean inStock(){"/>
+          <lines text="&#x9;&#x9;return false;"/>
+          <lines text="&#x9;}"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Order" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders\Order.java" extension="java">
+          <lines text="package management.orders;"/>
+          <lines text=""/>
+          <lines text="public class Order {"/>
+          <lines text="&#x9;private String date;"/>
+          <lines text="&#x9;private String status;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;private OrderDetail[] orderDetail1;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcSubTotal(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcTax(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcTotal(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcTotalWeight(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="OrderDetail" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders\OrderDetail.java" extension="java">
+          <lines text="package management.orders;"/>
+          <lines text=""/>
+          <lines text="public class OrderDetail {"/>
+          <lines text="&#x9;private double quantity;"/>
+          <lines text="&#x9;private String status;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;private Item item1;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcSubTotal(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcWeight(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public double calcTax(){"/>
+          <lines text="&#x9;&#x9;return 0;"/>
+          <lines text="&#x9;}"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+      </content>
+      <content xsi:type="text:Folder" name="payment" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment">
+        <content xsi:type="text:File" name="Cash" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Cash.java" extension="java">
+          <lines text="package management.payment;"/>
+          <lines text=""/>
+          <lines text="public class Cash extends Payment{"/>
+          <lines text="&#x9;private double cashTendered;"/>
+          <lines text="&#x9;"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Check" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Check.java" extension="java">
+          <lines text="package management.payment;"/>
+          <lines text=""/>
+          <lines text="public class Check extends Payment{"/>
+          <lines text="&#x9;private String name;"/>
+          <lines text="&#x9;private String bankID;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public boolean authorized(){"/>
+          <lines text="&#x9;&#x9;return false;"/>
+          <lines text="&#x9;}"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Credit" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Credit.java" extension="java">
+          <lines text="package management.payment;"/>
+          <lines text=""/>
+          <lines text="public class Credit extends Payment{"/>
+          <lines text="&#x9;private int number;"/>
+          <lines text="&#x9;private String type;"/>
+          <lines text="&#x9;private String expDate;"/>
+          <lines text="&#x9;"/>
+          <lines text="&#x9;public boolean authorized(){"/>
+          <lines text="&#x9;&#x9;return false;"/>
+          <lines text="&#x9;}"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Payment" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Payment.java" extension="java">
+          <lines text="package management.payment;"/>
+          <lines text=""/>
+          <lines text="public abstract class Payment {"/>
+          <lines text="&#x9;private double amount;"/>
+          <lines text="}"/>
+          <lines text=""/>
+        </content>
+      </content>
+    </content>
+    <content xsi:type="text:Folder" name="people" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people">
+      <content xsi:type="text:File" name="Customer" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people\Customer.java" extension="java">
+        <lines text="package people;"/>
+        <lines text=""/>
+        <lines text="public class Customer extends Person {"/>
+        <lines text="&#x9;private String address; "/>
+        <lines text="}"/>
+        <lines text=""/>
+      </content>
+      <content xsi:type="text:File" name="Employee" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people\Employee.java" extension="java">
+        <lines text="package people;"/>
+        <lines text=""/>
+        <lines text="public class Employee extends Person {"/>
+        <lines text="&#x9;private double salary;"/>
+        <lines text="&#x9;"/>
+        <lines text="}"/>
+        <lines text=""/>
+      </content>
+      <content xsi:type="text:File" name="Person" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people\Person.java" extension="java">
+        <lines text="package people;"/>
+        <lines text=""/>
+        <lines text="public abstract class Person {"/>
+        <lines text="&#x9;private String name;"/>
+        <lines text="&#x9;"/>
+        <lines text="}"/>
+        <lines text=""/>
+      </content>
+    </content>
+  </root>
+</text:Project>

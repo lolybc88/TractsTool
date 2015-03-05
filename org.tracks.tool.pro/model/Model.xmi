@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<pro:Model xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:pro="http://pro/1.0"
+    xsi:schemaLocation="http://pro/1.0 pro.ecore">
+    
+  <creates object="Obj"
+      type="Family"/>
+  <sets object="obj"
+      attribute="Name"
+      value="Pepe"/>
+  <inserts obj1="obj"
+      obj2="obj2"
+      rel="miAssoc"/>
+</pro:Model>

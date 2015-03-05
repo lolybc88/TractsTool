@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ASCII"?>
+<test:EClass0
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:test="http://test/1.0">
+  <EReference0>
+    <EAttribute0>a</EAttribute0>
+    <EAttribute0>b</EAttribute0>
+  </EReference0>
+  <EReference1/>
+  <EReference1>
+    <EAttribute1>10</EAttribute1>
+    <EAttribute1>11</EAttribute1>
+    <EAttribute1>12</EAttribute1>
+  </EReference1>
+  <EReference1>
+    <EAttribute1>1</EAttribute1>
+    <EAttribute1>2</EAttribute1>
+    <EAttribute1>3</EAttribute1>
+  </EReference1>
+  <attr0>abc</attr0>
+  <attr0>def</attr0>
+  <attr0>ghi</attr0>
+  <attr1>true</attr1>
+  <attr1>false</attr1>
+</test:EClass0>

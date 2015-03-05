@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ATL org.tracts.tool.ecore2use Transformation Runtime Plug-in
+Bundle-SymbolicName: org.tracts.tool.ecore2use
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.tracts.tool.ecore2use.Activator
+Bundle-Vendor: Eclipse Modeling Project
+Require-Bundle: org.eclipse.core.runtime, 
+ org.eclipse.emf.ecore,
+ org.eclipse.m2m.atl.engine.emfvm
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Eclipse-LazyStart: true

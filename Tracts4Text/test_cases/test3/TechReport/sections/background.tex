@@ -1,0 +1,152 @@
+In this section, we shortly introduce the formalisms used in this paper for specifying and implementing model transformations. As we shall see, these formalisms are not integrated, and thus, the developed artifacts are completely independent of each other.
+
+\subsection{Specifying Transformations with Tracts}
+
+One of the advantages of contracts is that they allow defining \emph{what} a piece of software does but not \emph{how} it is done. Contracts can be used to precisely specify the constraints (going beyond metamodel constraints) to be
+satisfied by source models such that the transformation is applicable, i.e.,
+\emph{preconditions} of the transformations. They can also be used to
+express constraints on the target models, i.e., \emph{postconditions} of the
+transformation. And finally, they can be used to specify constraints that need to
+be satisfied by any pair of source/target models of a correct transformation, i.e., \emph{invariants} of the transformation.
+Thus, a specification language should allow to formulate these three kinds of
+contracts.
+
+In literature there are several approaches which try to deal with the specification. Some of them work in the model level (\cite{Kolovos06},\cite{Lin04modelcomparison:}, \cite{Lin2005}, \cite{Garcia-Dominguez11}, \cite{Mottu2008}) and others in the metamodel level (\cite{BaloghBCGHMPPRVa10}, \cite{Guerra12}, \cite{Baudry06}, \cite{Anastasakis07}) but the main problem is the complexity. The specifications of a model
+transformation can become monstrously large as far as the transformation is not
+trivial (even far more complex than the transformation itself). The reasons
+are, among others, the lack of modularity, having to deal with too many details
+at the same time, and the excessive size. Because the specifications try to
+capture all the model transformation behaviour in one huge set of constraints,
+they become hard to write, debug and maintain. In addition, tests become quite
+cumbersome, very complex, and computationally prohibitive to prove.
+
+In order to deal with these problems, tracts were introduced in~\cite{TRACTS11} as a specification and black-box testing mechanism for model transformations.
+Tracts provide modular pieces of specification, each one focusing on a particular transformation scenario. Thus every model transformation can be specified by means of a set of tracts, each one covering a particular use
+case---which is defined in terms of particular input and output models and how
+they should be related by the transformation. In this way, tracts allow
+partitioning the full input space of the transformation into smaller, more focused
+behavioural units, and to define specific tests for them. Basically, what we do
+with the tracts is to identify the scenarios of interest to the user of the
+transformation (each one defined by a tract) and check
+whether the transformation behaves as expected in these scenarios.
+Another characteristic of Tracts is that we do not require complete proofs,
+just to check that the transformation works for the tract test suites, hence
+providing a \emph{light-weight} form of verification.
+
+In a nutshell, a tract defines a set of constraints on the \emph{source} and
+\emph{target} metamodels, a set of \emph{source-target} constraints, and a
+tract \emph{test suite}, i.e., a collection of source models satisfying the
+source constraints. The constraints serve as ``contracts'' (in the sense of
+contract-based design~\cite{Meyer92}) for the transformation in some particular
+scenarios, and are expressed by means of OCL invariants. They provide the
+\emph{specification} of the transformation. Figure~\ref{fig:TMT}
+gives an overview on the used concepts and their connection.
+
+Additionally, every tract provides a \emph{test suite} that allows to
+operationalize the conformance tests. We do not provide the full behavioral
+specification of a model transformation, but just a set of tracts that defines
+how the transformation should behave in certain particular scenarios (or use
+cases) which are the ones of interest to the user. We do not care how the
+transformation works in the rest of the cases.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{images/tract_concepts}
+\caption{Concepts in a Tract}
+\label{fig:TMT}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{images/Family2Person}
+\caption{The Family and Person metamodels.}
+\label{fig:Family2PersonsMM}
+\end{figure}
+
+For demonstrating how to use Tracts, we introduce the simple transformation example \emph{Families2Persons}\footnote{The complete example is available at \texttt{http://atenea.lcc.uma.es/index.php/Main\_Page/Resources\\/Tracts-ATL}}. The source and target metamodels of this transformation are shown in Figure \ref{fig:Family2PersonsMM}. For this example, a set of tracts is developed to consider only those families which count exactly four members (mother, father, daughter, son):
+
+\begin{lstlisting}[numbers=none]
+-- C1: SRC_oneDaughterOneSon
+Family.allInstances->forAll(f|f.daughters->size=1 and f.sons->size=1)
+		
+-- C2: SRC_TRG_Mother2Female
+Family.allInstances->forAll(fam|Female.allInstances->exists(f|fam.mother.firstName.concat(' ').concat(fam.lastName)=f.fullName))
+		
+-- C3: SRC_TRG_Daughter2Female
+Family.allInstances->forAll(fam|Female.allInstances->exists(f|fam.daughters->exists(d|d.firstName.concat(' ').concat(fam.lastName)=f.fullName)))
+		
+-- C4: SRC_TRG_FatherSon2Male
+Family.allInstances->forAll(fam|Male.allInstances->exists(m| fam.father.firstName.concat(' ').concat(fam.lastName)=m.fullName xor fam.sons->exists(s|m.firstName.concat(' ').concat(fam.lastName)=s.fullName))
+		
+-- C5: SRC_TRG_Female2MotherDaughter
+Female.allInstances->forAll(f|Family.allInstances->exists(fam|fam.mother.firstName.concat(' ').concat(fam.lastName)=f.fullName xor fam.daughters->exists(d|d.firstName.concat(' ').concat(fam.lastName)=f.fullName)))
+		
+-- C6: SRC_TRG_Male2FatherSon
+Male.allInstances->forAll(m|Family.allInstances->exists(fam|fam.father.firstName.concat(' ').concat(fam.lastName)=m.fullName xor fam.sons->exists(s|s.firstName.concat(' ').concat(fam.lastName)=m.fullName)))
+		
+-- C7: SRC_TRG_MemberSize_EQ_PersonSize
+Member.allInstances->size=Person.allInstances->size
+
+-- C8: TRG_PersonHasName
+Person.allInstances->forAll(p|p.fullName <> '' and not p.fullName.oclIsUndefined())
+\end{lstlisting}
+
+\subsection{Implementing Transformations with ATL}
+
+Given this specification, a model transformation language may be selected to implement the transformation. The ATLAS Transformation Language (ATL) \cite{ATL} is a common choice. ATL is designed as a hybrid model transformation language containing a mixture of declarative and imperative constructs for defining uni-directional transformations. An ATL transformation is mainly composed by a set of \emph{rules}. A rule describes how a subset of the target model should be generated from a subset of the source model. A rule consists of an \textit{input} pattern (having an optional \emph{filter} condition) which is matched on the source model and an \textit{output} pattern which produces certain elements in the target model for each match of the input pattern. The values of the target model elements are assigned in \emph{bindings} which calculate the values by OCL expressions. Given the metamodels in Figure \ref{fig:Family2PersonsMM} and the tracts, a possible implementation in ATL may be as follows:
+
+\begin{lstlisting}[numbers=none]
+module Families2Persons;
+create OUT: Persons from IN: Families;
+
+helper context Families!Member def: isFemale(): Boolean =
+    if not self.familyMother.oclIsUndefined() then
+		true
+	else
+		if not self.familyDaughter.oclIsUndefined() then
+			true
+		else
+			false
+		endif
+	endif;
+
+helper context Families!Member def: familyName: String =
+	if not self.familyFather.oclIsUndefined() then
+		self.familyFather.lastName
+	else
+		if not self.familyMother.oclIsUndefined() then
+			self.familyMother.lastName
+		else
+			if not self.familySon.oclIsUndefined() then
+				self.familySon.lastName
+			else
+				self.familyDaughter.lastName
+			endif
+		endif
+	endif;
+
+rule Member2Male { -- R1 for short
+  from
+    s: Families!Member (not s.isFemale())
+  to
+    t: Persons!Male (fullName <- s.firstName + ' ' + s.familyName )
+}
+
+rule Member2Female { -- R2 for short
+  from
+    s: Families!Member (s.isFemale())
+  to
+    t: Persons!Female (fullName <- s.firstName + ' ' + s.familyName)
+}
+\end{lstlisting}
+
+%  if not self.familyFather.oclIsUndefined() then self.familyFather.lastName
+%  else ...
+%    if not self.familyMother.oclIsUndefined() then self.familyMother.lastName
+%    else
+%      if not self.familySon.oclIsUndefined() then self.familySon.lastName
+%      else
+%         self.familyDaughter.lastName
+%      endif
+%    endif
+%  endif;

@@ -1,0 +1,15 @@
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=200pt]{images/Process}
+\caption{Matching process at a glance.}
+\label{fig:Process}
+\end{figure}
+
+In order to obtain the result shown in the previous subsection, it is beneficial to have automation support for the matching process. Figure~\ref{fig:Process} depicts each step of the matching process. The initial input for this processes are the constraints and the transformation rules. The output are the matching tables as explained before.
+
+Starting with the constraint branch, the first step is to extract the types for each constraint. This is achieved by employing the API of the USE (UML based Specification Environment) tool \cite{USE2}. This API allows to parse an OCL expression and provides the parsing results in a model-based representation. Using this representation, we are able to extract all the types used within an OCL expression. This is actually provided by having the parse tree representing each subexpression by an explicit node which also provides the return type for each subexpression.
+
+The types extraction for ATL transformations is more challenging compared to the OCL part, because currently there is no support offered by the ATL implementation. However, the textual ATL transformations can be automatically injected to model-based representations. This model-based representation allows to extract the needed information from an ATL transformation by applying another ATL transformation (a so-called higher-order transformation) which generates a model stating for each ATL rule all used types of the input and output pattern elements. Currently, we only support to extract the explicitly given types. The extraction of implicit types used in filter and binding expressions is subject to future work. %\manuel{can we use USE to give us the types for OCL expressions used in ATL code?}
+
+Having the used types of all constraints and rules, we may apply the matching functions---which coincide with the metrics described in the previous subsection. The matching functions are implemented in Java and the output of the computation is either represented as an Excel file as well as can be exported as an EMF-based model for further computations, e.g., by applying further model transformations for analysing the matching tables. The \emph{Tracts2ATL} Matcher prototype can be downloaded from our project website\footnote{\url{http://atenea.lcc.uma.es/Descargas/Tract2ATLMatcher.zip}}. 

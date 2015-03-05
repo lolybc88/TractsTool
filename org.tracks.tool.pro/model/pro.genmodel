@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.tracks.tool.pro/src" modelPluginID="org.tracks.tool.pro"
+    modelName="Pro" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
+    copyrightFields="false">
+  <foreignModel>pro.ecore</foreignModel>
+  <genPackages prefix="Pro" disposableProviderFactory="true" ecorePackage="pro.ecore#/">
+    <genClasses ecoreClass="pro.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pro.ecore#//Model/creates"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pro.ecore#//Model/sets"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pro.ecore#//Model/inserts"/>
+    </genClasses>
+    <genClasses ecoreClass="pro.ecore#//CreateG">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//CreateG/object"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//CreateG/type"/>
+    </genClasses>
+    <genClasses ecoreClass="pro.ecore#//SetG">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//SetG/object"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//SetG/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//SetG/value"/>
+    </genClasses>
+    <genClasses ecoreClass="pro.ecore#//InsertG">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//InsertG/obj1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//InsertG/obj2"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pro.ecore#//InsertG/rel"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

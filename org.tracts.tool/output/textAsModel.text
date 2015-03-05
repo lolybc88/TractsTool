@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ASCII"?>
+<text:Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:text="http://text/1.0">
+  <root xsi:type="text:Folder" name="testHotel_Java" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java">
+    <content xsi:type="text:Folder" name="management" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management">
+      <content xsi:type="text:Folder" name="orders" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders">
+        <content xsi:type="text:File" name="Item" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders\Item.java" extension="java">
+          <lines text="package management.orders;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public class Item {&#xD;"/>
+          <lines text="&#x9;private double shippingWeight;&#xD;"/>
+          <lines text="&#x9;private String description;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double getPriceForQuantity(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double getTax(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public boolean inStock(){&#xD;"/>
+          <lines text="&#x9;&#x9;return false;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Order" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders\Order.java" extension="java">
+          <lines text="package management.orders;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public class Order {&#xD;"/>
+          <lines text="&#x9;private String date;&#xD;"/>
+          <lines text="&#x9;private String status;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;private OrderDetail[] orderDetail1;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcSubTotal(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcTax(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcTotal(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcTotalWeight(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="OrderDetail" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\orders\OrderDetail.java" extension="java">
+          <lines text="package management.orders;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public class OrderDetail {&#xD;"/>
+          <lines text="&#x9;private double quantity;&#xD;"/>
+          <lines text="&#x9;private String status;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;private Item item1;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcSubTotal(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcWeight(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public double calcTax(){&#xD;"/>
+          <lines text="&#x9;&#x9;return 0;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+      </content>
+      <content xsi:type="text:Folder" name="payment" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment">
+        <content xsi:type="text:File" name="Cash" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Cash.java" extension="java">
+          <lines text="package management.payment;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public class Cash extends Payment{&#xD;"/>
+          <lines text="&#x9;private double cashTendered;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Check" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Check.java" extension="java">
+          <lines text="package management.payment;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public class Check extends Payment{&#xD;"/>
+          <lines text="&#x9;private String name;&#xD;"/>
+          <lines text="&#x9;private String bankID;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public boolean authorized(){&#xD;"/>
+          <lines text="&#x9;&#x9;return false;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Credit" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Credit.java" extension="java">
+          <lines text="package management.payment;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public class Credit extends Payment{&#xD;"/>
+          <lines text="&#x9;private int number;&#xD;"/>
+          <lines text="&#x9;private String type;&#xD;"/>
+          <lines text="&#x9;private String expDate;&#xD;"/>
+          <lines text="&#x9;&#xD;"/>
+          <lines text="&#x9;public boolean authorized(){&#xD;"/>
+          <lines text="&#x9;&#x9;return false;&#xD;"/>
+          <lines text="&#x9;}&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+        <content xsi:type="text:File" name="Payment" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\management\payment\Payment.java" extension="java">
+          <lines text="package management.payment;&#xD;"/>
+          <lines text="&#xD;"/>
+          <lines text="public abstract class Payment {&#xD;"/>
+          <lines text="&#x9;private double amount;&#xD;"/>
+          <lines text="}&#xD;"/>
+          <lines text=""/>
+        </content>
+      </content>
+    </content>
+    <content xsi:type="text:Folder" name="people" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people">
+      <content xsi:type="text:File" name="Customer" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people\Customer.java" extension="java">
+        <lines text="package people;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="public class Customer extends Person {&#xD;"/>
+        <lines text="&#x9;private String address; &#xD;"/>
+        <lines text="}&#xD;"/>
+        <lines text=""/>
+      </content>
+      <content xsi:type="text:File" name="Employee" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people\Employee.java" extension="java">
+        <lines text="package people;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="public class Employee extends Person {&#xD;"/>
+        <lines text="&#x9;private double salary;&#xD;"/>
+        <lines text="&#x9;&#xD;"/>
+        <lines text="}&#xD;"/>
+        <lines text=""/>
+      </content>
+      <content xsi:type="text:File" name="Person" absoluteName="C:\Users\Atenea\Desktop\testHotel_Java\people\Person.java" extension="java">
+        <lines text="package people;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="public abstract class Person {&#xD;"/>
+        <lines text="&#x9;private String name;&#xD;"/>
+        <lines text="&#x9;&#xD;"/>
+        <lines text="}&#xD;"/>
+        <lines text=""/>
+      </content>
+    </content>
+  </root>
+</text:Project>

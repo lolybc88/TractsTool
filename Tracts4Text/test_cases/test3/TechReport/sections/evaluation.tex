@@ -1,0 +1,473 @@
+
+Tracts also provide mechanisms for testing model transformations. But when a tract fails, it is useful to know which rule or rules are responsible for the failure. This need originated the work we are presenting in this paper. Finding the ``guilty'' rules is supported by rule traceability (CC metric), and complemented by the RCR metric that reflects additional information. As we presented in the previous section, we count on several metrics which allows us to reason on more complicated cases.
+
+\subsection{Transformation Example: UML2ER}
+
+The \emph{Families2Persons} example is a rather small example, but sufficient for demonstrating the basic process of computing the different metrics. Of course, the usefulness of the process described above is intended to show up for larger examples having a comprehensive set of constraints and rules. In comparison with the \emph{Families2Persons} example, the following \emph{UML2ER} example is larger. This transformation scenario  considers the metamodels for a simplified version of UML class diagrams and Entity-Relationship diagrams. The metamodels are illustrated in Figure~\ref{fig:UML2ER}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\textwidth]{images/UML2ER}
+\caption{The UML and ER metamodels.}
+\label{fig:UML2ER}
+\end{figure}
+
+The specification of the transformation comprises eight source-target constraints where two kinds of constraints are used. One kind is comparing the amount of instances for a given source and target class, while the other kind is checking for equivalency of elements based on containment relationships and value correspondences.
+
+\begin{lstlisting}[numbers=none]
+
+-- SRC_TRG_Package2ERModel
+-- C1: Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name))
+
+-- SRC_TRG_Package2ERModel and Class2EntityType and NESTING
+-- C2: Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements-> forAll(class | e.entities->one(entity | entity.name = class.name))))
+
+-- SRC_TRG_Package2ERModel and Class2EntityType and Property2Feature and NESTING
+-- C3: Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | entity.features->forAll(f | f.name = prop.name))))))
+
+-- SRC_TRG_NamedElement2Element
+-- C4: NamedElement.allInstances-> size() = Element.allInstances->size()
+
+-- SRC_TRG_Package2ERModel
+-- C5: Package.allInstances->size() = ERModel.allInstances->size()
+
+-- SRC_TRG_Class2EntityType
+-- C6: Class.allInstances->size() = EntityType.allInstances->size()
+
+-- SRC_TRG_Property2Feature
+-- C7: Property.allInstances->size() = Feature.allInstances->size()
+
+-- SRC_TRG_Package2ERModel and Class2EntityType and Property2Attribute and NESTING
+-- C8: Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.primitiveType<> "" and (not prop.primitiveType.oclIsUndefined()) implies entity.features-> select(f|f.oclIsTypeOf(Attribute)) -> one(f | f.name = prop.name))))))
+
+-- SRC_TRG_Package2ERModel and Class2EntityType and Property2WeakReference and NESTING
+-- C9: Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name andp.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType <> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and prop.isContainment impliesf.oclIsTypeOf(WeakReference)))))))
+
+-- SRC_TRG_Package2ERModel and Class2EntityType and Property2StrongReference and NESTING
+-- C10: Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType <> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and not prop.isContainment impliesf.oclIsTypeOf(StrongReference)))))))
+\end{lstlisting}
+
+The transformation contains eight transformation rules, whereas three of the rules are abstract rules and a multitude of inheritance relationships between the rules exists: $R8, R7 < R6; R6, R5 < R4; R4, R3, R2 < R1$.
+
+\begin{lstlisting}[numbers=none]
+module UML2ER;
+create OUT : ER from IN : SimpleUML;
+
+rule NamedElement{ -- R1
+	from
+		s: SimpleUML!NamedElement
+	to
+		t: ER!Element (
+			name <- s.name	
+		)	
+}
+
+rule Package extends NamedElement{ -- R2
+	from
+		s: SimpleUML!Package
+	to
+		t: ER!ERModel (
+			entities <- s.ownedElements	
+		)
+}
+
+rule Class extends NamedElement { -- R3
+	from s: SimpleUML!Class
+	to t: ER!EntityType (
+			features <- s.ownedProperty->collect (e | thisModule.Property(e))
+    )
+}
+
+
+lazy abstract rule Property extends NamedElement{ -- R4
+	from s: SimpleUML!Property
+	to t: ER!Feature ()
+}
+
+
+lazy rule Attributes extends Property{ -- R5
+	from s: SimpleUML!Property (not s.primitiveType.oclIsUndefined())
+	to	t: ER!Attribute (
+			type <- s.primitiveType	
+	)
+}
+
+lazy abstract rule References extends Property { -- R6
+	from s: SimpleUML!Property (not s.complexType.oclIsUndefined() )
+	to t: ER!Reference (
+			type <- s.complexType
+	)
+}
+
+lazy rule WeakReferences extends References { -- R7
+	from s: SimpleUML!Property (not s.isContainment)
+	to t: ER!WeakReference
+}
+
+lazy rule StrongReferences extends References{ -- R8
+	from s: SimpleUML!Property (s.isContainment)
+	to t: ER!StrongReference
+}
+\end{lstlisting}
+
+We now report on the results we got when applying our approach for the \emph{UML2ER} example. Tables \ref{tab:TableUML2ER4C}-\ref{tab:TableUML2ER4CR} illustrate the corresponding matching tables.
+
+Now assume that the transformation is executed, the constraints are checked, and C7 fails. By looking at Table~\ref{tab:TableUML2ER4C}, we find a complete coverage of C7 by R4. Thus, it is more likely that the failure is due to R4, instead of coming from R5, R6, R7 or R8. In contrast, the cells R1/C7, R2/C7 and R3/C7 indicate that C7 is completely independent from R1, R2 and R3. Thus, it seems more appropriate in the error tracking process to start with R4 and then continuing with R5-R8.
+
+Let us now suppose that a constraint fails and there are two or more cells in its row in Table \ref{tab:TableUML2ER4C} with value 1, while the value of these cells in the other two tables is different. In this case, we should choose to review the rule which has the higher value for RCR metric (Table \ref{tab:TableUML2ER4CR}).
+
+\begin{table}[!h]
+\centering
+\caption{Matching table using CC metric.}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|} \cline{2-10}
+&R1&R2&R3&R4&R5&R6&R7&R8&standard deviation\\ \hline
+\multicolumn{1}{|c|}{C1}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C2}&0.0&0.5&0.5&0.0&0.0&0.0&0.0&0.0&0.216506351\\ \hline
+\multicolumn{1}{|c|}{C3}&0.0&0.33&0.33&0.33&0.16&0.16&0.16&0.16&0.110239638\\ \hline
+\multicolumn{1}{|c|}{C4}&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C5}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C6}&0.0&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C7}&0.0&0.0&0.0&1.0&0.5&0.5&0.5&0.5&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C8}&0.0&0.28&0.28&0.28&0.28&0.14&0.14&0.14&0.099424364\\ \hline
+\multicolumn{1}{|c|}{C9}&0.0&0.25&0.25&0.25&0.12&0.25&0.25&0.12&0.088388348\\ \hline
+\multicolumn{1}{|c|}{C10}&0.0&0.25&0.25&0.25&0.12&0.25&0.12&0.25&0.088388348\\ \hline
+\end{tabular}
+\label{tab:TableUML2ER4C}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\caption{Matching table using RC metric.}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|} \cline{2-10}
+&R1&R2&R3&R4&R5&R6&R7&R8&standard deviation\\ \hline
+\multicolumn{1}{|c|}{C1}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C2}&0.0&1.0&1.0&0.0&0.0&0.0&0.0&0.0&0.433012702\\ \hline
+\multicolumn{1}{|c|}{C3}&0.0&1.0&1.0&1.0&0.5&0.5&0.5&0.5&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C4}&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C5}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C6}&0.0&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C7}&0.0&0.0&0.0&1.0&0.5&0.5&0.5&0.5&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C8}&0.0&1.0&1.0&1.0&1.0&0.5&0.5&0.5&0.347985273\\ \hline
+\multicolumn{1}{|c|}{C9}&0.0&1.0&1.0&1.0&0.5&1.0&1.0&0.5&0.353553391\\ \hline
+\multicolumn{1}{|c|}{C10}&0.0&1.0&1.0&1.0&0.5&1.0&0.5&1.0&0.353553391\\ \hline
+\end{tabular}
+\label{tab:TableUML2ER4R}
+\end{table}
+
+\begin{table}[[!h]]
+\centering
+\caption{Matching table using RCR metric.}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|} \cline{2-10}
+&R1&R2&R3&R4&R5&R6&R7&R8&standard deviation\\ \hline
+\multicolumn{1}{|c|}{C1}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C2}&0.0&0.5&0.5&0.0&0.0&0.0&0.0&0.0&0.216506351\\ \hline
+\multicolumn{1}{|c|}{C3}&0.0&0.33&0.33&0.33&0.14&0.14&0.14&0.14&0.115267361\\ \hline
+\multicolumn{1}{|c|}{C4}&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C5}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C6}&0.0&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.330718914\\ \hline
+\multicolumn{1}{|c|}{C7}&0.0&0.0&0.0&1.0&0.33&0.33&0.33&0.33&0.30900827\\ \hline
+\multicolumn{1}{|c|}{C8}&0.0&0.28&0.28&0.28&0.28&0.12&0.12&0.12&0.10333158\\ \hline
+\multicolumn{1}{|c|}{C9}&0.0&0.25&0.25&0.25&0.11&0.25&0.25&0.11&0.091009322\\ \hline
+\multicolumn{1}{|c|}{C10}&0.0&0.25&0.25&0.25&0.11&0.25&0.11&0.25&0.091009322\\ \hline
+\end{tabular}
+\label{tab:TableUML2ER4CR}
+\end{table}
+
+Another situation happens when a rule is fully covered by a constraint. Consequently, the value of the corresponding cell in Table \ref{tab:TableUML2ER4R} is 1, but not 1 in the rest of the tables. For instance, in Table~\ref{tab:TableUML2ER4R}, C8 has value 1 for R2, R3, R4 and R5 but less than 1 in Tables \ref{tab:TableUML2ER4C} and \ref{tab:TableUML2ER4CR}. Again, in this situation it is better to chose the rule with a higher value in Table \ref{tab:TableUML2ER4CR}. Another interesting information that we can extract from Table \ref{tab:TableUML2ER4R} is whether each rule is fully covered by a set of Tracts or if further Tracts are needed to enhance the test coverage.
+In the last case (although not shown in our example), a constraint which fails has values in all tables different from 1. In that case, one more time, we must review the rule with the higher value for Table~\ref{tab:TableUML2ER4CR}.
+
+To sum up, what is the possibility of finding a rule for a failed constraint? As mentioned before, we have two kinds of constraints. For constraints checking that the amount of instances for source and target classes should be equal, unambiguous alignments can be found. For the other kind, the situation is different. Depending on the size of the constraints and the amount of used types, we may find several rules having similar alignment ratings. Thus, we explore in the following subsections several possibilities for revising the matching function to produce more distinct values.
+
+\subsection{Considering Inheritance}
+
+In this section, we propose a modification of the matching function in order to consider \emph{inheritance} between meta-classes. This is of major importance, because ATL transformation rules are matching for direct instances of the given input pattern types, but also for indirect instances, i.e., instances of subclasses. The same is true for tracts. If for instance the amount of instances of a certain type is computed (using the \emph{allInstances} operation), then not only the direct instances are counted but also the indirect instances.
+
+What we exactly do to consider inheritance between meta-classes is to divide the matching process in two phases. First, we match the types which is the same as we did before, i.e., we are matching for equivalent types, and in a second step, for the remaining types, we look for subtype or supertype matches. However, for distinguishing between equivalent type matches and sub-/supertype matches, we weight the latter only as the half of equivalent type matches, i.e., their match weight is 0.5 instead of 1.
+
+Let's consider the Family2Person example, where we have for Ri/Rj \manuel{add the exact example} the sets $C_{i}$ = \{ Family, Member, Person \} and $R_{j}$ = \{ Family, Female\} then the matching function has a full match for Family/Family, which weight is 1, and a supertype match for Person/Female with a weight of 0.5.
+
+\subsubsection{Revised Matching Function}
+
+To consider inheritance in the alignment process, we have to extend the matching function.
+The new metrics are:
+
+\begin{align}
+CC_{i,j} = \dfrac{| C_{i} \cap_{inh} R_{j} |}{| C_{i} |}
+\label{for:firstmetric}
+\end{align}
+
+\begin{align}
+RC_{i,j} = \dfrac{| C_{i} \cap_{inh} R_{j} |}{| R_{j} |}
+\label{for:secondmetric}
+\end{align}
+
+\begin{align}
+RCR_{i,j} = \dfrac{| C_{i} \cap_{inh} R_{j} |}{| C_{i} \cup R_{j} |}
+\label{for:thirdmetric}
+\end{align}
+
+where $ C \cap_{inh} R $ operation is given in the following. As can be seen in the listing, the first phase is used for checking the full matches and in the second phase the sub-/supertype matches are computed.
+
+\begin{lstlisting}
+Input: C, R
+Output: vAbs
+vAbs = 0;
+for (Type c : C) do
+    if (R.contains(c))
+        vAbs++
+        R.remove(c)
+    endif
+endfor
+for (Type c : C) do
+    subSuperType = R.getOneSubOrSuperType(subAndSuperTypes(c))
+    if (subSuperType != null)
+        vAbs=vAbs+0.5
+        R.remove(subSuperType);
+    endif
+endfor
+return vAbs
+\end{lstlisting}
+
+\begin{algorithm}[h]
+
+% Data
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Versions
+\SetKwData{C}{C}
+\SetKwData{cc}{c}
+\SetKwData{R}{R}
+\SetKwData{vAbs}{vAbs}
+\SetKwData{subSuperType}{subSuperType}
+
+% Keywords
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetKw{Null}{null}
+\SetKw{Return}{return}
+
+% Functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetKwFunction{Remove}{remove}
+\SetKwFunction{Contains}{contains}
+\SetKwFunction{ContainsAny}{containsAny}
+
+
+\KwIn{\C, \R}
+\KwOut{\vAbs}
+
+\BlankLine
+\vAbs = 0
+\tcp{Find full matches}
+\For{\cc $\in$ \C}{
+    \If{\R.\Contains{\cc}}{
+    \vAbs = \vAbs + 1\\
+    \R.\Remove{\cc}
+    }
+}
+\tcp{Find sub-/supertype matches}
+\For{\cc $\in$ \C}{
+    \subSuperType $=$ \R.\ContainsAny{\subSuperType{\cc}}\\
+    \If{\subSuperType $<>$ \Null}{
+    \vAbs = \vAbs + 0.5\\
+    \R.\Remove{\subSuperType}
+    }
+}
+\Return \vAbs
+\BlankLine
+\caption{Matching Function extended with Inheritance}
+\label{alg:inheritance}
+\end{algorithm}
+
+
+\subsubsection{Results}
+
+Table \ref{tab:TableUML2ERInh} shows the results for the UML2ER example when the inheritance-aware metrics are computed.
+
+\begin{table}[!h]
+\centering
+\caption{Matching table using the inheritance.}
+\begin{tabular}{c|c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|} \cline{2-25}
+& \multicolumn{8}{|c||}{CC} & \multicolumn{8}{|c||}{RC} & \multicolumn{8}{|c|}{RCR}\\ \cline{2-25}
+&R1&R2&R3&R4&R5&R6&R7&R8&R1&R2&R3&R4&R5&R6&R7&R8&R1&R2&R3&R4&R5&R6&R7&R8\\ \hline \hline
+\multicolumn{1}{|c|}{C1}&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C2}&0.25&0.5&0.5&0.0&0.0&0.0&0.0&0.0&0.5&1.0&1.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&1.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C3}&0.16&0.33&0.33&0.33&0.25&0.25&0.25&0.25&0.5&1.0&1.0&1.0&0.75&0.75&0.75&0.75&0.5&1.0&1.0&1.0&0.75&0.75&0.75&0.75\\ \hline
+\multicolumn{1}{|c|}{C4}&1.0&0.5&0.5&0.5&0.5&0.5&0.5&0.5&1.0&0.5&0.5&0.5&0.5&0.5&0.5&0.5&1.0&0.5&0.5&0.5&0.5&0.5&0.5&0.5\\ \hline
+\multicolumn{1}{|c|}{C5}&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C6}&0.5&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&1.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C7}&0.5&0.0&0.0&1.0&0.75&0.75&0.75&0.75&0.5&0.0&0.0&1.0&0.75&0.75&0.75&0.75&0.5&0.0&0.0&1.0&0.75&0.75&0.75&0.75\\ \hline
+\multicolumn{1}{|c|}{C8}&0.14&0.28&0.28&0.28&0.28&0.21&0.21&0.21&0.5&1.0&1.0&1.0&1.0&0.75&0.75&0.75&0.5&1.0&1.0&1.0&1.0&0.75&0.75&0.75\\ \hline
+\multicolumn{1}{|c|}{C9}&0.12&0.25&0.25&0.25&0.18&0.25&0.25&0.18&0.5&1.0&1.0&1.0&0.75&1.0&1.0&0.75&0.5&1.0&1.0&1.0&0.75&1.0&1.0&0.75\\ \hline
+\multicolumn{1}{|c|}{C10}&0.12&0.25&0.25&0.25&0.18&0.25&0.18&0.25&0.5&1.0&1.0&1.0&0.75&1.0&0.75&1.0&0.5&1.0&1.0&1.0&0.75&1.0&0.75&1.0\\ \hline
+\end{tabular}
+\label{tab:TableUML2ERInh}
+\end{table}
+
+As we can see in the table, ... positive effects/negative effects...
+
+\subsection{Considering Features}
+
+In this subsection we deal additional information extractable from tracts and ATL rules. Until now, we only extracted types from the constraints and the ATL rules. Now we also take care of the features used in tracts and ATL rules. For example, in the UML2ER transformation, rule 1 counts on two types (NamedElement and Element) and two features (NamedElement.name and Element.name). Now, we find a match between the constraint and rule sets when there are either two equal types in both or two equal features (notice that we are considering separately types and features and they do not match each other). This allows to explore the differences when using only features, only types, and their combination.
+
+\subsubsection{Revised Matching Function}
+
+In case features and types are considered separately or also combined, the matching function and the metrics are the same as we presented in Subsection~\ref{subsec:MatchingTables} with the only difference that in the input sets only features, only types, or both are considered. Anyway, we could consider the types and the features as two subsets and this the distinction is reflected in the pseudocode for the $ C \cap_{tf} R $ as follows:
+
+\manuel{the two loops are more or less the same. can we generalize to element? maybe it makes also sense to present the Ecore metamodel in the tech report?}
+
+\begin{lstlisting}
+Input: C, R
+vAbs = 0;
+for (Type c : C) do
+    if (R.contains(c))
+        vAbs++
+    endif
+endfor
+for (Feature f : C) do
+    if (R.contains(f))
+        vAbs++
+    endif
+endfor
+return vAbs
+\end{lstlisting}
+
+\subsubsection{Results}
+
+Table \ref{tab:TableUML2ERFeatures} shows the results and there we can see one expected property which is that the values will be always equal or lower than before, but all of them keep more or less the same relative distance among them. This means that we can use features or not, even we can think about use only use features and ignore the types, but the interpretation of the tables will be the same, so in certain way, we can choose what we want.
+
+\manuel{this means, the table is presenting the metrics using types and features, right? Maybe it is good to show before the table only using features? Can we somehow compute the deviation between the results using types and the results using features? would be a nice approach to strengthen the discussion of the results. Maybe we can also conclude that features are not having a strong influence on the results, and reasoning on types may be sufficient...}
+
+\begin{table}[!h]
+\centering
+\caption{Matching table considering features.}
+\begin{tabular}{c|c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|} \cline{2-25}
+& \multicolumn{8}{|c||}{CC} & \multicolumn{8}{|c||}{RC} & \multicolumn{8}{|c|}{RCR}\\ \cline{2-25}
+&R1&R2&R3&R4&R5&R6&R7&R8&R1&R2&R3&R4&R5&R6&R7&R8&R1&R2&R3&R4&R5&R6&R7&R8\\ \hline \hline
+\multicolumn{1}{|c|}{C1}&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.33&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C2}&0.0&0.3&0.2&0.0&0.0&0.0&0.0&0.0&0.0&0.75&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.27&0.16&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C3}&0.0&0.13&0.2&0.13&0.06&0.06&0.06&0.06&0.0&0.5&0.75&1.0&0.25&0.25&0.33&0.33&0.0&0.11&0.18&0.13&0.05&0.05&0.05&0.05\\ \hline
+\multicolumn{1}{|c|}{C4}&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C5}&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C6}&0.0&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C7}&0.0&0.0&0.0&1.0&0.5&0.5&0.5&0.5&0.0&0.0&0.0&1.0&0.25&0.25&0.33&0.33&0.0&0.0&0.0&1.0&0.2&0.2&0.25&0.25\\ \hline
+\multicolumn{1}{|c|}{C8}&0.0&0.15&0.15&0.10&0.15&0.05&0.05&0.05&0.0&0.75&0.75&1.0&0.75&0.25&0.33&0.33&0.0&0.15&0.15&0.10&0.15&0.04&0.04&0.04\\ \hline
+\multicolumn{1}{|c|}{C9}&0.0&0.14&0.14&0.09&0.04&0.14&0.14&0.09&0.0&0.75&0.75&1.0&0.25&0.75&1.0&0.66&0.0&0.13&0.13&0.09&0.04&0.13&0.14&0.09\\ \hline
+\multicolumn{1}{|c|}{C10}&0.0&0.14&0.14&0.09&0.04&0.14&0.09&0.14&0.0&0.75&0.75&1.0&0.25&0.75&0.66&1.0&0.0&0.13&0.13&0.09&0.04&0.13&0.09&0.14\\ \hline
+\end{tabular}
+\label{tab:TableUML2ERFeatures}
+\end{table}
+
+\subsection{Considering Self-Information}
+
+Until now we have considered that each type or feature match weight 1 (except for sub-/supertype matches when we consider inheritance between metaclasses where we use 0.5). However, when examining some constraint, we can find types or features which appear although they are not the key information. For instance, let us have a look to the constraint C10 in \emph{UML2ER} example. Some types (such as Property, ERModel, Class, EntityType, etc.) appear because of the nesting but the highlighted types should be Reference and StrongReference because they are exactly the core of the constraint. C10 does not aim to put restrictions for Property, but this type is necessary to define the constraint correctly. Trying to deal with this, we have analyzed the types used in contracts and modified the weights for the matching function taking into account information theory \cite{Shannon2001}: the amount of self-information contained in a probabilistic event depends only on the probability of that event: the smaller its probability, the larger the self-information associated with receiving the information that the event indeed occurred.
+
+When adapting the notion of information theory to our problem domain, the end up with the following definition: the smaller the probability that a type occurs in a tract, the larger the self-information associated with receiving the information that the type indeed occurs in the tract. Thus, we employ the standard formula for computing self-information \emph{I} for a given model element:
+
+\begin{align}
+I(m) = - log2[p(m)]
+\end{align}
+
+where m is a model element and  p(m) is the probability of the model element m occurring in a tract.
+
+To make things clear, we enumerate in the following table the occurrences for each type in the tracts, the probability, and the self-information:
+
+\begin{table}[t]
+\centering
+\caption{Self-information of types for UML2ER example.}
+\begin{tabular}{|c|l|l|l|} \hline
+Type&Occurrences&Probability&Self-information\\ \hline
+Package & 	7 &	0.7	&0.51 \\ \hline
+ERModel & 	7 &	0.7	&0.51 \\ \hline
+Class & 	6 &	0.6	&0.74 \\ \hline
+EntityType & 	6	& 0.6	& 0.74 \\ \hline
+Property &	5	& 0.5	& 1 \\ \hline
+Feature &	5	&0.5	& 1 \\ \hline
+Attribute &	1	&0.1	& 3.32 \\ \hline
+Reference & 	2	&0.2	& 2.32 \\ \hline
+WeakReference & 	1	&0.1	& 3.32 \\ \hline
+StrongReference & 	1	&0.1	& 3.32\\ \hline
+\end{tabular}
+\label{tab:SelfInformation}
+\end{table}
+
+As we can see in the table, some types occur quite frequently (around 0.7) whereas other are rather limited occurring (around 0.10). This gives us quite different numbers for the calculated self-information. If we now want to consider the self-information for computing the alignments, we have to consider it in the matching function.
+
+\subsubsection{Revised Matching Function}
+
+In general, we may distinguish between basic tracts consisting of only a few set of types and tracts containing several types needed for formulating the constraint. To give you an idea how the distribution of the type size is for the UML2ER example, the following table contains the numbers of types and features for each of the ten tracts.
+
+\begin{table}[t]
+\centering
+\caption{Self-information of types for UML2ER example.}
+\begin{tabular}{|c|l|l|} \hline
+Tract&Used Types&Used Features\\ \hline
+C1	& 2	& 2\\ \hline
+C2	& 4	& 6\\ \hline
+C3	& 6	& 10\\ \hline
+C4	& 2	& 0\\ \hline
+C5	& 2	& 0\\ \hline
+C6	& 2	& 0\\ \hline
+C7	& 2	& 0\\ \hline
+C8	& 7	& 12\\ \hline
+C9	& 8	& 13\\ \hline
+C10	& 8	& 13\\ \hline\hline
+Avg	& 4.3 & 5.6\\\hline
+\end{tabular}
+\label{tab:Family2PersonExample}
+\end{table}
+
+
+\begin{lstlisting}
+Input: C, R, avgTypeSize
+Output: vAbs
+vAbs = 0;
+for (Type c : C) do
+    if (R.contains(c))
+        if (C.size() > avgTypeSize)						
+	       if(c.selfInformation() <= 0,25)
+                continue					
+	       else if(c.selfInformation < 1)
+                vAbs = vAbs + c.selfinformation - 0,25					
+	       else
+                vAbs = vAbs + 1	
+        endif		
+        R.remove(c)
+    endif
+endfor
+return vAbs
+\end{lstlisting}
+
+\subsubsection{Results}
+
+The results considering inheritance for types and weighting them with the previous procedure are shown in table \ref{tab:TableUML2ERSelfInfo}.
+
+\begin{table}[!h]
+\centering
+\caption{Matching table considering inheritance and self-information.}
+\begin{tabular}{c|c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|} \cline{2-25}
+& \multicolumn{8}{|c||}{CC} & \multicolumn{8}{|c||}{RC} & \multicolumn{8}{|c|}{RCR}\\ \cline{2-25}
+&R1&R2&R3&R4&R5&R6&R7&R8&R1&R2&R3&R4&R5&R6&R7&R8&R1&R2&R3&R4&R5&R6&R7&R8\\ \hline \hline
+\multicolumn{1}{|c|}{C1}&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C2}&0.25&0.5&0.5&0.0&0.0&0.0&0.0&0.0&0.5&1.0&1.0&0.0&0.0&0.0&0.0&0.0& 0.5&1.0&1.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C3}&0.04&0.09&0.14&0.20&0.15&0.15&0.15&0.15&0.14&0.28&0.44&0.62&0.46&0.46&0.46&0.46&0.14&0.28&0.44&0.62&0.46&0.46&0.46&0.46\\ \hline
+\multicolumn{1}{|c|}{C4}&1.0&0.5&0.5&0.5&0.5&0.5&0.5&0.5&1.0&0.5&0.5&0.5&0.5&0.5&0.5&0.5&1.0&0.5&0.5&0.5&0.5&0.5&0.5&0.5\\ \hline
+\multicolumn{1}{|c|}{C5}&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0&0.5&1.0&0.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C6}&0.5&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&1.0&0.0&0.0&0.0&0.0&0.0&0.5&0.0&1.0&0.0&0.0&0.0&0.0&0.0\\ \hline
+\multicolumn{1}{|c|}{C7}&0.5&0.0&0.0&1.0&0.75&0.75&0.75&0.75&0.5&0.0&0.0&1.0&0.75&0.75&0.75&0.75&0.5&0.0&0.0&1.0&0.75&0.75&0.75&0.75\\ \hline
+\multicolumn{1}{|c|}{C8}&0.04&0.08&0.12&0.17&0.23&0.13&0.13&0.13&0.14&0.28&0.44&0.62&0.81&0.46&0.46&0.46&0.14&0.28&0.44&0.62&0.81&0.46&0.46&0.46\\ \hline
+\multicolumn{1}{|c|}{C9}&0.03&0.07&0.11&0.15&0.11&0.20&0.20&0.11&0.14&0.28&0.44&0.62&0.46&0.81&0.81&0.46&0.14&0.28&0.44&0.62&0.46&0.81&0.81&0.46\\ \hline
+\multicolumn{1}{|c|}{C10}&0.03&0.07&0.11&0.15&0.11&0.20&0.11&0.20&0.14&0.28&0.44&0.62&0.46&0.81&0.46&0.81&0.14&0.28&0.44&0.62&0.46&0.81&0.46&0.81\\ \hline
+\end{tabular}
+\label{tab:TableUML2ERSelfInfo}
+\end{table}
+
+\subsection{Combined Configurable Matching Function}
+
+\subsubsection{Revised Matching Function}
+
+\subsubsection{Results}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

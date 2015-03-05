@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/Tracts4Text/src" modelPluginID="Tracts4Text" modelName="Text"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false">
+  <foreignModel>Text.ecore</foreignModel>
+  <genPackages prefix="Text" disposableProviderFactory="true" ecorePackage="Text.ecore#/">
+    <genClasses ecoreClass="Text.ecore#//Project">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Text.ecore#//Project/root"/>
+    </genClasses>
+    <genClasses ecoreClass="Text.ecore#//Folder">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Text.ecore#//Folder/content"/>
+    </genClasses>
+    <genClasses ecoreClass="Text.ecore#//File">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Text.ecore#//File/extension"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Text.ecore#//File/lines"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Text.ecore#//Entity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Text.ecore#//Entity/name"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Text.ecore#//Entity/container"/>
+    </genClasses>
+    <genClasses ecoreClass="Text.ecore#//Line">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Text.ecore#//Line/text"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

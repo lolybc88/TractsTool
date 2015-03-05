@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<text:Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:text="http://text/1.0">
+  <root xsi:type="text:Folder" name="test3" absoluteName="teste">
+    <content xsi:type="text:Folder" name="TechReport" absoluteName="test">
+      <content xsi:type="text:File" name="a" absoluteName="a" extension="a"/>
+    </content>
+    <content xsi:type="text:File" name="b" absoluteName="s" extension="x"/>
+  </root>
+</text:Project>

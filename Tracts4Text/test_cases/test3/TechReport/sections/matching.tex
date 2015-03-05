@@ -1,0 +1,106 @@
+As we have seen in the previous section, Tracts allow defining constraints for transformations, while ATL uses rules to express model transformations. Having independent artifacts for the specification and implementation allows for freedom which formalisms to choose for both levels and how to implement the specifications. However, the following questions cannot be answered without through reasoning on both artifact types: $(a)$  Which transformation rule(s) implement(s) which constraint(s)? $(b)$ Are all constraints covered by transformation rules? and $(c)$ Are all transformation rules covered by constraints?
+
+\subsection{Challenges}
+
+In general, we there are two possibilities to compute alignments between rules and constraints to answer the previous questions. First, there is \emph{static alignment} by reasoning only on the constraints and transformation rules without executing them, and second, there is the possibility to \emph{dynamically} explore the relationships by running the transformations as well as checking the constraints to find overlaps on accessed model elements.
+
+While the second approach may lead to more precise alignments, the alignments are always specific to a given input model. If a more general alignment should be derived, the static approach would more beneficial. However, static alignment seems to be more challenging, because there is a complete paradigm mismatch of the specification language and the implementation language. While in Tracts general OCL expressions are used, in ATL the prime elements are rules. Thus, current generic model matching frameworks cannot be employed, because they produce matches based on structural equivalences. But in our case we have two different languages following different programming paradigms. Thus no structural equivalences are identifiable in a generic manner and other means for comparison have to be found.
+
+The common denominator of constraints and rules are the metamodel elements used, which may give an indication of the relatedness. Therefore, we describe next how this information can be obtained from constraints and rules, compare the extracted information, and present the results to the user.
+
+\subsection{Matching Tables: 3 different Viewpoints}
+\label{subsec:MatchingTables}
+
+For representing the alignments between constraints and rules, we use tabular representations which we call \emph{matching tables}. Our aim is to automatically compute such tabular representations by employing matching functions and to provide different viewpoints on the alignments found. Using different viewpoints on alignments supports answering different questions as outlined in~\cite{WongGH00}.
+
+Given a set of constraints and a set of rules, the corresponding matching tables are computed based on the types of the elements, i.e., the classes from the metamodels, that they contain. In these tables, each cell links a constraint and a rule with a  specific value between 0 and 1. Let $C_{i}$ be the set of types extracted for constraint $i$ and $R_{j}$ for rule $j$. In the following, three different metrics are introduced that provide different viewpoints on the types overlaps.
+
+The \emph{constraint coverage} (CC) metric states the coverage for constraint $i$ by a given rule $j$. For this metric, the value for the cell $[i,j]$ is given by the following formula.
+
+\begin{align}
+CC_{i,j} = \dfrac{| C_{i} \cap R_{j} |}{| C_{i} |}
+\label{for:firstmetric}
+\end{align}
+
+As the denominator is the number of types in $C_{i}$, the result is relative to constraint $i$ and we interpret this value for rule traceability, i.e., to find rules which are related to the given~constraint.
+
+The \emph{rule coverage} (RC) metric states the coverage for rule $j$ by a given constraint $i$. We use this value to express constraint traceability, i.e., to find the constraints most closely related to a given rule. The following formula is used to compute the values for this metric.
+
+\begin{align}
+RC_{i,j} = \dfrac{| C_{i} \cap R_{j} |}{| R_{j} |}
+\label{for:secondmetric}
+\end{align}
+
+
+
+The last metric is relative to both constraints and rules. Thus, it gives a statement of the relatedness of both without defining a direction for interpreting the values. The  \emph{relatedness} of \emph{constraints} and \emph{rules} (RCR) metric is as follows.
+
+\begin{align}
+RCR_{i,j} = \dfrac{| C_{i} \cap R_{j} |}{| C_{i} \cup R_{j} |}
+\label{for:thirdmetric}
+\end{align}
+
+After extracting the types for constraints and rules, there exist five possible cases, as depicted in Figure~\ref{fig:Sectorial} using Venn diagrams. Let us study each one and comment some of the particular properties of these metrics.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=200pt]{images/Sectorial}
+\caption{Possible situations for $C_{i}$ and $R_{j}$.}
+\label{fig:Sectorial}
+\end{figure}
+
+
+In case (a), every constraint type is contained by the set of rule types, $C_{i} \subseteq R_{j}$, thus the value for the CC metric is 1 and it means that the constraint is fully covered by the rule. The other metrics have a value lower than 1.
+
+Case (b) is the opposite to case (a), $R_{j} \subseteq C_{i}$, and here the RC metric is always 1. One possible interpretation follows. If after the transformation execution and constraint verification we detect that $C_{i}$ fails, we know that the failure probably comes from $R_{j}$ or a part of it and the bigger the value of RC is, the most likely it is that the failure comes from $R_{j}$.
+
+For case (c), $C_{i}$ and $R_{j}$ are disjoint sets. Thus all the metrics are 0 which means that the given constraint and the given rule are completely independent.
+
+In case (d), every metric will have a value between 0 and 1. The exact value will be dependent on the size of the sets and the number of common elements. For example, the bigger the common part for $C_{i}$ is, the closer the value for metric CC will be to 1. The lower the common part is, the closer CC will be to 0. It is the same with $R_{j}$ and metric RC. Considering the third metric in case (d), its value depends only on the size of the common part. Thus, the bigger it is, the closer the value is to 1.
+
+In case (e), both types of constraints and rules are the same set, consequently each metric is 1. It is the situation where a constraint and a rule are totally covered by each other.
+
+
+\begin{table}[t]
+\centering
+\caption{Used types for Families2Person example.}
+\begin{tabular}{|c|l|} \hline
+Constraint/Rule&Involved Types\\ \hline
+C1&Member, Family\\ \hline
+C2&Member, Family, Female\\ \hline
+C3&Member, Family, Female\\ \hline
+C4&Member, Family, Male\\ \hline
+C5&Member, Family, Female\\ \hline
+C6&Member, Family, Male\\ \hline
+C7&Member, Person\\ \hline
+C8&Person\\ \hline
+R1&Member, Male\\ \hline
+R2&Member, Female\\ \hline
+\end{tabular}
+\label{tab:Family2PersonExample}
+\end{table}
+
+The \emph{Families2Persons} example presented in the previous section counts on two rules and eight constraints. The types used in the constraints and rules are summarized in Table \ref{tab:Family2PersonExample}.
+According to the types extracted for this example, the corresponding matching tables are shown in Table~\ref{tab:TableSM2LUT}. The second and third columns express the constraint coverage, the fourth and fifth the rule coverage, and the sixth and seventh the relatedness. Please note that this is a small example with the only intention of showing how the metrics are computed. Section \ref{sec:Evaluation} shows matching tables for a larger example as well as their interpretation.
+
+\begin{table}[t]
+\centering
+\caption{Families2Person matching tables.}
+\begin{tabular}{c|c|c||c|c||c|c|}
+\cline{2-7}
+& \multicolumn{2}{|c||}{CC} & \multicolumn{2}{|c||}{RC} & \multicolumn{2}{|c|}{RCR}\\ \cline{2-7}
+&R1&R2&R1&R2&R1&R2\\ \hline
+\multicolumn{1}{|c|}{C1}&0.5&0.5&0.5&0.5&0.33&0.33\\ \hline
+\multicolumn{1}{|c|}{C2}&0.33&0.66&0.5&1&0.25&0.66\\ \hline
+\multicolumn{1}{|c|}{C3}&0.33&0.66&0.5&1&0.25&0.66\\ \hline
+\multicolumn{1}{|c|}{C4}&0.66&0.33&1&0.5&0.66&0.25\\ \hline
+\multicolumn{1}{|c|}{C5}&0.33&0.66&0.5&1&0.25&0.66\\ \hline
+\multicolumn{1}{|c|}{C6}&0.66&0.33&1&0.5&0.66&0.25\\ \hline
+\multicolumn{1}{|c|}{C7}&0.5&0.5&0.5&0.5&0.33&0.33\\ \hline
+\multicolumn{1}{|c|}{C8}&0.0&0.0&0.0&0.0&0.33&0.33\\ \hline
+\end{tabular}
+\label{tab:TableSM2LUT}
+\end{table}
+
+

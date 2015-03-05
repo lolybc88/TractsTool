@@ -1,0 +1,60 @@
+query Use2Text = Use!Model.allInstances() -> asSequence() -> first().toString.writeTo('temp/MM.use');
+
+helper def: reservedWords : Sequence(String) = Sequence{'abstract', 'class', 'Set', 'Bag', 'Sequence', 'ordered', 'attributes',
+		'end', 'between', 'enum', 'model', 'constraints', 'context', 'inv', 'operations', 'pre', 'post', 'from'};
+
+
+helper context Use!Model def: _name : String = if (thisModule.reservedWords.includes(self.name)) then '_' + 
+self.name else self.name endif;
+
+helper context Use!Attribute def: _name : String = if (thisModule.reservedWords.includes(self.name)) then '_' + 
+self.name else self.name endif;
+
+helper context Use!Literal def: _name : String = if (thisModule.reservedWords.includes(self.name)) then '_' + 
+self.name else self.name endif;
+
+helper context Use!Role def: _name : String = if (thisModule.reservedWords.includes(self.name)) then '_' + 
+self.name else self.name endif;
+
+helper context Use!Model def: toString : String = 'model ' + self._name +
+												  self.enumerations -> iterate(x; acc : String = '' | acc + '\n' + x.toString) + '\n' +
+												  self.classes -> iterate(x; acc : String = '' | acc + '\n' + x.toString) + '\n' +
+												  self.associations -> iterate(x; acc : String = '' | acc + '\n' + x.toString);
+
+helper context Use!Class def: toString : String = 'class ' + self.name +
+	if (self.superClasses.size()=0) then
+		''
+	else
+		self.superClasses->iterate(x; acc : String = '' |
+			if (x.name = self.superClasses.first().name) then
+				(' < ' + x.name)
+			else
+				(acc + ', ' + x.name)
+			endif)
+	endif +
+	'\nattributes' + self.attributes-> iterate (x; acc : String = '' | acc + ' \n ' + x._name + ' : ' + x.type.toString) + '\nend\n';
+
+
+helper context Use!SimpleType def: toString : String = self.type;
+
+helper context Use!CollectionType def : toString : String = self.type.toString() + '(' + self.baseType.toString + ')';
+
+helper context Use!EnumerationType def : toString : String = self.enum.name; 
+	
+helper context Use!ReferenceType def : toString : String = self.class.name; 
+
+helper context Use!Enumeration def : toString : String = 'enum ' + self.name + '{' +
+	self.literals -> iterate(x; acc : String = '' |
+			if (x.toString = self.literals.first().toString) then x.toString else acc + ', ' + x.toString endif ) + '}';
+
+helper context Use!Literal def : toString : String = self._name;
+
+helper context Use!Association def : toString : String = self.kind.toString().toLower() + ' ' + self.name + ' between\n' +
+	self.role->first().toString + '\n' +  
+	self.role->last().toString + '\n' +
+	'end\n';
+
+helper context Use!Role def : toString : String = self.className.name +
+	' [' + self.lowerBound + '..' + if(self.upperBound=-1) then '*' else self.upperBound endif + '] ' +
+	'role ' + self._name +
+	if (not self.ordered) or self.ordered.oclIsUndefined() or self.upperBound=1 then '' else ' ordered' endif;

@@ -1,0 +1,19 @@
+!new Project ('Project_0')
+!new Folder ('Folder_1')
+!new Folder ('Folder_2')
+!new File ('File_3')
+!new File ('File_4')
+!insert (@Project_0,@Folder_1) into root_Project_Entity
+!@Folder_1.name := 'test3'
+!@Folder_1.absoluteName := 'teste'
+!insert (@Folder_1,@Folder_2) into content_container_Folder_Entity
+!insert (@Folder_1,@File_4) into content_container_Folder_Entity
+!@Folder_2.name := 'TechReport'
+!@Folder_2.absoluteName := 'test'
+!insert (@Folder_2,@File_3) into content_container_Folder_Entity
+!@File_3.name := 'a'
+!@File_3.absoluteName := 'a'
+!@File_3.extension := 'a'
+!@File_4.name := 'b'
+!@File_4.absoluteName := 's'
+!@File_4.extension := 'x'

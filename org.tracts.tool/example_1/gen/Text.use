@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<USE:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:USE="http://USE" name="text">
+  <classes name="src_Project"/>
+  <classes name="src_Folder" superClasses="//@classes.3"/>
+  <classes name="src_File" superClasses="//@classes.3">
+    <attributes name="extension">
+      <type xsi:type="USE:SimpleType" type="String"/>
+    </attributes>
+  </classes>
+  <classes name="src_Entity" abstract="true">
+    <attributes name="name">
+      <type xsi:type="USE:SimpleType" type="String"/>
+    </attributes>
+    <attributes name="absoluteName">
+      <type xsi:type="USE:SimpleType" type="String"/>
+    </attributes>
+  </classes>
+  <classes name="src_Line">
+    <attributes name="text">
+      <type xsi:type="USE:SimpleType" type="String"/>
+    </attributes>
+  </classes>
+  <associations name="src_root_Project_Entity" kind="Composition">
+    <role name="root_Project_Entity_derived" upperBound="-1" className="//@classes.0"/>
+    <role lowerBound="1" name="root_Project_Entity" ordered="true" upperBound="1" className="//@classes.3"/>
+  </associations>
+  <associations name="src_lines_File_Line" kind="Composition">
+    <role name="lines_File_Line_derived" upperBound="-1" className="//@classes.2"/>
+    <role name="lines_File_Line" ordered="true" upperBound="-1" className="//@classes.4"/>
+  </associations>
+  <associations name="src_content_container_Folder_Entity" kind="Composition">
+    <role name="container_Folder_Entity" ordered="true" upperBound="1" className="//@classes.1"/>
+    <role name="content_Folder_Entity" ordered="true" upperBound="-1" className="//@classes.3"/>
+  </associations>
+</USE:Model>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<USE:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:USE="http://USE" name="test">
+  <classes name="trg_EClass0">
+    <attributes name="attr0">
+      <type xsi:type="USE:CollectionType">
+        <baseType xsi:type="USE:SimpleType" type="String"/>
+      </type>
+    </attributes>
+    <attributes name="attr1">
+      <type xsi:type="USE:CollectionType" type="Bag">
+        <baseType xsi:type="USE:SimpleType" type="Boolean"/>
+      </type>
+    </attributes>
+  </classes>
+  <classes name="trg_EClass1">
+    <attributes name="EAttribute0">
+      <type xsi:type="USE:CollectionType" type="Sequence">
+        <baseType xsi:type="USE:EnumerationType" enum="//@enumerations.0"/>
+      </type>
+    </attributes>
+  </classes>
+  <classes name="trg_EClass2">
+    <attributes name="EAttribute0">
+      <type xsi:type="USE:SimpleType" type="Boolean"/>
+    </attributes>
+    <attributes name="EAttribute1">
+      <type xsi:type="USE:CollectionType" type="Sequence">
+        <baseType xsi:type="USE:SimpleType"/>
+      </type>
+    </attributes>
+  </classes>
+  <enumerations name="trg_EEnum0">
+    <literals name="a"/>
+    <literals name="b"/>
+  </enumerations>
+  <associations name="trg_EReference0_EClass0_EClass1" kind="Composition">
+    <role name="EReference0_EClass0_EClass1_derived" upperBound="-1" className="//@classes.0"/>
+    <role name="EReference0_EClass0_EClass1" ordered="true" upperBound="1" className="//@classes.1"/>
+  </associations>
+  <associations name="trg_EReference1_EClass0_EClass2" kind="Composition">
+    <role name="EReference1_EClass0_EClass2_derived" upperBound="-1" className="//@classes.0"/>
+    <role name="EReference1_EClass0_EClass2" ordered="true" upperBound="8" className="//@classes.2"/>
+  </associations>
+  <associations name="trg_EReference0_EClass1_EClass2">
+    <role name="EReference0_EClass1_EClass2_derived" upperBound="-1" className="//@classes.1"/>
+    <role name="EReference0_EClass1_EClass2" ordered="true" upperBound="1" className="//@classes.2"/>
+  </associations>
+</USE:Model>

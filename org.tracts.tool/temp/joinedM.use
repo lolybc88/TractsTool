@@ -1,0 +1,77 @@
+!new src_Package ('Package_194')
+!new src_Class ('Class_195')
+!new src_Property ('Property_196')
+!new src_Property ('Property_197')
+!new src_Class ('Class_198')
+!new src_Property ('Property_199')
+!new src_Property ('Property_200')
+!new src_Class ('Class_201')
+!new src_Property ('Property_202')
+!new src_Class ('Class_203')
+!@Package_194.name := null
+!insert (@Package_194,@Class_195) into src_ownedElements_Class_Package
+!insert (@Package_194,@Class_198) into src_ownedElements_Class_Package
+!insert (@Package_194,@Class_201) into src_ownedElements_Class_Package
+!insert (@Package_194,@Class_203) into src_ownedElements_Class_Package
+!@Class_195.name := 'A'
+!insert (@Class_195,@Property_196) into src_ownedProperty_Class_Property
+!insert (@Class_195,@Property_197) into src_ownedProperty_Class_Property
+!@Property_196.name := 'primitive1'
+!@Property_196.primitiveType := 'String'
+!@Property_196.isContainment := false
+!@Property_197.name := 'complex1'
+!@Property_197.primitiveType := null
+!@Property_197.isContainment := false
+!insert (@Property_197,@Class_195) into src_complexType_Class_Property
+!@Class_198.name := 'B'
+!insert (@Class_198,@Property_199) into src_ownedProperty_Class_Property
+!insert (@Class_198,@Property_200) into src_ownedProperty_Class_Property
+!@Property_199.name := 'primitive2'
+!@Property_199.primitiveType := 'Integer'
+!@Property_199.isContainment := false
+!@Property_200.name := 'complex2'
+!@Property_200.primitiveType := null
+!@Property_200.isContainment := true
+!insert (@Property_200,@Class_198) into src_complexType_Class_Property
+!@Class_201.name := 'C'
+!insert (@Class_201,@Property_202) into src_ownedProperty_Class_Property
+!@Property_202.name := 'complex2'
+!@Property_202.primitiveType := null
+!@Property_202.isContainment := false
+!insert (@Property_202,@Class_198) into src_complexType_Class_Property
+!@Class_203.name := 'D'
+!new trg_ERModel ('ERModel_204')
+!new trg_EntityType ('EntityType_205')
+!new trg_Attribute ('Attribute_206')
+!new trg_WeakReference ('WeakReference_207')
+!new trg_EntityType ('EntityType_208')
+!new trg_Attribute ('Attribute_209')
+!new trg_StrongReference ('StrongReference_210')
+!new trg_EntityType ('EntityType_211')
+!new trg_WeakReference ('WeakReference_212')
+!new trg_EntityType ('EntityType_213')
+!@ERModel_204.name := null
+!insert (@ERModel_204,@EntityType_205) into trg_entities_ERModel_EntityType
+!insert (@ERModel_204,@EntityType_208) into trg_entities_ERModel_EntityType
+!insert (@ERModel_204,@EntityType_211) into trg_entities_ERModel_EntityType
+!insert (@ERModel_204,@EntityType_213) into trg_entities_ERModel_EntityType
+!@EntityType_205.name := 'A'
+!insert (@EntityType_205,@Attribute_206) into trg_features_EntityType_Feature
+!insert (@EntityType_205,@WeakReference_207) into trg_features_EntityType_Feature
+!@Attribute_206.name := 'primitive1'
+!@Attribute_206.type := 'String'
+!@WeakReference_207.name := 'complex1'
+!insert (@WeakReference_207,@EntityType_205) into trg_type_EntityType_Reference
+!@EntityType_208.name := 'B'
+!insert (@EntityType_208,@Attribute_209) into trg_features_EntityType_Feature
+!insert (@EntityType_208,@StrongReference_210) into trg_features_EntityType_Feature
+!@Attribute_209.name := 'primitive2'
+!@Attribute_209.type := 'Integer'
+!@StrongReference_210.name := 'complex2'
+!insert (@StrongReference_210,@EntityType_208) into trg_type_EntityType_Reference
+!@EntityType_211.name := 'C'
+!insert (@EntityType_211,@WeakReference_212) into trg_features_EntityType_Feature
+!@WeakReference_212.name := 'complex2'
+!insert (@WeakReference_212,@EntityType_208) into trg_type_EntityType_Reference
+!@EntityType_213.name := 'D'
+check -d

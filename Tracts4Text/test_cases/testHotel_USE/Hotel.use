@@ -1,0 +1,84 @@
+model hotel
+
+abstract class Person
+attributes
+name : String
+end
+
+class Customer < Person
+attributes
+address : String
+end
+
+class Employee < Person
+attributes
+salary : Real
+end
+
+abstract class Payment
+attributes
+amount : Real
+end
+
+class Cash < Payment
+attributes
+cashTendered : Real
+end
+
+class Check < Payment
+attributes
+name : String
+bankID : Integer
+operations
+authorized()
+end
+
+class Credit < Payment
+attributes
+number : Integer
+type : String
+expDate : String
+operations
+authorized()
+end
+
+class Order
+attributes
+date : String
+status : String
+operations
+calcSubTotal()
+calcTax()
+calcTotal()
+calcWeight()
+end
+
+class OrderDetail
+attributes
+quantity : Real
+taxStatus : String
+operations
+calcSubTotal()
+calcWeight()
+calcTax()
+end
+
+class Item
+attributes
+shippingWeight : Real
+description : String
+operations
+getPriceForQuantity()
+getTax()
+inStock()
+end
+
+association Order_OrderDetail between
+Order[1] role order
+OrderDetail [*] role orderDetail
+end
+
+association OrderDetail_Item between
+OrderDetail [1] role orderDetail
+Item [1] role item
+end

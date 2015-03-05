@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ASCII"?>
+<text:Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:text="http://text/1.0">
+  <root xsi:type="text:Folder" name="car" absoluteName="C:\Users\Atenea\Desktop\ws_TractsTool_v5.0\Tracts4Text\test_cases\car">
+    <content xsi:type="text:Folder" name="PackCar" absoluteName="C:\Users\Atenea\Desktop\ws_TractsTool_v5.0\Tracts4Text\test_cases\car\PackCar">
+      <content xsi:type="text:File" name="Car" absoluteName="C:\Users\Atenea\Desktop\ws_TractsTool_v5.0\Tracts4Text\test_cases\car\PackCar\Car.java" extension="java">
+        <lines text="package PackCar;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="import java.util.Vector;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="public class Car {&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="    /**&#xD;"/>
+        <lines text="   * &#xD;"/>
+        <lines text="   * @element-type Wheel&#xD;"/>
+        <lines text="   */&#xD;"/>
+        <lines text="  public Vector  wheels;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="}"/>
+      </content>
+    </content>
+    <content xsi:type="text:Folder" name="PackWheel" absoluteName="C:\Users\Atenea\Desktop\ws_TractsTool_v5.0\Tracts4Text\test_cases\car\PackWheel">
+      <content xsi:type="text:File" name="Engine" absoluteName="C:\Users\Atenea\Desktop\ws_TractsTool_v5.0\Tracts4Text\test_cases\car\PackWheel\Engine.java" extension="java">
+        <lines text="package PackWheel;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="public class Engine {&#xD;"/>
+        <lines text="}"/>
+      </content>
+      <content xsi:type="text:File" name="Wheel" absoluteName="C:\Users\Atenea\Desktop\ws_TractsTool_v5.0\Tracts4Text\test_cases\car\PackWheel\Wheel.java" extension="java">
+        <lines text="package PackWheel;&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="public class Wheel {&#xD;"/>
+        <lines text="&#xD;"/>
+        <lines text="  &#xD;"/>
+        <lines text="}"/>
+      </content>
+    </content>
+  </root>
+</text:Project>

@@ -1,0 +1,35 @@
+model test
+enum trg_EEnum0{a, b}
+
+class trg_EClass0
+attributes 
+ attr0 : Set(String) 
+ attr1 : Bag(Boolean)
+end
+
+class trg_EClass1
+attributes 
+ EAttribute0 : Sequence(trg_EEnum0)
+end
+
+class trg_EClass2
+attributes 
+ EAttribute0 : Boolean 
+ EAttribute1 : Sequence(Integer)
+end
+
+
+composition trg_EReference0_EClass0_EClass1 between
+trg_EClass0 [0..*] role EReference0_EClass0_EClass1_derived ordered
+trg_EClass1 [0..1] role EReference0_EClass0_EClass1 ordered
+end
+
+composition trg_EReference1_EClass0_EClass2 between
+trg_EClass0 [0..*] role EReference1_EClass0_EClass2_derived ordered
+trg_EClass2 [0..8] role EReference1_EClass0_EClass2 ordered
+end
+
+association trg_EReference0_EClass1_EClass2 between
+trg_EClass1 [0..*] role EReference0_EClass1_EClass2_derived ordered
+trg_EClass2 [0..1] role EReference0_EClass1_EClass2 ordered
+end
