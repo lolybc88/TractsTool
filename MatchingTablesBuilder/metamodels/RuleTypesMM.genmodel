@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/Tracts2ATL/tracts2atl" modelPluginID="Tracts2ATL"
+    modelName="RuleTypesMM" importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0"
+    copyrightFields="false">
+  <foreignModel>RuleTypesMM.ecore</foreignModel>
+  <genPackages prefix="Ruletypesmm" disposableProviderFactory="true" ecorePackage="RuleTypesMM.ecore#/">
+    <genClasses ecoreClass="RuleTypesMM.ecore#//Rule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RuleTypesMM.ecore#//Rule/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/inputTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/outputTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/bindingTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/filterTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/bindingFeatures"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/filterFeatures"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Rule/inherits"/>
+    </genClasses>
+    <genClasses ecoreClass="RuleTypesMM.ecore#//Trafo">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RuleTypesMM.ecore#//Trafo/rules"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RuleTypesMM.ecore#//Trafo/name"/>
+    </genClasses>
+    <genClasses ecoreClass="RuleTypesMM.ecore#//Type">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RuleTypesMM.ecore#//Type/name"/>
+    </genClasses>
+    <genClasses ecoreClass="RuleTypesMM.ecore#//Feature">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RuleTypesMM.ecore#//Feature/name"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

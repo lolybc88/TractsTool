@@ -1,0 +1,1942 @@
+module AddTypes;
+create OUT : ATL from IN : ATL, SRC : Ecore, DST : Ecore;
+
+--- Yields the EPackage for the IN model of the ATL transformation to be transformed. 
+helper def: IN_PACKAGE : Ecore!EPackage = 
+	let mmName : String = ATL!Module.allInstances()->any(m|true).inModels->any(m|true).metamodel.name 
+	in  Ecore!EPackage.allInstances()->any(p|p.name = mmName);
+
+--- Yields the EPackage for the OUT model of the ATL transformation to be transformed. 
+helper def: OUT_PACKAGE : Ecore!EPackage = 
+	let mmName : String = ATL!Module.allInstances()->any(m|true).outModels->any(m|true).metamodel.name 
+	in  Ecore!EPackage.allInstances()->any(p|p.name = mmName);
+
+helper def: getInClass(name : String) : Ecore!EClass = 
+	thisModule.IN_PACKAGE.eClassifiers->any(c1|c1.name = name);
+
+helper def: getOutClass(name : String) : Ecore!EClass = 
+	thisModule.OUT_PACKAGE.eClassifiers->any(c1|c1.name = name);
+
+helper def: getInClassFeature(cName : String, fName : String) : Ecore!EStructuralFeature = 
+	let c : Ecore!EClass = thisModule.getInClass(cName) in 
+		if c.oclIsUndefined() then OclUndefined else c.eAllStructuralFeatures->any(r|r.name = fName) endif;
+
+helper def: getOutClassFeature(cName : String, fName : String) : Ecore!EStructuralFeature = 
+	let c : Ecore!EClass = thisModule.getOutClass(cName) in 
+		if c.oclIsUndefined() then OclUndefined else c.eAllStructuralFeatures->any(r|r.name = fName) endif;
+
+helper def: inOclModel : ATL!OclModel = OclUndefined;
+helper def: outOclModel : ATL!OclModel = OclUndefined;
+
+
+--- Creates a deep copy of an OclType.
+rule CloneOclType(s : ATL!"OclType") {
+	using {
+		res : ATL!"OclType" = OclUndefined;
+		t : ATL!"OclType" = OclUndefined;
+	}
+	do {
+		if (s.oclIsTypeOf(ATL!OclModelElement)) {
+			res <- thisModule.CloneOclModelElement(s);
+		}
+		if (s.oclIsTypeOf(ATL!SetType)) {
+			t <- thisModule.CloneOclType(s.elementType);
+			res <- thisModule.CreateSetType(t);
+		}
+		if (s.oclIsTypeOf(ATL!BagType)) {
+			t <- thisModule.CloneOclType(s.elementType);
+			res <- thisModule.CreateBagType(t);
+		}
+		if (res.oclIsUndefined()) {
+			s.debug('cannot clone');
+		}
+		res;
+	}
+}
+
+--- Creates a copy of an OclModelElement. Helper for CloneOclType. 
+rule CloneOclModelElement(s : ATL!OclModelElement) {
+	to t : ATL!OclModelElement( 
+		model <- thisModule.resolveTemp(s.model), 
+		name <- s.name )
+	do { t; }
+}
+
+--- Creates a (compound) OclType object for any typed object (currently expressions).
+rule CreateOclType(ocl : OclAny) {
+	using { 
+		t : ATL!"OclType" = OclUndefined;
+		sourceType : ATL!"OclType" = OclUndefined; 
+		elementType : ATL!"OclType" = OclUndefined; 
+		iterType  : ATL!"OclType" = OclUndefined;
+		argType : ATL!"OclType" = OclUndefined;
+	 	lazyRule : ATL!MatchedLazyRule = OclUndefined;
+	}
+	do {
+		if (ocl.oclIsTypeOf(ATL!NavigationOrAttributeCallExp)) {
+			sourceType <- thisModule.CreateOclType(ocl.source);
+			if (sourceType.oclIsUndefined()) {
+				
+			} else {
+				if (thisModule.getInClassFeature(sourceType.name, ocl.name).upperBound <> 1) {
+					t <- thisModule.CreateOclTypeForNavigationOrAttributeCallExp_Set(ocl, sourceType);
+				} else {
+					t <- thisModule.CreateOclTypeForNavigationOrAttributeCallExp_Obj(ocl, sourceType);
+				}
+			}
+		}
+		if (ocl.oclIsTypeOf(ATL!VariableExp)) {
+			if (ocl.referredVariable.varName <> 'thisModule') {
+				t <- thisModule.CreateOclType(ocl.referredVariable);
+			}
+		}
+		
+		if (ocl.oclIsKindOf(ATL!VariableDeclaration)) {
+			if (not(ocl.varName = 'thisModule')) {
+				t <- thisModule.CloneOclType(ocl.type);
+			} else {
+				1; -- to raise a type error - this should never be read
+			}
+		}
+		
+		if (ocl.oclIsTypeOf(ATL!OperationCallExp)) {
+			if (ocl.source.oclIsKindOf(ATL!VariableExp)) {
+				if (ocl.source.referredVariable.varName = 'thisModule') {
+					lazyRule <- ATL!LazyMatchedRule.allInstances()->any(r|r.name = ocl.operationName);
+					t <- thisModule.CloneOclType( lazyRule.outPattern.elements->at(1).type);
+				}
+			}
+		}
+		
+		if (ocl.oclIsTypeOf(ATL!CollectionOperationCallExp)) {
+			sourceType <- thisModule.CreateOclType(ocl.source);
+			if (ocl.operationName = 'union') {
+				t <- sourceType;
+			}
+			if (ocl.operationName = 'flatten') {
+				t <- thisModule.CloneOclType(sourceType.elementType);
+			}
+		}
+		
+		if (ocl.oclIsKindOf(ATL!IteratorExp)) {
+			sourceType <- thisModule.CreateOclType(ocl.source);
+			iterType <- sourceType.elementType;
+			for (i in ocl.iterators) {
+				i.type <- thisModule.CloneOclType(iterType);
+			}
+			argType <- thisModule.CreateOclType(ocl.body);
+			if (ocl.name = 'collect') {
+				t <- thisModule.CreateBagType(thisModule.CloneOclType(argType));
+			}
+			if (ocl.name = 'select') {
+				t <- thisModule.CloneOclType(sourceType);
+			}
+		}
+		
+		if (t.oclIsUndefined()) {
+			if (t.oclIsTypeOf(ATL!VariableExp)) {
+				if ( not (t.varName = 'thisModule') ) {
+					ocl.oclType().debug('could not type');
+				}
+			} else {
+				ocl.oclType().debug('could not type');
+			}
+		} 
+		t;
+	}
+}
+
+
+rule CreateSetType(t : ATL!"OclType") {
+	to bt : ATL!SetType ( elementType <- t )
+	do { bt; }
+}
+
+rule CreateBagType(t : ATL!"OclType") {
+	to bt : ATL!BagType ( elementType <- t )
+	do { bt; }
+}
+
+rule CreateOclTypeForNavigationOrAttributeCallExp_Obj(ocl : ATL!NavigationOrAttributeCallExp, sourceType : ATL!"OclType") {
+	to  type : ATL!OclModelElement
+	do {
+		if (not(thisModule.getInClass(sourceType.name).oclIsUndefined())) {
+			type.name <- thisModule.getInClassFeature(sourceType.name, ocl.name).eType.name;
+			type.model <- thisModule.resolveTemp(thisModule.inOclModel);
+		} else {
+			type.name <- thisModule.getOutClassFeature(sourceType.name, ocl.name).eType.name;
+			type.model <- thisModule.resolveTemp(thisModule.outOclModel);
+		}
+		type;
+	}
+}
+
+rule CreateOclTypeForNavigationOrAttributeCallExp_Set(ocl : ATL!NavigationOrAttributeCallExp, sourceType : ATL!"OclType") {
+	to  setType : ATL!SetType (elementType <- elemType),
+		elemType : ATL!OclModelElement 
+	do {
+		if (not(thisModule.getInClass(sourceType.name).oclIsUndefined())) {
+			elemType.name <- thisModule.getInClassFeature(sourceType.name, ocl.name).eType.name;
+			elemType.model <- thisModule.resolveTemp(thisModule.inOclModel);
+		} else {
+			elemType.name <- thisModule.getOutClassFeature(sourceType.name, ocl.name).eType.name;
+			elemType.model <- thisModule.resolveTemp(thisModule.outOclModel);
+		}
+		setType;
+	}
+}
+
+rule CopyUnit {
+ from
+  s : ATL!Unit
+  (
+   s.oclIsTypeOf(ATL!Unit)
+  )
+ to
+  t : ATL!Unit (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   libraries <- s.libraries,
+   name <- s.name
+  )
+}
+
+rule CopyLibrary {
+ from
+  s : ATL!Library
+  (
+   s.oclIsTypeOf(ATL!Library)
+  )
+ to
+  t : ATL!Library (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   libraries <- s.libraries,
+   name <- s.name,
+   helpers <- s.helpers
+  )
+}
+
+rule CopyQuery {
+ from
+  s : ATL!Query
+  (
+   s.oclIsTypeOf(ATL!Query)
+  )
+ to
+  t : ATL!Query (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   libraries <- s.libraries,
+   name <- s.name,
+   body <- s.body,
+   helpers <- s.helpers
+  )
+}
+
+rule CopyModule {
+ from
+  s : ATL!Module
+  (
+   s.oclIsTypeOf(ATL!Module)
+  )
+ to
+  t : ATL!Module (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   libraries <- s.libraries,
+   name <- s.name,
+   isRefining <- s.isRefining,
+   inModels <- s.inModels,
+   outModels <- s.outModels,
+   elements <- s.elements
+  )
+  do {
+  	thisModule.oclModelIn <- t.inModels->any(x|true);
+  	thisModule.oclModelOut <- t.outModels->any(x|true);
+  }
+}
+
+rule CopyHelper {
+ from
+  s : ATL!Helper
+  (
+   s.oclIsTypeOf(ATL!Helper)
+  )
+ to
+  t : ATL!Helper (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   module <- s.module,
+   query <- s.query,
+   library <- s.library,
+   definition <- s.definition
+  )
+}
+
+rule CopyMatchedRule {
+ from
+  s : ATL!MatchedRule
+  (
+   s.oclIsTypeOf(ATL!MatchedRule)
+  )
+ to
+  t : ATL!MatchedRule (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   module <- s.module,
+   outPattern <- s.outPattern,
+   actionBlock <- s.actionBlock,
+   variables <- s.variables,
+   name <- s.name,
+   inPattern <- s.inPattern,
+   children <- s.children,
+   superRule <- s.superRule,
+   isAbstract <- s.isAbstract,
+   isRefining <- s.isRefining,
+   isNoDefault <- s.isNoDefault
+  )
+}
+
+rule CopyLazyMatchedRule {
+ from
+  s : ATL!LazyMatchedRule
+  (
+   s.oclIsTypeOf(ATL!LazyMatchedRule)
+  )
+ to
+  t : ATL!LazyMatchedRule (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   module <- s.module,
+   outPattern <- s.outPattern,
+   actionBlock <- s.actionBlock,
+   variables <- s.variables,
+   name <- s.name,
+   inPattern <- s.inPattern,
+   children <- s.children,
+   superRule <- s.superRule,
+   isAbstract <- s.isAbstract,
+   isRefining <- s.isRefining,
+   isNoDefault <- s.isNoDefault,
+   isUnique <- s.isUnique
+  )
+}
+
+rule CopyCalledRule {
+ from
+  s : ATL!CalledRule
+  (
+   s.oclIsTypeOf(ATL!CalledRule)
+  )
+ to
+  t : ATL!CalledRule (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   module <- s.module,
+   outPattern <- s.outPattern,
+   actionBlock <- s.actionBlock,
+   variables <- s.variables,
+   name <- s.name,
+   parameters <- s.parameters,
+   isEntrypoint <- s.isEntrypoint,
+   isEndpoint <- s.isEndpoint
+  )
+}
+
+rule CopyInPattern {
+ from
+  s : ATL!InPattern
+  (
+   s.oclIsTypeOf(ATL!InPattern)
+  )
+ to
+  t : ATL!InPattern (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   elements <- s.elements,
+   rule <- s.rule,
+   filter <- s.filter
+  )
+}
+
+rule CopyOutPattern {
+ from
+  s : ATL!OutPattern
+  (
+   s.oclIsTypeOf(ATL!OutPattern)
+  )
+ to
+  t : ATL!OutPattern (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   rule <- s.rule,
+   elements <- s.elements
+  )
+}
+
+rule CopySimpleInPatternElement {
+ from
+  s : ATL!SimpleInPatternElement
+  (
+   s.oclIsTypeOf(ATL!SimpleInPatternElement)
+  )
+ to
+  t : ATL!SimpleInPatternElement (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   mapsTo <- s.mapsTo,
+   inPattern <- s.inPattern,
+   models <- s.models
+  )
+}
+
+rule CopySimpleOutPatternElement {
+ from
+  s : ATL!SimpleOutPatternElement
+  (
+   s.oclIsTypeOf(ATL!SimpleOutPatternElement)
+  )
+ to
+  t : ATL!SimpleOutPatternElement (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   outPattern <- s.outPattern,
+   sourceElement <- s.sourceElement,
+   bindings <- s.bindings,
+   model <- s.model,
+   reverseBindings <- s.reverseBindings
+  )
+}
+
+rule CopyForEachOutPatternElement {
+ from
+  s : ATL!ForEachOutPatternElement
+  (
+   s.oclIsTypeOf(ATL!ForEachOutPatternElement)
+  )
+ to
+  t : ATL!ForEachOutPatternElement (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   outPattern <- s.outPattern,
+   sourceElement <- s.sourceElement,
+   bindings <- s.bindings,
+   model <- s.model,
+   collection <- s.collection,
+   iterator <- s.iterator
+  )
+}
+
+rule CopyBinding {
+ from
+  s : ATL!Binding
+  (
+   s.oclIsTypeOf(ATL!Binding)
+  )
+ to
+  t : ATL!Binding (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   value <- s.value,
+   outPatternElement <- s.outPatternElement,
+   propertyName <- s.propertyName,
+   isAssignment <- s.isAssignment
+  )
+}
+
+rule CopyRuleVariableDeclaration {
+ from
+  s : ATL!RuleVariableDeclaration
+  (
+   s.oclIsTypeOf(ATL!RuleVariableDeclaration)
+  )
+ to
+  t : ATL!RuleVariableDeclaration (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   rule <- s.rule
+  )
+}
+
+rule CopyLibraryRef {
+ from
+  s : ATL!LibraryRef
+  (
+   s.oclIsTypeOf(ATL!LibraryRef)
+  )
+ to
+  t : ATL!LibraryRef (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   unit <- s.unit,
+   name <- s.name
+  )
+}
+
+rule CopyActionBlock {
+ from
+  s : ATL!ActionBlock
+  (
+   s.oclIsTypeOf(ATL!ActionBlock)
+  )
+ to
+  t : ATL!ActionBlock (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   rule <- s.rule,
+   statements <- s.statements
+  )
+}
+
+rule CopyExpressionStat {
+ from
+  s : ATL!ExpressionStat
+  (
+   s.oclIsTypeOf(ATL!ExpressionStat)
+  )
+ to
+  t : ATL!ExpressionStat (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   expression <- s.expression
+  )
+}
+
+rule CopyBindingStat {
+ from
+  s : ATL!BindingStat
+  (
+   s.oclIsTypeOf(ATL!BindingStat)
+  )
+ to
+  t : ATL!BindingStat (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   source <- s.source,
+   propertyName <- s.propertyName,
+   isAssignment <- s.isAssignment,
+   value <- s.value
+  )
+}
+
+rule CopyIfStat {
+ from
+  s : ATL!IfStat
+  (
+   s.oclIsTypeOf(ATL!IfStat)
+  )
+ to
+  t : ATL!IfStat (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   condition <- s.condition,
+   thenStatements <- s.thenStatements,
+   elseStatements <- s.elseStatements
+  )
+}
+
+rule CopyForStat {
+ from
+  s : ATL!ForStat
+  (
+   s.oclIsTypeOf(ATL!ForStat)
+  )
+ to
+  t : ATL!ForStat (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   iterator <- s.iterator,
+   collection <- s.collection,
+   statements <- s.statements
+  )
+}
+
+rule CopyVariableExp {
+ from
+  s : ATL!VariableExp
+  (
+   s.oclIsTypeOf(ATL!VariableExp)
+  )
+ to
+  t : ATL!VariableExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   referredVariable <- s.referredVariable
+  )
+  do {
+	t.type <- thisModule.CreateOclType(s);
+  }
+}
+
+rule CopySuperExp {
+ from
+  s : ATL!SuperExp
+  (
+   s.oclIsTypeOf(ATL!SuperExp)
+  )
+ to
+  t : ATL!SuperExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute
+  )
+}
+
+rule CopyStringExp {
+ from
+  s : ATL!StringExp
+  (
+   s.oclIsTypeOf(ATL!StringExp)
+  )
+ to
+  t : ATL!StringExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   stringSymbol <- s.stringSymbol
+  )
+}
+
+rule CopyBooleanExp {
+ from
+  s : ATL!BooleanExp
+  (
+   s.oclIsTypeOf(ATL!BooleanExp)
+  )
+ to
+  t : ATL!BooleanExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   booleanSymbol <- s.booleanSymbol
+  )
+}
+
+rule CopyRealExp {
+ from
+  s : ATL!RealExp
+  (
+   s.oclIsTypeOf(ATL!RealExp)
+  )
+ to
+  t : ATL!RealExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   realSymbol <- s.realSymbol
+  )
+}
+
+rule CopyIntegerExp {
+ from
+  s : ATL!IntegerExp
+  (
+   s.oclIsTypeOf(ATL!IntegerExp)
+  )
+ to
+  t : ATL!IntegerExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   integerSymbol <- s.integerSymbol
+  )
+}
+
+rule CopyBagExp {
+ from
+  s : ATL!BagExp
+  (
+   s.oclIsTypeOf(ATL!BagExp)
+  )
+ to
+  t : ATL!BagExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   elements <- s.elements
+  )
+}
+
+rule CopyOrderedSetExp {
+ from
+  s : ATL!OrderedSetExp
+  (
+   s.oclIsTypeOf(ATL!OrderedSetExp)
+  )
+ to
+  t : ATL!OrderedSetExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   elements <- s.elements
+  )
+}
+
+rule CopySequenceExp {
+ from
+  s : ATL!SequenceExp
+  (
+   s.oclIsTypeOf(ATL!SequenceExp)
+  )
+ to
+  t : ATL!SequenceExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   elements <- s.elements
+  )
+}
+
+rule CopySetExp {
+ from
+  s : ATL!SetExp
+  (
+   s.oclIsTypeOf(ATL!SetExp)
+  )
+ to
+  t : ATL!SetExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   elements <- s.elements
+  )
+}
+
+rule CopyTupleExp {
+ from
+  s : ATL!TupleExp
+  (
+   s.oclIsTypeOf(ATL!TupleExp)
+  )
+ to
+  t : ATL!TupleExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   tuplePart <- s.tuplePart
+  )
+}
+
+rule CopyTuplePart {
+ from
+  s : ATL!TuplePart
+  (
+   s.oclIsTypeOf(ATL!TuplePart)
+  )
+ to
+  t : ATL!TuplePart (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   tuple <- s.tuple
+  )
+}
+
+rule CopyMapExp {
+ from
+  s : ATL!MapExp
+  (
+   s.oclIsTypeOf(ATL!MapExp)
+  )
+ to
+  t : ATL!MapExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   elements <- s.elements
+  )
+}
+
+rule CopyMapElement {
+ from
+  s : ATL!MapElement
+  (
+   s.oclIsTypeOf(ATL!MapElement)
+  )
+ to
+  t : ATL!MapElement (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   map <- s.map,
+   key <- s.key,
+   value <- s.value
+  )
+}
+
+rule CopyEnumLiteralExp {
+ from
+  s : ATL!EnumLiteralExp
+  (
+   s.oclIsTypeOf(ATL!EnumLiteralExp)
+  )
+ to
+  t : ATL!EnumLiteralExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name
+  )
+}
+
+rule CopyOclUndefinedExp {
+ from
+  s : ATL!OclUndefinedExp
+  (
+   s.oclIsTypeOf(ATL!OclUndefinedExp)
+  )
+ to
+  t : ATL!OclUndefinedExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute
+  )
+}
+
+rule CopyNavigationOrAttributeCallExp {
+ from
+  s : ATL!NavigationOrAttributeCallExp
+  (
+   s.oclIsTypeOf(ATL!NavigationOrAttributeCallExp)
+  )
+ to
+  t : ATL!NavigationOrAttributeCallExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   source <- s.source,
+   name <- s.name
+  )
+  do {
+  	t.type <- thisModule.CreateOclType(s);
+  }
+}
+
+rule CopyOperationCallExp {
+ from
+  s : ATL!OperationCallExp
+  (
+   s.oclIsTypeOf(ATL!OperationCallExp)
+  )
+ to
+  t : ATL!OperationCallExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   source <- s.source,
+   arguments <- s.arguments,
+   operationName <- s.operationName
+  )
+  do {
+  	t.type <- thisModule.CreateOclType(s);
+  }
+}
+
+rule CopyOperatorCallExp {
+ from
+  s : ATL!OperatorCallExp
+  (
+   s.oclIsTypeOf(ATL!OperatorCallExp)
+  )
+ to
+  t : ATL!OperatorCallExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   source <- s.source,
+   arguments <- s.arguments,
+   operationName <- s.operationName
+  )
+}
+
+rule CopyCollectionOperationCallExp {
+ from
+  s : ATL!CollectionOperationCallExp
+  (
+   s.oclIsTypeOf(ATL!CollectionOperationCallExp)
+  )
+ to
+  t : ATL!CollectionOperationCallExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   source <- s.source,
+   arguments <- s.arguments,
+   operationName <- s.operationName
+  )
+  do {
+  	t.type <- thisModule.CreateOclType(s);
+  }
+}
+
+rule CopyIterateExp {
+ from
+  s : ATL!IterateExp
+  (
+   s.oclIsTypeOf(ATL!IterateExp)
+  )
+ to
+  t : ATL!IterateExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   source <- s.source,
+   body <- s.body,
+   iterators <- s.iterators,
+   result <- s.result
+  )
+}
+
+rule CopyIteratorExp {
+ from
+  s : ATL!IteratorExp
+  (
+   s.oclIsTypeOf(ATL!IteratorExp)
+  )
+ to
+  t : ATL!IteratorExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   source <- s.source,
+   body <- s.body,
+   iterators <- s.iterators,
+   name <- s.name
+  )
+  do {
+  	t.type <- thisModule.CreateOclType(s);
+  }
+}
+
+rule CopyLetExp {
+ from
+  s : ATL!LetExp
+  (
+   s.oclIsTypeOf(ATL!LetExp)
+  )
+ to
+  t : ATL!LetExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   variable <- s.variable,
+   in_ <- s.in_
+  )
+}
+
+rule CopyIfExp {
+ from
+  s : ATL!IfExp
+  (
+   s.oclIsTypeOf(ATL!IfExp)
+  )
+ to
+  t : ATL!IfExp (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   thenExpression <- s.thenExpression,
+   condition <- s.condition,
+   elseExpression <- s.elseExpression
+  )
+}
+
+rule CopyVariableDeclaration {
+ from
+  s : ATL!VariableDeclaration
+  (
+   s.oclIsTypeOf(ATL!VariableDeclaration)
+  )
+ to
+  t : ATL!VariableDeclaration (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp
+  )
+}
+
+
+
+rule CopyIterator {
+ from
+  s : ATL!Iterator
+  (
+   s.oclIsTypeOf(ATL!Iterator)
+  )
+ to
+  t : ATL!Iterator (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   loopExpr <- s.loopExpr
+  )
+}
+
+rule CopyParameter {
+ from
+  s : ATL!Parameter
+  (
+   s.oclIsTypeOf(ATL!Parameter)
+  )
+ to
+  t : ATL!Parameter (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   id <- s.id,
+   varName <- s.varName,
+   type <- s.type,
+   initExpression <- s.initExpression,
+   letExp <- s.letExp,
+   baseExp <- s.baseExp,
+   variableExp <- s.variableExp,
+   operation <- s.operation
+  )
+}
+
+rule CopyCollectionType {
+ from
+  s : ATL!CollectionType
+  (
+   s.oclIsTypeOf(ATL!CollectionType)
+  )
+ to
+  t : ATL!CollectionType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   elementType <- s.elementType
+  )
+}
+
+abstract rule CopyOclType {
+ from
+  s : ATL!"OclType"
+  (
+   s.oclIsTypeOf(ATL!"OclType")
+  )
+ to
+  t : ATL!"OclType" (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration
+  )
+}
+
+rule CopyStringType {
+ from
+  s : ATL!StringType
+  (
+   s.oclIsTypeOf(ATL!StringType)
+  )
+ to
+  t : ATL!StringType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration
+  )
+}
+
+rule CopyBooleanType {
+ from
+  s : ATL!BooleanType
+  (
+   s.oclIsTypeOf(ATL!BooleanType)
+  )
+ to
+  t : ATL!BooleanType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration
+  )
+}
+
+rule CopyIntegerType {
+ from
+  s : ATL!IntegerType
+  (
+   s.oclIsTypeOf(ATL!IntegerType)
+  )
+ to
+  t : ATL!IntegerType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration
+  )
+}
+
+rule CopyRealType {
+ from
+  s : ATL!RealType
+  (
+   s.oclIsTypeOf(ATL!RealType)
+  )
+ to
+  t : ATL!RealType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration
+  )
+}
+
+rule CopyBagType {
+ from
+  s : ATL!BagType
+  (
+   s.oclIsTypeOf(ATL!BagType)
+  )
+ to
+  t : ATL!BagType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   elementType <- s.elementType
+  )
+}
+
+rule CopyOrderedSetType {
+ from
+  s : ATL!OrderedSetType
+  (
+   s.oclIsTypeOf(ATL!OrderedSetType)
+  )
+ to
+  t : ATL!OrderedSetType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   elementType <- s.elementType
+  )
+}
+
+rule CopySequenceType {
+ from
+  s : ATL!SequenceType
+  (
+   s.oclIsTypeOf(ATL!SequenceType)
+  )
+ to
+  t : ATL!SequenceType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   elementType <- s.elementType
+  )
+}
+
+rule CopySetType {
+ from
+  s : ATL!SetType
+  (
+   s.oclIsTypeOf(ATL!SetType)
+  )
+ to
+  t : ATL!SetType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   elementType <- s.elementType
+  )
+}
+
+rule CopyOclAnyType {
+ from
+  s : ATL!OclAnyType
+  (
+   s.oclIsTypeOf(ATL!OclAnyType)
+  )
+ to
+  t : ATL!OclAnyType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration
+  )
+}
+
+rule CopyTupleType {
+ from
+  s : ATL!"TupleType"
+  (
+   s.oclIsTypeOf(ATL!"TupleType")
+  )
+ to
+  t : ATL!"TupleType" (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   attributes <- s.attributes
+  )
+}
+
+rule CopyTupleTypeAttribute {
+ from
+  s : ATL!TupleTypeAttribute
+  (
+   s.oclIsTypeOf(ATL!TupleTypeAttribute)
+  )
+ to
+  t : ATL!TupleTypeAttribute (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   tupleType <- s.tupleType,
+   name <- s.name
+  )
+}
+
+rule CopyOclModelElement {
+ from
+  s : ATL!OclModelElement
+  (
+   s.oclIsTypeOf(ATL!OclModelElement)
+  )
+ to
+  t : ATL!OclModelElement (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   model <- s.model
+  )
+}
+
+rule CopyMapType {
+ from
+  s : ATL!MapType
+  (
+   s.oclIsTypeOf(ATL!MapType)
+  )
+ to
+  t : ATL!MapType (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   type <- s.type,
+   ifExp3 <- s.ifExp3,
+   appliedProperty <- s.appliedProperty,
+   collection <- s.collection,
+   letExp <- s.letExp,
+   loopExp <- s.loopExp,
+   parentOperation <- s.parentOperation,
+   initializedVariable <- s.initializedVariable,
+   ifExp2 <- s.ifExp2,
+   owningOperation <- s.owningOperation,
+   ifExp1 <- s.ifExp1,
+   owningAttribute <- s.owningAttribute,
+   name <- s.name,
+   definitions <- s.definitions,
+  --  oclExpression <- s.oclExpression,  
+   operation <- s.operation,
+   mapType2 <- s.mapType2,
+   attribute <- s.attribute,
+   mapType <- s.mapType,
+   collectionTypes <- s.collectionTypes,
+   tupleTypeAttribute <- s.tupleTypeAttribute,
+   variableDeclaration <- s.variableDeclaration,
+   valueType <- s.valueType,
+   keyType <- s.keyType
+  )
+}
+
+rule CopyOclFeatureDefinition {
+ from
+  s : ATL!OclFeatureDefinition
+  (
+   s.oclIsTypeOf(ATL!OclFeatureDefinition)
+  )
+ to
+  t : ATL!OclFeatureDefinition (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   feature <- s.feature,
+   context_ <- s.context_
+  )
+}
+
+rule CopyOclContextDefinition {
+ from
+  s : ATL!OclContextDefinition
+  (
+   s.oclIsTypeOf(ATL!OclContextDefinition)
+  )
+ to
+  t : ATL!OclContextDefinition (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   definition <- s.definition,
+   context_ <- s.context_
+  )
+}
+
+rule CopyAttribute {
+ from
+  s : ATL!Attribute
+  (
+   s.oclIsTypeOf(ATL!Attribute)
+  )
+ to
+  t : ATL!Attribute (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   definition <- s.definition,
+   name <- s.name,
+   initExpression <- s.initExpression,
+   type <- s.type
+  )
+}
+
+rule CopyOperation {
+ from
+  s : ATL!Operation
+  (
+   s.oclIsTypeOf(ATL!Operation)
+  )
+ to
+  t : ATL!Operation (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   definition <- s.definition,
+   name <- s.name,
+   parameters <- s.parameters,
+   returnType <- s.returnType,
+   body <- s.body
+  )
+}
+
+rule CopyOclModel {
+ from
+  s : ATL!OclModel
+ to
+  t : ATL!OclModel (
+   location <- s.location,
+   commentsBefore <- s.commentsBefore,
+   commentsAfter <- s.commentsAfter,
+   name <- s.name,
+   metamodel <- s.metamodel,
+   elements <- s.elements,
+   model <- s.model
+  )
+}

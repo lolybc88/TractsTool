@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ruletypesmm="http://ruletypesmm/1.0" name="UML2ER">
+  <rules name="Package" inherits="//@rules.1">
+    <features>ownedElements</features>
+    <types>Package</types>
+    <types>ERModel</types>
+  </rules>
+  <rules name="NamedElement">
+    <features>name</features>
+    <types>NamedElement</types>
+    <types>Element</types>
+  </rules>
+  <rules name="Class" inherits="//@rules.1">
+    <features>getAllProperties</features>
+    <types>Class</types>
+    <types>EntityType</types>
+  </rules>
+  <rules name="Property" inherits="//@rules.1">
+    <features>getAllProperties</features>
+    <types>Property</types>
+    <types>Class</types>
+    <types>Feature</types>
+  </rules>
+  <rules name="Attributes" inherits="//@rules.3">
+    <features>primitiveType</features>
+    <types>Property</types>
+    <types>Class</types>
+    <types>Attribute</types>
+  </rules>
+  <rules name="References" inherits="//@rules.3">
+    <features>complexType</features>
+    <types>Property</types>
+    <types>Class</types>
+    <types>WeakReference</types>
+  </rules>
+  <rules name="WeakReferences" inherits="//@rules.5">
+    <features>isContainment</features>
+    <types>Property</types>
+    <types>Class</types>
+    <types>WeakReference</types>
+  </rules>
+  <rules name="StrongReferences" inherits="//@rules.5">
+    <types>Property</types>
+    <types>Class</types>
+    <types>StrongReference</types>
+  </rules>
+</ruletypesmm:Trafo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ruletypesmm="http://ruletypesmm/1.0" name="Families2Persons">
+  <rules name="Member2Male">
+    <inputTypes name="Member"/>
+    <outputTypes name="Male"/>
+  </rules>
+  <rules name="Member2Female">
+    <inputTypes name="Member"/>
+    <outputTypes name="Female"/>
+  </rules>
+</ruletypesmm:Trafo>

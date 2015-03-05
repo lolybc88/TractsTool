@@ -1,0 +1,35 @@
+-- @path MM=/StateMachine2LookupTable/metamodels/StateMachine.ecore
+-- @path MM1=/StateMachine2LookupTable/metamodels/LookUpTable.ecore
+
+module SM2LUT;
+create OUT : MM1 from IN : MM;
+
+rule SM2LUT {
+	from
+		a : MM!StateMachine
+	to 
+		b : MM1!LookUpTable (
+			event <- a.transition -> collect(x|x.event).asSet() -> collect(x|thisModule.createEvent(x))
+		)
+}
+
+unique lazy rule createEvent {
+	from
+		a : String
+	to 
+		b : MM1!Event (
+			name <- a
+		)
+}
+
+rule T2C {
+	from
+		a : MM!Transition
+	to 
+		b : MM1!Change (
+			fromState <- a.src.name,
+			toState <- a.tgt.name,
+			sm <- a.src.refImmediateComposite().name,
+			event <- thisModule.createEvent(a.event)
+		)
+}

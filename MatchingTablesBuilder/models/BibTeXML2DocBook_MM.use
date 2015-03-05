@@ -1,0 +1,165 @@
+model BibTeX
+
+class src_BibTeXFile
+attributes
+end
+
+class src_Author
+attributes 
+ author : String
+end
+
+class src_BibTeXEntry
+attributes 
+ id : String
+end
+
+class src_AuthoredEntry < src_BibTeXEntry
+attributes
+end
+
+class src_DatedEntry < src_BibTeXEntry
+attributes 
+ year : String
+end
+
+class src_TitledEntry < src_BibTeXEntry
+attributes 
+ title : String
+end
+
+class src_BookTitledEntry < src_BibTeXEntry
+attributes 
+ booktitle : String
+end
+
+class src_Article < src_AuthoredEntry, src_DatedEntry, src_TitledEntry
+attributes 
+ journal : String
+end
+
+class src_TechReport < src_AuthoredEntry, src_DatedEntry, src_TitledEntry
+attributes
+end
+
+class src_Unpublished < src_AuthoredEntry, src_TitledEntry
+attributes 
+ note : String
+end
+
+class src_Manual < src_TitledEntry
+attributes
+end
+
+class src_Proceedings < src_DatedEntry, src_TitledEntry
+attributes
+end
+
+class src_InProceedings < src_Proceedings, src_AuthoredEntry, src_BookTitledEntry
+attributes
+end
+
+class src_Booklet < src_DatedEntry
+attributes
+end
+
+class src_Book < src_AuthoredEntry, src_DatedEntry, src_TitledEntry
+attributes 
+ publisher : String
+end
+
+class src_InCollection < src_Book, src_BookTitledEntry
+attributes
+end
+
+class src_InBook < src_Book
+attributes 
+ chapter : Integer
+end
+
+class src_Misc < src_BibTeXEntry
+attributes
+end
+
+class src_ThesisEntry < src_AuthoredEntry, src_DatedEntry, src_TitledEntry
+attributes 
+ school : String
+end
+
+class src_PhDThesis < src_ThesisEntry
+attributes
+end
+
+class src_MasterThesis < src_ThesisEntry
+attributes
+end
+
+class trg_DocBook
+attributes
+end
+
+class trg_Book
+attributes
+end
+
+class trg_TitledElement
+attributes 
+ title : String
+end
+
+class trg_Article < trg_TitledElement
+attributes
+end
+
+class trg_Section < trg_TitledElement
+attributes
+end
+
+class trg_Sect1 < trg_Section
+attributes
+end
+
+class trg_Sect2 < trg_Section
+attributes
+end
+
+class trg_Para
+attributes 
+ content : String
+end
+
+
+composition src_entries_BibTeXEntry_BibTeXFile between
+src_BibTeXFile [0..*] role entries_BibTeXEntry_BibTeXFile_derived
+src_BibTeXEntry [0..*] role entries_BibTeXEntry_BibTeXFile
+end
+
+composition src_authors_Author_AuthoredEntry between
+src_AuthoredEntry [0..*] role authors_Author_AuthoredEntry_derived
+src_Author [1..*] role authors_Author_AuthoredEntry
+end
+
+composition trg_books_Book_DocBook between
+trg_DocBook [0..*] role books_Book_DocBook_derived
+trg_Book [1..*] role books_Book_DocBook ordered
+end
+
+composition trg_articles_Article_Book between
+trg_Book [0..*] role articles_Article_Book_derived
+trg_Article [1..*] role articles_Article_Book ordered
+end
+
+composition trg_sections_1_Article_Sect1 between
+trg_Article [0..*] role sections_1_Article_Sect1_derived
+trg_Sect1 [1..*] role sections_1_Article_Sect1 ordered
+end
+
+composition trg_paras_Para_Section between
+trg_Section [1..1] role section_Para_Section
+trg_Para [1..*] role paras_Para_Section ordered
+end
+
+composition trg_sections_2_Sect1_Sect2 between
+trg_Sect1 [0..*] role sections_2_Sect1_Sect2_derived
+trg_Sect2 [1..*] role sections_2_Sect1_Sect2 ordered
+end

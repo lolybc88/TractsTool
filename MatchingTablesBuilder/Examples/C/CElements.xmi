@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:ruletypesmm="http://ruletypesmm/1.0"
+    name="Families2Persons">
+  <rules name="rule1">
+    <outTypes>trg_Male</outTypes>
+    <allFootPrints>src_C4.b</allFootPrints>
+    <allFootPrints>src_C2.a</allFootPrints>
+  </rules>
+  <mms inputMM="Families"/>
+  <mms inputMM="PrimitiveTypes"/>
+  <mms outputMM="Persons"/>
+  <mms outputMM="PrimitiveTypes"/>
+</ruletypesmm:Trafo>

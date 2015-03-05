@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ruletypesmm="http://ruletypesmm/1.0" name="Ecore2Use">
+  <rules name="Package2Model">
+    <features>eSuperPackage</features>
+    <features>name</features>
+    <features>eClassifiers</features>
+    <features>eReferences</features>
+    <features>eOpposite</features>
+    <types>EPackage</types>
+    <types>Model</types>
+  </rules>
+  <rules name="Classes">
+    <features>abstract</features>
+    <features>name</features>
+    <features>eSuperTypes</features>
+    <features>eAttributes</features>
+    <types>EClass</types>
+    <types>Class</types>
+  </rules>
+  <rules name="Attributes">
+    <features>name</features>
+    <types>EAttribute</types>
+    <types>Attribute</types>
+  </rules>
+  <rules name="SingleValuedAttributes" inherits="//@rules.2">
+    <values>1</values>
+    <features>upperBound</features>
+    <types>EAttribute</types>
+  </rules>
+  <rules name="MultiValuedAttributes" inherits="//@rules.2">
+    <values>1</values>
+    <values>Set</values>
+    <values>Bag</values>
+    <values>Sequence</values>
+    <features>upperBound</features>
+    <features>unique</features>
+    <features>ordered</features>
+    <types>EAttribute</types>
+    <types>Attribute</types>
+    <types>CollectionType</types>
+  </rules>
+  <rules name="SingleValuedEnumAttributes" inherits="//@rules.3">
+    <features>eAttributeType</features>
+    <types>EAttribute</types>
+    <types>Attribute</types>
+    <types>EnumerationType</types>
+  </rules>
+  <rules name="SingleValuedPrimitiveAttributes" inherits="//@rules.3">
+    <features>eAttributeType</features>
+    <features>getSimpleType</features>
+    <types>EAttribute</types>
+    <types>Attribute</types>
+    <types>SimpleType</types>
+  </rules>
+  <rules name="MultiValuedEnumAttributes" inherits="//@rules.4">
+    <features>eAttributeType</features>
+    <types>EAttribute</types>
+    <types>Attribute</types>
+    <types>CollectionType</types>
+    <types>EnumerationType</types>
+  </rules>
+  <rules name="MultiValuedPrimitiveAttributes" inherits="//@rules.4">
+    <features>eAttributeType</features>
+    <features>getSimpleType</features>
+    <types>EAttribute</types>
+    <types>Attribute</types>
+    <types>CollectionType</types>
+    <types>SimpleType</types>
+  </rules>
+  <rules name="CreateEnumerationType">
+    <features>name</features>
+    <features>eLiterals</features>
+    <types>EEnum</types>
+    <types>Enumeration</types>
+  </rules>
+  <rules name="Literals">
+    <features>name</features>
+    <types>EEnumLiteral</types>
+    <types>Literal</types>
+  </rules>
+  <rules name="UniDirectionalReference2Association">
+    <values>_</values>
+    <values>Composition</values>
+    <values>Association</values>
+    <values>0</values>
+    <values>1</values>
+    <values>false</values>
+    <values>_derived</values>
+    <features>eOpposite</features>
+    <features>name</features>
+    <features>eContainingClass</features>
+    <features>eReferenceType</features>
+    <features>containment</features>
+    <features>lowerBound</features>
+    <features>upperBound</features>
+    <features>ordered</features>
+    <types>EReference</types>
+    <types>Association</types>
+    <types>Role</types>
+  </rules>
+  <rules name="BiDirectionalReference2Association">
+    <values>_</values>
+    <values>Composition</values>
+    <values>Association</values>
+    <features>name</features>
+    <features>eContainingClass</features>
+    <features>eReferenceType</features>
+    <features>containment</features>
+    <features>lowerBound</features>
+    <features>upperBound</features>
+    <features>ordered</features>
+    <features>eOpposite</features>
+    <types>EReference</types>
+    <types>Association</types>
+    <types>Role</types>
+  </rules>
+</ruletypesmm:Trafo>

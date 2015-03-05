@@ -1,0 +1,92 @@
+model JoinedModel
+
+class src_NamedElement
+attributes 
+	name:String
+end 
+
+class src_Class < src_NamedElement
+attributes 
+end 
+
+class src_Property < src_NamedElement
+attributes 
+	primitiveType:String
+	isContainment:Boolean
+end
+
+class src_Package < src_NamedElement
+attributes 
+end 
+
+composition src_Class_ownedProperty_Property between
+src_Class [0..1] role _class
+src_Property [0..*] role ownedProperty
+end 
+
+association src_Class_superClasses_Class between
+src_Class [0..*] role _class
+src_Class [0..*] role superClasses
+end 
+
+association src_Property_complexType_Class between
+src_Property [0..*] role _property
+src_Class [0..1] role complexType
+end 
+
+composition src_Package_ownedElements_Class between
+src_Package [0..1] role _package
+src_Class [0..*] role ownedElements
+end 
+
+----------------------------------------------------
+
+class trg_ERModel < trg_Element
+attributes 
+end 
+
+class trg_EntityType < trg_Element
+attributes 
+end 
+
+class trg_Feature < trg_Element
+attributes 
+end 
+
+class trg_Attribute < trg_Feature
+attributes 
+	type:String
+end 
+
+class trg_WeakReference < trg_Reference
+attributes 
+end 
+
+class trg_StrongReference < trg_Reference
+attributes 
+end 
+
+class trg_Element
+attributes 
+	name:String
+end 
+
+class trg_Reference < trg_Feature
+attributes 
+end 
+
+composition trg_ERModel_entities_EntityType between
+trg_ERModel [0..1] role _eRModel
+trg_EntityType [0..*] role entities
+end 
+
+composition trg_EntityType_features_Feature between
+trg_EntityType [0..1] role _entityType
+trg_Feature [0..*] role features
+end 
+
+association trg_Reference_type_EntityType between
+trg_Reference [0..*] role _reference
+trg_EntityType [1..1] role type
+end 
+

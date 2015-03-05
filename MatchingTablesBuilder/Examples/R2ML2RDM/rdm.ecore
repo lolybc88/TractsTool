@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="RDM">
+  <eClassifiers xsi:type="ecore:EClass" name="DifferentFrom" eSuperTypes="#//PredicateSymbol"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SameAs" eSuperTypes="#//PredicateSymbol"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IndividualVariable" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classRef" ordered="false"
+        eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataVariable" eSuperTypes="#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Term"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" eType="#//Datatype"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false"
+        lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BuiltIn" eSuperTypes="#//PredicateSymbol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildInID" ordered="false"
+        unique="false" lowerBound="1" eType="#//Integer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PredicateSymbol"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Atom">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasPredicateSymbol" ordered="false"
+        lowerBound="1" eType="#//PredicateSymbol"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="terms" upperBound="-1"
+        eType="#//Term"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Consequent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containsAtom" ordered="false"
+        upperBound="-1" eType="#//Atom"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Antecedent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containsAtom" ordered="false"
+        upperBound="-1" eType="#//Atom"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule" eSuperTypes="#//OntologyElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasAntecedent" ordered="false"
+        lowerBound="1" eType="#//Antecedent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasConsequent" ordered="false"
+        lowerBound="1" eType="#//Consequent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Integer"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Long"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Float"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Double"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Boolean"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MinCardinalityRestriction" eSuperTypes="#//Restriction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="minCardinality" ordered="false"
+        lowerBound="1" eType="#//TypedLiteral"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaxCardinalityRestriction" eSuperTypes="#//Restriction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="maxCardinality" ordered="false"
+        lowerBound="1" eType="#//TypedLiteral"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CardinalityRestriction" eSuperTypes="#//Restriction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cardinality" ordered="false"
+        lowerBound="1" eType="#//TypedLiteral"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitiveProperty" eSuperTypes="#//ObjectProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SymmetricProperty" eSuperTypes="#//ObjectProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InverseFunctionalProperty" eSuperTypes="#//ObjectProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionalProperty" eSuperTypes="#//Property"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlainLiteral" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" ordered="false"
+        unique="false" lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedLiteral" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="theType" ordered="false"
+        unique="false" lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal" abstract="true" eSuperTypes="#//Datatype">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lexicalForm" ordered="false"
+        unique="false" lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Datatype" abstract="true" eSuperTypes="#//OntologyElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DataRange" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datatype" ordered="false"
+        eType="#//Datatype"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oneOf" ordered="false"
+        upperBound="-1" eType="#//Literal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AllValuesFromRestriction" eSuperTypes="#//Restriction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allValuesFromRange" ordered="false"
+        eType="#//DataRange"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allValuesFromClass" ordered="false"
+        eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SomeValuesFromRestriction" eSuperTypes="#//Restriction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="someValuesFromClass" ordered="false"
+        eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="someValuesFromRange" ordered="false"
+        eType="#//DataRange"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OntologyPropertyValue" eSuperTypes="#//OntologyProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="URI" eSuperTypes="#//Annotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationPropertyValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+        lowerBound="1" eType="#//Annotation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" ordered="false"
+        lowerBound="1" eType="#//AnnotatableElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1"
+        eType="#//AnnotationProperty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumeratedDatatype" eSuperTypes="#//Datatype">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collectionOf" ordered="false"
+        upperBound="-1" eType="#//DataValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//Datatype"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HasValueRestriction" eSuperTypes="#//Restriction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasLiteralValue" ordered="false"
+        eType="#//Literal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasValue" ordered="false"
+        eType="#//Individual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Restriction" abstract="true" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onProperty" ordered="false"
+        upperBound="-1" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toDatatype" ordered="false"
+        eType="#//Datatype"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AllDiferent" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distinctMembers" ordered="false"
+        upperBound="-1" eType="#//Individual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataValue" eSuperTypes="#//Constant #//Annotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1"
+        eType="#//Datatype"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        unique="false" lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DatatypePropertyValue" eSuperTypes="#//PropertyValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+        lowerBound="1" eType="#//DataValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectPropertyValue" eSuperTypes="#//PropertyValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+        lowerBound="1" eType="#//Individual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyValue" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" ordered="false"
+        lowerBound="1" eType="#//Individual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnionClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unionOf" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntersectionClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intersectionOf" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplementClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="complementOf" ordered="false"
+        lowerBound="1" eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumeratedClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oneOf" ordered="false"
+        upperBound="-1" eType="#//Individual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namespace">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" ordered="false"
+        upperBound="-1" eType="#//NamedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false"
+        lowerBound="1" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" ordered="false" unique="false"
+        lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DatatypeProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="range" ordered="false"
+        upperBound="-1" eType="#//DataRange"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="range" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inverseOf" ordered="false"
+        upperBound="-1" eType="#//ObjectProperty"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitive" ordered="false"
+        unique="false" lowerBound="1" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="symmetric" ordered="false"
+        unique="false" lowerBound="1" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inverseFunctional" ordered="false"
+        unique="false" lowerBound="1" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="complex" ordered="false"
+        unique="false" lowerBound="1" eType="#//Boolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Individual" eSuperTypes="#//Constant #//Annotation #//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sameAs" ordered="false"
+        upperBound="-1" eType="#//Individual"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="differentFrom" ordered="false"
+        upperBound="-1" eType="#//Individual"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1"
+        eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//PredicateSymbol #//OntologyElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="disjointWith" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subClassOf" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="equivalentClass" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" eSuperTypes="#//PredicateSymbol #//OntologyElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domain" ordered="false"
+        upperBound="-1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="equivalentProperty" ordered="false"
+        upperBound="-1" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subPropertyOf" ordered="false"
+        upperBound="-1" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deprecated" ordered="false"
+        unique="false" lowerBound="1" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="functional" ordered="false"
+        unique="false" lowerBound="1" eType="#//Boolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationProperty" eSuperTypes="#//OntologyElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OntologyProperty" abstract="true" eSuperTypes="#//OntologyElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OntologyElement" eSuperTypes="#//NamedElement #//AnnotatableElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Ontology" eSuperTypes="#//AnnotatableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" ordered="false"
+        upperBound="-1" eType="#//Ontology"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="priorVersion" ordered="false"
+        eType="#//Ontology"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" ordered="false"
+        upperBound="-1" eType="#//NamedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incompatibleWith" ordered="false"
+        upperBound="-1" eType="#//Ontology"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" ordered="false"
+        upperBound="-1" eType="#//OntologyPropertyValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotatableElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" ordered="false" unique="false"
+        lowerBound="1" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false"
+        lowerBound="1" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" ordered="false"
+        unique="false" lowerBound="1" eType="#//String"/>
+  </eClassifiers>
+</ecore:EPackage>

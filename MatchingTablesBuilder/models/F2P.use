@@ -1,0 +1,82 @@
+
+model JoinedModel
+
+class Family
+attributes 
+	lastName:String
+end 
+
+class Member
+attributes 
+	firstName:String
+end 
+
+composition Family_father_Member between
+Family [0..1] role familyFather
+Member [1..1] role father
+end 
+
+composition Family_mother_Member between
+Family [0..1] role familyMother
+Member [1..1] role mother
+end 
+
+composition Family_sons_Member between
+Family [0..1] role familySon
+Member [0..*] role sons
+end 
+
+composition Family_daughters_Member between
+Family [0..1] role familyDaughter
+Member [0..*] role daughters
+end 
+
+
+abstract class Person
+attributes 
+	fullName:String
+end 
+
+class Male < Person
+attributes 
+end 
+
+class Female < Person
+attributes 
+end 
+
+constraints
+
+-- context Family inv SRC_oneDaughterOneSon:
+-- Family.allInstances->forAll(f|f.daughters->size=1 and f.sons->size=1)
+
+context Family inv SRC_TRG_MotherDaughter2Female:
+Family.allInstances->forAll(fam|Female.allInstances->exists(m|
+fam.mother.firstName.concat(' ').concat(fam.lastName)=m.fullName))
+
+context Family inv SRC_TRG_MotherDaughter2Female2:
+Family.allInstances->forAll(fam|Female.allInstances->exists(d|
+fam.daughters->exists(x|x.firstName.concat(' ').
+concat(fam.lastName)=d.fullName)))
+
+context Family inv SRC_TRG_FatherSon2Male:
+Family.allInstances->forAll(fam|Male.allInstances->exists(f|
+fam.father.firstName.concat(' ').concat(fam.lastName)=f.fullName))
+and Family.allInstances->forAll(fam|Male.allInstances->exists(s|
+fam.sons->any(true).firstName.concat(' ').
+concat(fam.lastName)=s.fullName))
+
+context Family inv SRC_TRG_Female2MotherDaughter:
+Female.allInstances->forAll(f|Family.allInstances->exists(fam|
+fam.mother.firstName.concat(' ').concat(fam.lastName)=f.fullName
+or fam.daughters->any(true).firstName.concat(' ').
+concat(fam.lastName)=f.fullName))
+
+context Family inv SRC_TRG_Male2FatherSon:
+Male.allInstances->forAll(m|Family.allInstances->exists(fam|
+fam.father.firstName.concat(' ').concat(fam.lastName)=m.fullName
+or fam.sons->any(true).firstName.concat(' ').
+concat(fam.lastName)=m.fullName))
+
+context Family inv SRC_TRG_MemberSize_EQ_PersonSize:
+Member.allInstances->size=Person.allInstances->size

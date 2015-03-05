@@ -1,0 +1,18 @@
+<project name="InjectATLTrafo" default="InjectATLTrafo">  
+	
+	<target name="InjectATLTrafo">
+	
+	<atl.loadModel name="ATL" metamodel="MOF" path="metamodels/ATL.ecore" />
+		
+	<atl.loadModel name="myATL" metamodel="ATL" path="transformations/T4.atl">
+ 		<injector name="ATL" />
+	</atl.loadModel>
+
+	<atl.saveModel model="myATL" path="models/T4.xmi">
+	</atl.saveModel>	
+	
+	</target>
+	
+	<echo> Done! </echo>
+	
+</project>

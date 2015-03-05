@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ruletypesmm="http://ruletypesmm/1.0" name="PathExp2TextualPathExp">
+  <rules name="Main">
+    <inTypes>src_PathExp</inTypes>
+    <outTypes>trg_TextualPathExp</outTypes>
+    <outTypes>trg_Path</outTypes>
+    <allNavigationPaths>src_PathExp</allNavigationPaths>
+    <allNavigationPaths>trg_TextualPathExp</allNavigationPaths>
+    <allNavigationPaths>trg_Path</allNavigationPaths>
+    <allNavigationPaths>trg_TextualPathExp.path</allNavigationPaths>
+    <allNavigationPaths>trg_Path.transitions</allNavigationPaths>
+    <bindingFeatures>trg_TextualPathExp.path</bindingFeatures>
+    <bindingFeatures>trg_Path.transitions</bindingFeatures>
+    <allFootPrints>src_PathExp</allFootPrints>
+    <allFootPrints>trg_TextualPathExp</allFootPrints>
+    <allFootPrints>trg_Path</allFootPrints>
+    <allFootPrints>trg_TextualPathExp.path</allFootPrints>
+    <allFootPrints>trg_Path.transitions</allFootPrints>
+    <allFootPrints>trg_Transition</allFootPrints>
+  </rules>
+  <rules name="Loop">
+    <inFeatures>src_Transition.source</inFeatures>
+    <inFeatures>src_Transition.target</inFeatures>
+    <inTypes>src_Transition</inTypes>
+    <outTypes>trg_PrimitiveTrans</outTypes>
+    <allNavigationPaths>src_Transition</allNavigationPaths>
+    <allNavigationPaths>src_Transition.source</allNavigationPaths>
+    <allNavigationPaths>src_Transition.target</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans.name</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans.isMultiple</allNavigationPaths>
+    <bindingFeatures>trg_PrimitiveTrans.name</bindingFeatures>
+    <bindingFeatures>trg_PrimitiveTrans.isMultiple</bindingFeatures>
+    <allFootPrints>src_Transition</allFootPrints>
+    <allFootPrints>src_Transition.source</allFootPrints>
+    <allFootPrints>src_State</allFootPrints>
+    <allFootPrints>src_Transition.target</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans.name</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans.isMultiple</allFootPrints>
+  </rules>
+  <rules name="STransition">
+    <inFeatures>src_Transition.source</inFeatures>
+    <inFeatures>src_Transition.target</inFeatures>
+    <inFeatures>src_Transition.source.Transition</inFeatures>
+    <inFeatures>src_Transition.source</inFeatures>
+    <inTypes>src_Transition</inTypes>
+    <outTypes>trg_PrimitiveTrans</outTypes>
+    <allNavigationPaths>src_Transition</allNavigationPaths>
+    <allNavigationPaths>src_Transition.source</allNavigationPaths>
+    <allNavigationPaths>src_Transition.target</allNavigationPaths>
+    <allNavigationPaths>src_Transition.source.Transition</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans.name</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans.isMultiple</allNavigationPaths>
+    <bindingFeatures>trg_PrimitiveTrans.name</bindingFeatures>
+    <bindingFeatures>trg_PrimitiveTrans.isMultiple</bindingFeatures>
+    <allFootPrints>src_Transition</allFootPrints>
+    <allFootPrints>src_Transition.source</allFootPrints>
+    <allFootPrints>src_State</allFootPrints>
+    <allFootPrints>src_Transition.target</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans.name</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans.isMultiple</allFootPrints>
+  </rules>
+  <rules name="MTransition">
+    <inFeatures>src_Transition.source</inFeatures>
+    <inFeatures>src_Transition.target</inFeatures>
+    <inFeatures>src_Transition.source.Transition</inFeatures>
+    <inFeatures>src_Transition.source</inFeatures>
+    <inTypes>src_Transition</inTypes>
+    <outTypes>trg_PrimitiveTrans</outTypes>
+    <allNavigationPaths>src_Transition</allNavigationPaths>
+    <allNavigationPaths>src_Transition.source</allNavigationPaths>
+    <allNavigationPaths>src_Transition.target</allNavigationPaths>
+    <allNavigationPaths>src_Transition.source.Transition</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans.name</allNavigationPaths>
+    <allNavigationPaths>trg_PrimitiveTrans.isMultiple</allNavigationPaths>
+    <bindingFeatures>trg_PrimitiveTrans.name</bindingFeatures>
+    <bindingFeatures>trg_PrimitiveTrans.isMultiple</bindingFeatures>
+    <allFootPrints>src_Transition</allFootPrints>
+    <allFootPrints>src_Transition.source</allFootPrints>
+    <allFootPrints>src_State</allFootPrints>
+    <allFootPrints>src_Transition.target</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans.name</allFootPrints>
+    <allFootPrints>trg_PrimitiveTrans.isMultiple</allFootPrints>
+  </rules>
+  <rules name="State">
+    <inFeatures>src_State.Transition</inFeatures>
+    <inTypes>src_State</inTypes>
+    <outTypes>trg_AlternativeTrans</outTypes>
+    <outTypes>trg_Path</outTypes>
+    <allNavigationPaths>src_State</allNavigationPaths>
+    <allNavigationPaths>src_State.Transition</allNavigationPaths>
+    <allNavigationPaths>trg_AlternativeTrans</allNavigationPaths>
+    <allNavigationPaths>trg_Path</allNavigationPaths>
+    <allNavigationPaths>trg_AlternativeTrans.altPaths</allNavigationPaths>
+    <allNavigationPaths>trg_AlternativeTrans.isMultiple</allNavigationPaths>
+    <allNavigationPaths>trg_Path.transitions</allNavigationPaths>
+    <bindingFeatures>trg_AlternativeTrans.altPaths</bindingFeatures>
+    <bindingFeatures>trg_AlternativeTrans.isMultiple</bindingFeatures>
+    <bindingFeatures>trg_Path.transitions</bindingFeatures>
+    <allFootPrints>src_State</allFootPrints>
+    <allFootPrints>src_Transition</allFootPrints>
+    <allFootPrints>trg_AlternativeTrans</allFootPrints>
+    <allFootPrints>trg_Path</allFootPrints>
+    <allFootPrints>trg_AlternativeTrans.altPaths</allFootPrints>
+    <allFootPrints>trg_AlternativeTrans.isMultiple</allFootPrints>
+    <allFootPrints>trg_Path.transitions</allFootPrints>
+    <allFootPrints>trg_Transition</allFootPrints>
+  </rules>
+  <mms inputMM="PathExp"/>
+  <mms inputMM="PrimitiveTypes"/>
+  <mms outputMM="PrimitiveTypes"/>
+  <mms outputMM="TextualPathExp"/>
+</ruletypesmm:Trafo>

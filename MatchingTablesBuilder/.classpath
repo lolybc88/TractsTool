@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/constraintsTypeExtractor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ATL_FootprintReader"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.tracts.tool"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.tracts.tool.use2text"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.tracts.tool.ecore2use"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Tracts4Text"/>
+	<classpathentry kind="lib" path="lib/gsbase.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20130125-0546.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.3.v20130125-0546.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.1.v20130125-0546.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common.source_3.6.200.v20130402-1505.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.m2m.atl.common_3.3.1.v201209061455.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.m2m.atl.core_3.3.1.v201209061455.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.m2m.atl.core.ant_3.3.1.v201209061455.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.m2m.atl.core.emf_3.3.1.v201209061455.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/Tracts2ATL/src" modelPluginID="Tracts2ATL" modelName="MatchingTables"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false">
+  <foreignModel>MatchingTables.ecore</foreignModel>
+  <genPackages prefix="Matchingtables" disposableProviderFactory="true" ecorePackage="MatchingTables.ecore#/">
+    <genClasses ecoreClass="MatchingTables.ecore#//MachtingResults">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//MachtingResults/cc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//MachtingResults/rc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//MachtingResults/rcr"/>
+    </genClasses>
+    <genClasses ecoreClass="MatchingTables.ecore#//CC"/>
+    <genClasses ecoreClass="MatchingTables.ecore#//RC"/>
+    <genClasses ecoreClass="MatchingTables.ecore#//RCR"/>
+    <genClasses image="false" ecoreClass="MatchingTables.ecore#//Table">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//Table/cells"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//Table/columns"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//Table/rows"/>
+    </genClasses>
+    <genClasses ecoreClass="MatchingTables.ecore#//Cell">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//Cell/column"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MatchingTables.ecore#//Cell/row"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MatchingTables.ecore#//Cell/value"/>
+    </genClasses>
+    <genClasses ecoreClass="MatchingTables.ecore#//Column">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MatchingTables.ecore#//Column/rule"/>
+    </genClasses>
+    <genClasses ecoreClass="MatchingTables.ecore#//Row">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MatchingTables.ecore#//Row/constraint"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

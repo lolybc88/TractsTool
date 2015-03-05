@@ -1,0 +1,63 @@
+
+model JoinedModel
+
+class StateMachine
+attributes 
+	name:String
+end 
+
+class State
+attributes 
+	name:String
+end 
+
+class Transition
+attributes
+	event:String
+end
+
+composition StateMachine_State between
+StateMachine [0..1]
+State [0..*] role state
+end 
+
+composition StateMachine_Transition between
+StateMachine [0..1]
+Transition [0..*] role transition
+end 
+
+association State_Transition1 between
+StateMachine [0..1] role tgt
+Transition [1..1] role incoming
+end 
+
+association State_Transition2 between
+StateMachine [0..1] role src
+Transition [1..1] role outcoming
+end 
+
+class LookUpTable
+end
+
+class Event
+attributes
+	name : String
+end
+
+class Change
+attributes
+	sm:String
+	fromState:String
+	toState:String
+end
+
+composition LookupTable_Event between
+LookUpTable [0..1]
+Event[0..*] role event
+end
+
+association Event_Change between
+Event [1] role event
+Change [0..*] role change
+end
+

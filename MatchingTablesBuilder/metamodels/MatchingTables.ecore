@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="matchingtables" nsURI="http://matchingtables/1.0" nsPrefix="matchingtables">
+  <eClassifiers xsi:type="ecore:EClass" name="MachtingResults">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cc" lowerBound="1" eType="#//CC"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rc" lowerBound="1" eType="#//RC"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rcr" lowerBound="1" eType="#//RCR"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CC" eSuperTypes="#//Table"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RC" eSuperTypes="#//Table"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RCR" eSuperTypes="#//Table"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Table" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
+        eType="#//Cell" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//Column" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cell">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" lowerBound="1"
+        eType="#//Column"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="row" lowerBound="1" eType="#//Row"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rule" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Row">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraint" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

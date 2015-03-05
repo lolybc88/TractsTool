@@ -1,0 +1,384 @@
+-- @nsURI MM=http://org.topcased.requirement/1.0
+-- @path MM1=/tr1/requisitepro/RequisitePro.ecore
+
+module form;
+create OUT : MM1 from IN : MM;
+
+rule root {
+	from
+		s: MM!RequirementProject 
+	to
+		t: MM1!Project (
+			name <- s.identifier,			
+			description <- s.shortDescription,
+			--here i need 1 of those twose--
+			--**********************************			
+			packages <- s.hierarchicalElement,			
+			packages <- s.chapter, --, packages <- s.attributeConfiguration,			
+			--content <- s.attributeConfiguration--, --content <- s.hierarchicalElement
+			--**********************************
+			---todo 
+			--,packages <- s.upstreamModel
+		
+---allInstances 
+--			content <- 	MM!Requirement.allInstances()
+---for the second MM
+--			,
+			content <- 	s.upstreamModel--.documents
+	)
+
+}
+
+rule Package1 {
+	from
+		s: MM!HierarchicalElement 
+	to
+		t: MM1!Package (
+			name <- 'HierarchicalElements_'+ s.identifier,
+			description <- s.shortDescription,
+			content <- s.requirement,
+			packages <- s.children
+		)
+}
+
+---this rule transformed to 4 rule to identify the source of each one
+--rule Package2 {
+--	from
+--		s: MM!SpecialChapter --()
+--	
+--	to
+--		t: MM1!Package (
+--			name <- 'special',
+--			--			name <- s.    s.identifier   --,
+----			,description <- s.shortDescription
+--			content <- s.requirement,
+--			packages <- s.hierarchicalElement
+--		)
+--}
+---*******************************************************************
+
+abstract rule SpecialChapter{
+	from 
+		s: MM!SpecialChapter
+    to
+		t:MM1!Package(
+			content <- s.requirement,
+			packages <- s.hierarchicalElement
+		)
+}
+
+
+rule Package3 extends SpecialChapter{
+	from
+		s: MM!UntracedChapter 
+	to
+		t: MM1!Package (
+			name <- 'Untraced_'
+		)
+}
+
+rule Package4 extends SpecialChapter {
+	from
+		s: MM!ProblemChapter 
+	to
+		t: MM1!Package (
+			name <- 'Problem_'
+		)
+}
+
+rule Package5 extends SpecialChapter {
+	from
+		s: MM!TrashChapter 
+	to
+		t: MM1!Package (
+			name <- 'Trash_' 
+		)
+}
+
+---todo
+----ce bout de code produit une erreur que je peut pas la comprendre.
+---///
+--rule Package7 extends Requirement{
+--	from
+--		s: MM!DeleteChapter 
+--	to
+--		t: MM1!Package (
+--			name <- 'Delete_'
+--		)
+--}
+---///
+
+----**********************************************************************************
+
+
+----------------Attribute-----------------------
+---au niveau attribute, j'ai besoin de definir name,type et value
+abstract rule Attribute{
+	from 
+		s: MM!Attribute((s.oclIsKindOf(MM!TextAttribute) or s.oclIsKindOf(MM!ObjectAttribute)) )--and not s.oclIsKindOf(MM!a)
+    to
+		t:MM1!Attribute(
+			---todo
+			----the type does not exist on the Attribute
+		)
+}
+
+
+rule TextAttribute extends Attribute { --extends Attribute{
+	from
+		s: MM!TextAttribute --(s.oclIsKindOf(MM!TextAttribute))	
+	to
+		t: MM1!Attribute (
+			---todo----this value is a EReference:EObject
+			value <- s.value, 			
+			type <- 'Text_'
+		)
+}
+---todo
+----value is a EReference:EObject
+
+--abstract rule ObjectAttribute extends Attribute{
+--	from 
+--		s: MM!ObjectAttribute
+--    to
+--		t:MM1!Attribute(
+--			--value <- s.value,--.toString()
+--			type <-'Object_' 
+--		)
+--}
+
+
+-----org.eclipse.m2m.atl.engine.emfvm.VMException: Trying to register several rules as default 
+-----for element org.topcased.requirement.impl.AttributeLinkImpl@9025a4 (name: #Link_to) 
+-----(partial: false) : ObjectAttribute and AttributeLink
+rule ObjectAttribute extends Attribute {-- extends Attribute{
+	from 
+		s: MM!ObjectAttribute --(not s.oclIsTypeOf(MM!TextAttribute))	
+    to
+		t:MM1!Attribute(
+			
+			value <- s.value.oclType().toString(),--ident,--.toString()
+			type <-'Object_' 
+		)
+}
+
+rule AttributeLink extends ObjectAttribute{
+	from
+		s: MM!AttributeLink 
+	to
+		t: MM1!Attribute (
+			value <-  s.value.ident --oclType().toString()--.regexReplaceAll('^.*!', ''),--.toString
+			,type <- 'Link_' 
+		)
+--		,m: MM1!"Ecore::EObject"(
+--			value <-  s.value
+--		)
+}
+--
+rule AttributeAllocate extends ObjectAttribute{
+	from
+		s: MM!AttributeAllocate 
+	to
+		t: MM1!Attribute (
+			value <- if s.value.oclIsUndefined() then '' else s.value.ident endif
+			--s.value.oclType().toString()--.ident,
+			,type <- 'Allocate_' 
+		)
+}
+
+
+
+
+---var---in this case, i can't present attribute with many value.
+--- TODO : ok it done , in this case i affect the default value in the beginning of the list of attribute
+--- seen the rule ConfiguratedAttribute
+--rule DefaultAttribute {
+--	from
+--		s: MM!DefaultAttributeValue --()
+--	
+--	to
+--		t: MM1!Attribute (
+--			value <-'DefaultAttribute_'+ s.value
+--		)
+--}
+----*************************************************************
+
+-------------------------Requirement------------------------------
+
+
+---in this case, i have a big problem that i have 1 abstract element and i have 3 target element (requierment, requirementProject, hierarchicalElement)
+---the problem is to difine the target model
+--abstract rule IdentifiedElement{
+--	from 
+--		s: MM!IdentifiedElement
+--    to
+--		t:MM1!??????(
+--			children <- s.externalResources,
+--			attributes <- s.attribute--- -> select(a | a.oclIsTypeOf(MM!TextAttribute))	
+--			,text <- s.shortDescription
+--		)
+--}
+
+
+----verifier text, type, name =====>> ok pour text et name, pour le type pas de valeur qui lui correspend a la source
+abstract rule Requirement{
+	from 
+		s: MM!Requirement
+    to
+		t:MM1!Requirement(
+			text <- s.shortDescription,
+			children <- s.externalResources,
+			---todo to delete for test only
+			attributes <- Sequence{}.debug(s.attribute->reject(a | a.oclIsTypeOf(MM!AttributeAllocate) or a.oclIsTypeOf(MM!AttributeLink) or a.oclIsTypeOf(MM!TextAttribute) or a.oclIsTypeOf(MM!ObjectAttribute))->collect(a | a.oclType().toString())),	--,--.oclIsTypeOf(MM!TextAttribute)
+			
+			attributes <- s.attribute-> select(a | a.oclIsTypeOf(MM!TextAttribute)),
+			attributes <- s.attribute-> select(a | a.oclIsTypeOf(MM!AttributeAllocate)),
+			attributes <- s.attribute-> select(a | a.oclIsTypeOf(MM!AttributeLink))
+			
+--			location <- thisModule.resolveTemp(s.getTheRoot.debug().toString(), k)
+---todo verification of the model, if it need this attribute or not
+			--,location <- s.getTheRoot.upstreamModel--.documents --s.getTheRoot.upstreamModel-----.documents
+			
+			---just for execute the second transformation
+			---,location <- s.getTheRoot.upstreamModel ---meme que sa marche,je ne trouve pas de resultat convenable puisque le modele cible commence par la balise XMI
+		)		
+}
+
+helper context MM!IdentifiedElement def : getTheRoot :Set( MM!RequirementProject) =
+	if self.oclIsTypeOf(MM!RequirementProject)   ---i can add a constraint that the element is OclIsTypeof(RequirementProject)
+	then 																	---or self.oclIsTypeOf( MM!RequirementProject)
+		self
+	else
+		if   self.oclIsKindOf(MM!SpecialChapter) then
+				OclUndefined
+			else
+				 self.refImmediateComposite().getTheRoot 
+		endif
+	endif;
+---todo i think is OK
+---because is not well connected to other elements in the model
+rule UpStreamModel {
+	from
+		s : MM!UpstreamModel
+	to
+		t : MM1!Document (
+			name <- s.ident,
+			description <- s.shortDescription
+		)
+}
+
+rule Requirement1 extends Requirement{
+	from
+		s: MM!CurrentRequirement	
+	to
+		t: MM1!Requirement (
+			name <- 'Current_'+s.identifier
+		)
+}
+
+rule Requirement2 extends Requirement {
+	from
+		s: MM!AnonymousRequirement	
+	to
+		t: MM1!Requirement (
+			name <- 'Anonymous_'+s.identifier
+		)
+}
+
+---it's deleted because the semantic
+--rule ConfiguratedAttribute {
+--	from
+--		s: MM!ConfiguratedAttribute 	
+--	to
+--		t: MM1!Attribute (
+--		value <- if s.listValue->notEmpty() then
+--			'Configurated_'+ s.defaultValue + '{'+ s.getListValueToString +'}' 
+--		else 
+--			OclUndefined--else_statements 
+--		endif
+--		,--listValue+s.listValue
+--		type <- s.type.toString()--,
+--		--value.debug().toString()
+--		--????<- s.name	
+--		)
+--}
+--helper context MM!ConfiguratedAttribute def : getListValueToString :String =
+--	self.listValue->iterate(e; res : String = '' |
+--		if not e.oclIsUndefined()
+--			then res +' '+ e.value --+','
+--			else res
+--		endif
+--);
+
+---this rule have to identify the elements that is are in the second ecore.
+---i have retrieve many problems that's why i trete this element in other ATL project "tr3tst""
+--rule UpStreamModel {
+--	from
+--		s : MM!UpstreamModel
+--	to
+--		t : MM1!Document (
+--			name <- s.ident,
+--			description <- s.shortDescription--,
+--			--type <- s.???????
+--			
+--			--package <- s.
+--			--name <- s.documents.debug()
+--		)
+--}
+
+--rule UpStreamModel {
+--	from
+--		s : MM!UpstreamModel 
+--	to
+--		t : MM1!Package (
+--			name <- s.documents.debug()
+--		)
+--}
+--
+--rule Package7 {  
+--	from
+--		s: MM!"ttm::Project" --UpstreamModel()
+--	
+--	to
+--		t: MM1!Package (
+--			name <- 'Projet_'+s.anyDocumentCovered--,
+--			--packages <- s.documents
+--			
+----			packages <- 
+--			--			name <- s.    s.identifier   --,
+----			,description <- s.shortDescription
+--			--content <- s.--.requirement,
+--			--packages <- s.hierarchicalElement
+--		)
+--}
+--
+--rule Package8 {
+--	from
+--		s: MM!"ttm::Document" --UpstreamModel()
+--	
+--	to
+--		t: MM1!Requirement (
+--			name <- 'Document_'+s.filename--,
+--			
+--			--packages <- s.documents
+--			
+----			packages <- 
+--			--			name <- s.    s.identifier   --,
+----			,description <- s.shortDescription
+--			--content <- s.--.requirement,
+--			--packages <- s.children --hierarchicalElement
+--			----NO--il vois les atts mais les att de l'hierarchical et non pas de
+--			--- Requirement
+--			--text <- s.externalResources.first(),--,
+--			--name <- 'Current_'+s.identifier,
+--			---text <- s.shortDescription,
+--			----the type does not exist
+--			--type <- s.
+--			---this item is not a valid feature
+--			--children <- s.children  --,
+--			
+--			
+--			--attributes <- s.attribute--- -> select(a | a.oclIsTypeOf(MM!TextAttribute))
+--		)
+--}
+---********************************************************

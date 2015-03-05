@@ -1,0 +1,48 @@
+module ER2REL;
+
+create OUT : REL from IN : ER;
+
+-- Create a relational schema for an ER schema
+rule S2S { 
+	from s : ER!ERSchema
+	to   t : REL!RELSchema ( relations <- s.elements )
+}
+
+-- modified later
+rule E2R { 
+	from s : ER!Entity
+	to   t : REL!Relation ( name  <- s.name )
+}
+
+-- Straightforward: relationships become relations
+rule R2R { 
+	from s : ER!Relship
+	to   t : REL!Relation ( name  <- s.name )
+}
+
+-- For each entity attribute, an attribute is required 
+-- for the corresponding relation
+rule EA2A { 
+	from att : ER!ERAttribute,
+	     ent : ER!Entity (att.entity = ent)
+	to   t : REL!RELAttribute ( name <- att.name, isKey <- att.isKey, relation <- ent )
+}
+
+-- For each relationship attribute, an attribute is required
+-- for the corresponding relation.
+rule RA2A { 
+	from att : ER!ERAttribute,
+		 rs  : ER!Relship ( att.relship = rs )
+	to   t : REL!RELAttribute ( name <- att.name, isKey <- att.isKey, relation <- rs )
+}
+
+-- For each relationship, the key attributes of all 
+-- participating entities have to be be reproduced 
+-- in the relation that corresponds to the relationship.
+-- (Foreign key attributes)
+rule RA2AK { 
+	from att : ER!ERAttribute,
+	     rse : ER!RelshipEnd ( att.entity = rse.entity and att.isKey = true )
+	to   t : REL!RELAttribute ( name <- att.name, isKey <- att.isKey, relation <- rse.relship )
+}
+

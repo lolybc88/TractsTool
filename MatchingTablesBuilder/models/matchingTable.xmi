@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="ASCII"?>
+<matchingtables:MachtingResults xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:matchingtables="http://matchingtables/1.0">
+  <cc>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.0" value="1.0"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.0" value="1.0"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.0"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.0" value="1.0"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.0" value="1.0"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.1" value="0.5"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.1" value="1.0"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.1"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.1" value="0.75"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.1" value="0.75"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.2" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.2" value="0.6666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.2"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.2" value="0.5"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.2" value="0.5"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.3"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.3" value="0.5"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.3" value="1.0"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.3" value="0.25"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.3" value="0.5"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.3" value="0.5"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.3" value="0.5"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.3" value="0.5"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.3" value="0.5"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.3"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.3"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.3"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.3"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.4"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.4" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.4" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.4" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.4" value="0.6666666666666666"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.4" value="0.25"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.4" value="0.25"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.4" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.4" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.4"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.4"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.4"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.4"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.5"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.5" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.5" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.5" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.5" value="0.6666666666666666"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.5" value="0.25"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.5" value="0.25"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.5" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.5" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.5"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.5"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.5"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.5"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.6"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.6" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.6" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.6" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.6" value="0.6666666666666666"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.6" value="0.25"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.6" value="0.25"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.6" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.6" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.6"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.6"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.6"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.6"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.7"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.7" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.7" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.7" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.7" value="0.6666666666666666"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.7" value="0.25"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.7" value="0.25"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.7" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.7" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.7"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.7"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.7"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.7"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.8" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.8" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.8" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.8" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.8" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.8" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.8" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.8" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.8" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.8" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.8"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.8"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.8"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.9" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.9" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.9" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.9" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.9" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.9" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.9" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.9" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.9" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.9" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.9"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.9"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.9"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.10" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.10" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.10" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.10" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.10" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.10" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.10" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.10" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.10" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.10" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.10"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.10"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.10"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.11" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.11" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.11" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.11" value="0.16666666666666666"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.11" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.11" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.11" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.11" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.11" value="0.5833333333333334"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.11" value="0.041666666666666664"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.11"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.11"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.11"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.12" value="0.14285714285714285"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.12" value="0.14285714285714285"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.12" value="0.2857142857142857"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.12" value="0.14285714285714285"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.12" value="0.2857142857142857"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.12" value="0.5"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.12" value="0.35714285714285715"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.12" value="0.5"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.12" value="0.35714285714285715"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.12" value="0.2857142857142857"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.12"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.12"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.12"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.13" value="0.5"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.13" value="0.5"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.13" value="0.25"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.13" value="0.5"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.13" value="0.25"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.13" value="1.0"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.13"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.14" value="0.5"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.14" value="1.0"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.14"/>
+    <cells column="//@cc/@columns.0" row="//@cc/@rows.15" value="0.25"/>
+    <cells column="//@cc/@columns.1" row="//@cc/@rows.15" value="0.3333333333333333"/>
+    <cells column="//@cc/@columns.2" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.3" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.4" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.5" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.6" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.7" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.8" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.9" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.10" row="//@cc/@rows.15"/>
+    <cells column="//@cc/@columns.11" row="//@cc/@rows.15" value="0.75"/>
+    <cells column="//@cc/@columns.12" row="//@cc/@rows.15" value="0.75"/>
+    <columns rule="R0"/>
+    <columns rule="R1"/>
+    <columns rule="R2"/>
+    <columns rule="R3"/>
+    <columns rule="R4"/>
+    <columns rule="R5"/>
+    <columns rule="R6"/>
+    <columns rule="R7"/>
+    <columns rule="R8"/>
+    <columns rule="R9"/>
+    <columns rule="R10"/>
+    <columns rule="R11"/>
+    <columns rule="R12"/>
+    <rows constraint="C0"/>
+    <rows constraint="C1"/>
+    <rows constraint="C2"/>
+    <rows constraint="C3"/>
+    <rows constraint="C4"/>
+    <rows constraint="C5"/>
+    <rows constraint="C6"/>
+    <rows constraint="C7"/>
+    <rows constraint="C8"/>
+    <rows constraint="C9"/>
+    <rows constraint="C10"/>
+    <rows constraint="C11"/>
+    <rows constraint="C12"/>
+    <rows constraint="C13"/>
+    <rows constraint="C14"/>
+    <rows constraint="C15"/>
+  </cc>
+</matchingtables:MachtingResults>

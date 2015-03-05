@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="4:1-73:2" name="UML2ER">
+    <commentsBefore>-- @path SimpleUML=/UML2ER/Metamodels/SimpleUml.ecore</commentsBefore>
+    <commentsBefore>-- @path ER=/UML2ER/Metamodels/ER.ecore</commentsBefore>
+    <commentsAfter>-- Contracts begin here...</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel</commentsAfter>
+    <commentsAfter>-- Feature: Package.name, ERModel.name</commentsAfter>
+    <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name))</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel, Class, EntityType</commentsAfter>
+    <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name</commentsAfter>
+    <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements-></commentsAfter>
+    <commentsAfter>--forAll(class | e.entities->one(entity | entity.name = class.name))))</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature</commentsAfter>
+    <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.feature, Property.name, Feature.name</commentsAfter>
+    <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | entity.features->forAll(f | f.name = prop.name))))))</commentsAfter>
+    <commentsAfter>-- Type: NamedElement, Element</commentsAfter>
+    <commentsAfter>--NamedElement.allInstances-> size() = Element.allInstances->size()</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel</commentsAfter>
+    <commentsAfter>--Package.allInstances->size() = ERModel.allInstances->size()</commentsAfter>
+    <commentsAfter>-- Type: Class, EntityType</commentsAfter>
+    <commentsAfter>--Class.allInstances->size() = EntityType.allInstances->size()</commentsAfter>
+    <commentsAfter>-- Type: Property, Feature</commentsAfter>
+    <commentsAfter>--Property.allInstances->size() = Feature.allInstances->size()</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature, Attribute</commentsAfter>
+    <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.primitiveType, Attribute.name</commentsAfter>
+    <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.primitiveType&lt;> &quot;&quot; and (not prop.primitiveType.oclIsUndefined()) implies entity.features-> select(f|f.oclIsTypeOf(Attribute)) -> one(f | f.name = prop.name))))))</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature, Reference, WeakReference</commentsAfter>
+    <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.complexType, Reference.name, Property.isContainment</commentsAfter>
+    <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name andp.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType &lt;> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and prop.isContainment impliesf.oclIsTypeOf(WeakReference)))))))</commentsAfter>
+    <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature, Reference, StrongReference</commentsAfter>
+    <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.complexType, Reference.name, Property.isContainment</commentsAfter>
+    <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType &lt;> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and not prop.isContainment impliesf.oclIsTypeOf(StrongReference)))))))</commentsAfter>
+    <inModels location="5:22-5:36" name="IN" metamodel="/2"/>
+    <outModels location="5:8-5:16" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:MatchedRule" location="9:1-16:2" name="NamedElement2Element" children="/0/@elements.1 /0/@elements.2 /0/@elements.3">
+      <commentsBefore>-- Type: NamedElement, Element</commentsBefore>
+      <commentsBefore>-- Feature: NamedElement.name, Element.name</commentsBefore>
+      <commentsAfter>-- Type: Package, ERModel</commentsAfter>
+      <commentsAfter>-- Feature: Package.ownedElements, ERModel.entities</commentsAfter>
+      <outPattern location="12:2-15:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="13:3-15:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="13:6-13:16" name="Element" model="/4"/>
+          <bindings location="14:4-14:18" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="14:12-14:18" name="name">
+              <source xsi:type="ocl:VariableExp" location="14:12-14:13" referredVariable="/0/@elements.0/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="10:2-11:28">
+        <elements xsi:type="atl:SimpleInPatternElement" location="11:3-11:28" varName="s" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="11:6-11:28" name="NamedElement" model="/3"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="20:1-27:2" name="Package" superRule="/0/@elements.0">
+      <commentsBefore>-- Type: Package, ERModel</commentsBefore>
+      <commentsBefore>-- Feature: Package.ownedElements, ERModel.entities</commentsBefore>
+      <commentsAfter>-- Type: Class, EntityType</commentsAfter>
+      <commentsAfter>-- Feature: Class.ownedProperty, EntityType.featues</commentsAfter>
+      <outPattern location="23:2-26:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="24:3-26:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="24:6-24:16" name="ERModel" model="/6"/>
+          <bindings location="25:4-25:31" propertyName="entities">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="25:16-25:31" name="ownedElements">
+              <source xsi:type="ocl:VariableExp" location="25:16-25:17" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="21:2-22:23">
+        <elements xsi:type="atl:SimpleInPatternElement" location="22:3-22:23" varName="s" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="22:6-22:23" name="Package" model="/5"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="31:1-34:72" name="Class" superRule="/0/@elements.0">
+      <commentsBefore>-- Type: Class, EntityType</commentsBefore>
+      <commentsBefore>-- Feature: Class.ownedProperty, EntityType.featues</commentsBefore>
+      <commentsAfter>-- Type: Propertz, Feature</commentsAfter>
+      <outPattern location="33:2-34:71">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="33:5-34:71" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="33:8-33:21" name="EntityType" model="/8"/>
+          <bindings location="34:4-34:69" propertyName="features">
+            <value xsi:type="ocl:IteratorExp" location="34:16-34:69" name="collect">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="34:16-34:31" name="ownedProperty">
+                <source xsi:type="ocl:VariableExp" location="34:16-34:17" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="34:46-34:68" operationName="Property">
+                <source xsi:type="ocl:VariableExp" location="34:46-34:56" referredVariable="/9"/>
+                <arguments xsi:type="ocl:VariableExp" location="34:66-34:67" referredVariable="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@iterators.0"/>
+              </body>
+              <iterators location="34:42-34:43" varName="e" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@body/@arguments.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="32:2-32:25">
+        <elements xsi:type="atl:SimpleInPatternElement" location="32:7-32:25" varName="s" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="32:10-32:25" name="Class" model="/7"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:LazyMatchedRule" location="38:1-41:2" name="Property" children="/0/@elements.4 /0/@elements.5" superRule="/0/@elements.0" isAbstract="true">
+      <commentsBefore>-- Type: Propertz, Feature</commentsBefore>
+      <commentsAfter>-- Type: Attribute, Property</commentsAfter>
+      <commentsAfter>-- Feature: Property.primitiveType, Attribute.type</commentsAfter>
+      <outPattern location="40:2-40:21">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="40:5-40:21" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="40:8-40:18" name="Feature" model="/11"/>
+        </elements>
+      </outPattern>
+      <inPattern location="39:2-39:28">
+        <elements xsi:type="atl:SimpleInPatternElement" location="39:7-39:28" varName="s">
+          <type xsi:type="ocl:OclModelElement" location="39:10-39:28" name="Property" model="/10"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:LazyMatchedRule" location="45:1-50:2" name="Attributes" superRule="/0/@elements.3">
+      <commentsBefore>-- Type: Attribute, Property</commentsBefore>
+      <commentsBefore>-- Feature: Property.primitiveType, Attribute.type</commentsBefore>
+      <commentsAfter>-- Type: Property, Reference</commentsAfter>
+      <commentsAfter>-- Feature: Property.complexType, Reference.type</commentsAfter>
+      <outPattern location="47:2-49:3">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="47:5-49:3" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="47:8-47:20" name="Attribute" model="/13"/>
+          <bindings location="48:4-48:27" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="48:12-48:27" name="primitiveType">
+              <source xsi:type="ocl:VariableExp" location="48:12-48:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="46:2-46:67">
+        <elements xsi:type="atl:SimpleInPatternElement" location="46:7-46:28" varName="s" variableExp="/0/@elements.4/@inPattern/@filter/@source/@source/@source /0/@elements.4/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="46:10-46:28" name="Property" model="/12"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="46:30-46:66" operationName="not">
+          <source xsi:type="ocl:OperationCallExp" location="46:34-46:66" operationName="oclIsUndefined">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="46:34-46:49" name="primitiveType">
+              <source xsi:type="ocl:VariableExp" location="46:34-46:35" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </source>
+          </source>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:LazyMatchedRule" location="54:1-59:2" name="References" children="/0/@elements.6 /0/@elements.7" superRule="/0/@elements.3" isAbstract="true">
+      <commentsBefore>-- Type: Property, Reference</commentsBefore>
+      <commentsBefore>-- Feature: Property.complexType, Reference.type</commentsBefore>
+      <commentsAfter>-- Type: Property, WeakReference</commentsAfter>
+      <commentsAfter>-- Feature: Property.isContainment</commentsAfter>
+      <outPattern location="56:2-58:3">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="56:5-58:3" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="56:8-56:20" name="Reference" model="/15"/>
+          <bindings location="57:4-57:25" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="57:12-57:25" name="complexType">
+              <source xsi:type="ocl:VariableExp" location="57:12-57:13" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="55:2-55:66">
+        <elements xsi:type="atl:SimpleInPatternElement" location="55:7-55:28" varName="s" variableExp="/0/@elements.5/@inPattern/@filter/@source/@source/@source /0/@elements.5/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="55:10-55:28" name="Property" model="/14"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="55:30-55:64" operationName="not">
+          <source xsi:type="ocl:OperationCallExp" location="55:34-55:64" operationName="oclIsUndefined">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="55:34-55:47" name="complexType">
+              <source xsi:type="ocl:VariableExp" location="55:34-55:35" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+            </source>
+          </source>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:LazyMatchedRule" location="63:1-66:2" name="WeakReferences" superRule="/0/@elements.5">
+      <commentsBefore>-- Type: Property, WeakReference</commentsBefore>
+      <commentsBefore>-- Feature: Property.isContainment</commentsBefore>
+      <commentsAfter>-- Type: Property, StrongReference</commentsAfter>
+      <commentsAfter>-- Feature: Property.isContainment</commentsAfter>
+      <outPattern location="65:2-65:24">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="65:5-65:24" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="65:8-65:24" name="WeakReference" model="/17"/>
+        </elements>
+      </outPattern>
+      <inPattern location="64:2-64:50">
+        <elements xsi:type="atl:SimpleInPatternElement" location="64:7-64:28" varName="s" variableExp="/0/@elements.6/@inPattern/@filter/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="64:10-64:28" name="Property" model="/16"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="64:30-64:49" operationName="not">
+          <source xsi:type="ocl:NavigationOrAttributeCallExp" location="64:34-64:49" name="isContainment">
+            <source xsi:type="ocl:VariableExp" location="64:34-64:35" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+          </source>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:LazyMatchedRule" location="70:1-73:2" name="StrongReferences" superRule="/0/@elements.5">
+      <commentsBefore>-- Type: Property, StrongReference</commentsBefore>
+      <commentsBefore>-- Feature: Property.isContainment</commentsBefore>
+      <commentsAfter>-- Contracts begin here...</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel</commentsAfter>
+      <commentsAfter>-- Feature: Package.name, ERModel.name</commentsAfter>
+      <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name))</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel, Class, EntityType</commentsAfter>
+      <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name</commentsAfter>
+      <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements-></commentsAfter>
+      <commentsAfter>--forAll(class | e.entities->one(entity | entity.name = class.name))))</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature</commentsAfter>
+      <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.feature, Property.name, Feature.name</commentsAfter>
+      <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | entity.features->forAll(f | f.name = prop.name))))))</commentsAfter>
+      <commentsAfter>-- Type: NamedElement, Element</commentsAfter>
+      <commentsAfter>--NamedElement.allInstances-> size() = Element.allInstances->size()</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel</commentsAfter>
+      <commentsAfter>--Package.allInstances->size() = ERModel.allInstances->size()</commentsAfter>
+      <commentsAfter>-- Type: Class, EntityType</commentsAfter>
+      <commentsAfter>--Class.allInstances->size() = EntityType.allInstances->size()</commentsAfter>
+      <commentsAfter>-- Type: Property, Feature</commentsAfter>
+      <commentsAfter>--Property.allInstances->size() = Feature.allInstances->size()</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature, Attribute</commentsAfter>
+      <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.primitiveType, Attribute.name</commentsAfter>
+      <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.primitiveType&lt;> &quot;&quot; and (not prop.primitiveType.oclIsUndefined()) implies entity.features-> select(f|f.oclIsTypeOf(Attribute)) -> one(f | f.name = prop.name))))))</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature, Reference, WeakReference</commentsAfter>
+      <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.complexType, Reference.name, Property.isContainment</commentsAfter>
+      <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name andp.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType &lt;> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and prop.isContainment impliesf.oclIsTypeOf(WeakReference)))))))</commentsAfter>
+      <commentsAfter>-- Type: Package, ERModel, Class, EntityType, Property, Feature, Reference, StrongReference</commentsAfter>
+      <commentsAfter>-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.complexType, Reference.name, Property.isContainment</commentsAfter>
+      <commentsAfter>--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType &lt;> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and not prop.isContainment impliesf.oclIsTypeOf(StrongReference)))))))</commentsAfter>
+      <outPattern location="72:2-72:26">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="72:5-72:26" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="72:8-72:26" name="StrongReference" model="/19"/>
+        </elements>
+      </outPattern>
+      <inPattern location="71:2-71:46">
+        <elements xsi:type="atl:SimpleInPatternElement" location="71:7-71:28" varName="s" variableExp="/0/@elements.7/@inPattern/@filter/@source">
+          <type xsi:type="ocl:OclModelElement" location="71:10-71:28" name="Property" model="/18"/>
+        </elements>
+        <filter xsi:type="ocl:NavigationOrAttributeCallExp" location="71:30-71:45" name="isContainment">
+          <source xsi:type="ocl:VariableExp" location="71:30-71:31" referredVariable="/0/@elements.7/@inPattern/@elements.0"/>
+        </filter>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="5:14-5:16" name="ER" model="/0/@outModels.0"/>
+  <ocl:OclModel location="5:27-5:36" name="SimpleUML" model="/0/@inModels.0"/>
+  <ocl:OclModel location="11:6-11:15" name="SimpleUML" elements="/0/@elements.0/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="13:6-13:8" name="ER" elements="/0/@elements.0/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="22:6-22:15" name="SimpleUML" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="24:6-24:8" name="ER" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="32:10-32:19" name="SimpleUML" elements="/0/@elements.2/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="33:8-33:10" name="ER" elements="/0/@elements.2/@outPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="34:46-34:56" varName="thisModule" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@body/@source"/>
+  <ocl:OclModel location="39:10-39:19" name="SimpleUML" elements="/0/@elements.3/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="40:8-40:10" name="ER" elements="/0/@elements.3/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="46:10-46:19" name="SimpleUML" elements="/0/@elements.4/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="47:8-47:10" name="ER" elements="/0/@elements.4/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="55:10-55:19" name="SimpleUML" elements="/0/@elements.5/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="56:8-56:10" name="ER" elements="/0/@elements.5/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="64:10-64:19" name="SimpleUML" elements="/0/@elements.6/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="65:8-65:10" name="ER" elements="/0/@elements.6/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="71:10-71:19" name="SimpleUML" elements="/0/@elements.7/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="72:8-72:10" name="ER" elements="/0/@elements.7/@outPattern/@elements.0/@type"/>
+</xmi:XMI>

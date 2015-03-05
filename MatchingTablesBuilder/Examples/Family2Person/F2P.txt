@@ -1,0 +1,8 @@
+src_Family.allInstances->forAll(f|f.daughters_Family_Member->size=1 and f.sons_Family_Member->size=1)
+src_Family.allInstances->forAll(fam|trg_Female.allInstances->exists(m| fam.mother_Family_Member.firstName.concat(' ').concat(fam.lastName)=m.fullName))
+src_Family.allInstances->forAll(fam|trg_Female.allInstances->exists(d| fam.daughters_Family_Member->exists(x|x.firstName.concat(' ').concat(fam.lastName)=d.fullName)))
+src_Family.allInstances->forAll(fam|trg_Male.allInstances->exists(f|fam.father_Family_Member.firstName.concat(' ').concat(fam.lastName)=f.fullName))and src_Family.allInstances->forAll(fam|trg_Male.allInstances->exists(s|fam.sons_Family_Member->any(true).firstName.concat(' ').concat(fam.lastName)=s.fullName))
+trg_Female.allInstances->forAll(f|src_Family.allInstances->exists(fam| fam.mother_Family_Member.firstName.concat(' ').concat(fam.lastName)=f.fullName or fam.daughters_Family_Member->any(true).firstName.concat(' ').concat(fam.lastName)=f.fullName))
+trg_Male.allInstances->forAll(m|src_Family.allInstances->exists(fam| fam.father_Family_Member.firstName.concat(' ').concat(fam.lastName)=m.fullName or fam.sons_Family_Member->any(true).firstName.concat(' ').concat(fam.lastName)=m.fullName))
+src_Member.allInstances->size=trg_Person.allInstances->size
+trg_Person.allInstances->forAll(p | p.fullName <> '' and not p.fullName.oclIsUndefined())

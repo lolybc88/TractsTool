@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="4:1-290:2" name="form">
+    <commentsBefore>-- @nsURI requirement=http://org.topcased.requirement/1.0</commentsBefore>
+    <commentsBefore>-- @path RequisitePro=/tr1/requisitepro/RequisitePro.ecore</commentsBefore>
+    <commentsAfter>---it's deleted because the semantic</commentsAfter>
+    <commentsAfter>--rule ConfiguratedAttribute {</commentsAfter>
+    <commentsAfter>--	from</commentsAfter>
+    <commentsAfter>--		s: requirement!ConfiguratedAttribute 	</commentsAfter>
+    <commentsAfter>--	to</commentsAfter>
+    <commentsAfter>--		t: RequisitePro!Attribute (</commentsAfter>
+    <commentsAfter>--		value &lt;- if s.listValue->notEmpty() then</commentsAfter>
+    <commentsAfter>--			'Configurated_'+ s.defaultValue + '{'+ s.getListValueToString +'}' </commentsAfter>
+    <commentsAfter>--		else </commentsAfter>
+    <commentsAfter>--			OclUndefined--else_statements </commentsAfter>
+    <commentsAfter>--		endif</commentsAfter>
+    <commentsAfter>--		,--listValue+s.listValue</commentsAfter>
+    <commentsAfter>--		type &lt;- s.type.toString()--,</commentsAfter>
+    <commentsAfter>--		--value.debug().toString()</commentsAfter>
+    <commentsAfter>--		--????&lt;- s.name	</commentsAfter>
+    <commentsAfter>--		)</commentsAfter>
+    <commentsAfter>--}</commentsAfter>
+    <commentsAfter>--helper context requirement!ConfiguratedAttribute def : getListValueToString :String =</commentsAfter>
+    <commentsAfter>--	self.listValue->iterate(e; res : String = '' |</commentsAfter>
+    <commentsAfter>--		if not e.oclIsUndefined()</commentsAfter>
+    <commentsAfter>--			then res +' '+ e.value --+','</commentsAfter>
+    <commentsAfter>--			else res</commentsAfter>
+    <commentsAfter>--		endif</commentsAfter>
+    <commentsAfter>--);</commentsAfter>
+    <commentsAfter>---this rule have to identify the elements that is are in the second ecore.</commentsAfter>
+    <commentsAfter>---i have retrieve many problems that's why i trete this element in other ATL project &quot;tr3tst&quot;&quot;</commentsAfter>
+    <commentsAfter>--rule UpStreamModel {</commentsAfter>
+    <commentsAfter>--	from</commentsAfter>
+    <commentsAfter>--		s : requirement!UpstreamModel</commentsAfter>
+    <commentsAfter>--	to</commentsAfter>
+    <commentsAfter>--		t : RequisitePro!Document (</commentsAfter>
+    <commentsAfter>--			name &lt;- s.ident,</commentsAfter>
+    <commentsAfter>--			description &lt;- s.shortDescription--,</commentsAfter>
+    <commentsAfter>--			--type &lt;- s.???????</commentsAfter>
+    <commentsAfter>--			</commentsAfter>
+    <commentsAfter>--			--package &lt;- s.</commentsAfter>
+    <commentsAfter>--			--name &lt;- s.documents.debug()</commentsAfter>
+    <commentsAfter>--		)</commentsAfter>
+    <commentsAfter>--}</commentsAfter>
+    <commentsAfter>--rule UpStreamModel {</commentsAfter>
+    <commentsAfter>--	from</commentsAfter>
+    <commentsAfter>--		s : requirement!UpstreamModel </commentsAfter>
+    <commentsAfter>--	to</commentsAfter>
+    <commentsAfter>--		t : RequisitePro!Package (</commentsAfter>
+    <commentsAfter>--			name &lt;- s.documents.debug()</commentsAfter>
+    <commentsAfter>--		)</commentsAfter>
+    <commentsAfter>--}</commentsAfter>
+    <commentsAfter>--</commentsAfter>
+    <commentsAfter>--rule Package7 {  </commentsAfter>
+    <commentsAfter>--	from</commentsAfter>
+    <commentsAfter>--		s: requirement!&quot;ttm::Project&quot; --UpstreamModel()</commentsAfter>
+    <commentsAfter>--	</commentsAfter>
+    <commentsAfter>--	to</commentsAfter>
+    <commentsAfter>--		t: RequisitePro!Package (</commentsAfter>
+    <commentsAfter>--			name &lt;- 'Projet_'+s.anyDocumentCovered--,</commentsAfter>
+    <commentsAfter>--			--packages &lt;- s.documents</commentsAfter>
+    <commentsAfter>--			</commentsAfter>
+    <commentsAfter>----			packages &lt;- </commentsAfter>
+    <commentsAfter>--			--			name &lt;- s.    s.identifier   --,</commentsAfter>
+    <commentsAfter>----			,description &lt;- s.shortDescription</commentsAfter>
+    <commentsAfter>--			--content &lt;- s.--.requirement,</commentsAfter>
+    <commentsAfter>--			--packages &lt;- s.hierarchicalElement</commentsAfter>
+    <commentsAfter>--		)</commentsAfter>
+    <commentsAfter>--}</commentsAfter>
+    <commentsAfter>--</commentsAfter>
+    <commentsAfter>--rule Package8 {</commentsAfter>
+    <commentsAfter>--	from</commentsAfter>
+    <commentsAfter>--		s: requirement!&quot;ttm::Document&quot; --UpstreamModel()</commentsAfter>
+    <commentsAfter>--	</commentsAfter>
+    <commentsAfter>--	to</commentsAfter>
+    <commentsAfter>--		t: RequisitePro!Requirement (</commentsAfter>
+    <commentsAfter>--			name &lt;- 'Document_'+s.filename--,</commentsAfter>
+    <commentsAfter>--			</commentsAfter>
+    <commentsAfter>--			--packages &lt;- s.documents</commentsAfter>
+    <commentsAfter>--			</commentsAfter>
+    <commentsAfter>----			packages &lt;- </commentsAfter>
+    <commentsAfter>--			--			name &lt;- s.    s.identifier   --,</commentsAfter>
+    <commentsAfter>----			,description &lt;- s.shortDescription</commentsAfter>
+    <commentsAfter>--			--content &lt;- s.--.requirement,</commentsAfter>
+    <commentsAfter>--			--packages &lt;- s.children --hierarchicalElement</commentsAfter>
+    <commentsAfter>--			----NO--il vois les atts mais les att de l'hierarchical et non pas de</commentsAfter>
+    <commentsAfter>--			--- Requirement</commentsAfter>
+    <commentsAfter>--			--text &lt;- s.externalResources.first(),--,</commentsAfter>
+    <commentsAfter>--			--name &lt;- 'Current_'+s.identifier,</commentsAfter>
+    <commentsAfter>--			---text &lt;- s.shortDescription,</commentsAfter>
+    <commentsAfter>--			----the type does not exist</commentsAfter>
+    <commentsAfter>--			--type &lt;- s.</commentsAfter>
+    <commentsAfter>--			---this item is not a valid feature</commentsAfter>
+    <commentsAfter>--			--children &lt;- s.children  --,</commentsAfter>
+    <commentsAfter>--			</commentsAfter>
+    <commentsAfter>--			</commentsAfter>
+    <commentsAfter>--			--attributes &lt;- s.attribute--- -> select(a | a.oclIsTypeOf(requirement!TextAttribute))</commentsAfter>
+    <commentsAfter>--		)</commentsAfter>
+    <commentsAfter>--}</commentsAfter>
+    <commentsAfter>---********************************************************</commentsAfter>
+    <inModels location="5:32-5:48" name="IN" metamodel="/2"/>
+    <outModels location="5:8-5:26" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:MatchedRule" location="7:1-30:2" name="root">
+      <outPattern location="10:2-28:3">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="11:3-28:3" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="11:6-11:26" name="Project" model="/4"/>
+          <bindings location="12:4-12:24" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="12:12-12:24" name="identifier">
+              <type xsi:type="ocl:OclModelElement" name="EString"/>
+              <source xsi:type="ocl:VariableExp" location="12:12-12:13" referredVariable="/0/@elements.0/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="RequirementProject"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="13:4-13:37" propertyName="description">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="13:19-13:37" name="shortDescription">
+              <type xsi:type="ocl:OclModelElement" name="EString"/>
+              <source xsi:type="ocl:VariableExp" location="13:19-13:20" referredVariable="/0/@elements.0/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="RequirementProject"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="16:4-16:37" propertyName="packages">
+            <commentsBefore>--here i need 1 of those twose--</commentsBefore>
+            <commentsBefore>--**********************************			</commentsBefore>
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="16:16-16:37" name="hierarchicalElement">
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="16:16-16:17" referredVariable="/0/@elements.0/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="RequirementProject"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="17:4-17:25" propertyName="packages">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="17:16-17:25" name="chapter">
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="SpecialChapter"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="17:16-17:17" referredVariable="/0/@elements.0/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="RequirementProject"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="27:4-27:31" propertyName="content">
+            <commentsBefore>--, packages &lt;- s.attributeConfiguration,			</commentsBefore>
+            <commentsBefore>--content &lt;- s.attributeConfiguration--, --content &lt;- s.hierarchicalElement</commentsBefore>
+            <commentsBefore>--**********************************</commentsBefore>
+            <commentsBefore>---todo </commentsBefore>
+            <commentsBefore>--,packages &lt;- s.upstreamModel</commentsBefore>
+            <commentsBefore>---allInstances </commentsBefore>
+            <commentsBefore>--			content &lt;- 	requirement!Requirement.allInstances()</commentsBefore>
+            <commentsBefore>---for the second requirement</commentsBefore>
+            <commentsBefore>--			,</commentsBefore>
+            <commentsAfter>--.documents</commentsAfter>
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="27:16-27:31" name="upstreamModel">
+              <commentsAfter>--.documents</commentsAfter>
+              <type xsi:type="ocl:OclModelElement" name="UpstreamModel"/>
+              <source xsi:type="ocl:VariableExp" location="27:16-27:17" referredVariable="/0/@elements.0/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="RequirementProject"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="8:2-9:36">
+        <elements xsi:type="atl:SimpleInPatternElement" location="9:3-9:36" varName="s" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.0/@outPattern/@elements.0/@bindings.1/@value/@source /0/@elements.0/@outPattern/@elements.0/@bindings.2/@value/@source /0/@elements.0/@outPattern/@elements.0/@bindings.3/@value/@source /0/@elements.0/@outPattern/@elements.0/@bindings.4/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="9:6-9:36" name="RequirementProject" model="/3"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="32:1-42:2" name="Package1">
+      <commentsAfter>---this rule transformed to 4 rule to identify the source of each one</commentsAfter>
+      <commentsAfter>--rule Package2 {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s: requirement!SpecialChapter --()</commentsAfter>
+      <commentsAfter>--	</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t: RequisitePro!Package (</commentsAfter>
+      <commentsAfter>--			name &lt;- 'special',</commentsAfter>
+      <commentsAfter>--			--			name &lt;- s.    s.identifier   --,</commentsAfter>
+      <commentsAfter>----			,description &lt;- s.shortDescription</commentsAfter>
+      <commentsAfter>--			content &lt;- s.requirement,</commentsAfter>
+      <commentsAfter>--			packages &lt;- s.hierarchicalElement</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>---*******************************************************************</commentsAfter>
+      <outPattern location="35:2-41:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="36:3-41:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="36:6-36:26" name="Package" model="/6"/>
+          <bindings location="37:4-37:49" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="37:12-37:49" operationName="+">
+              <source xsi:type="ocl:StringExp" location="37:12-37:35" stringSymbol="HierarchicalElements_"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="37:37-37:49" name="identifier">
+                <type xsi:type="ocl:OclModelElement" name="EString"/>
+                <source xsi:type="ocl:VariableExp" location="37:37-37:38" referredVariable="/0/@elements.1/@inPattern/@elements.0">
+                  <type xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+                </source>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="38:4-38:37" propertyName="description">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="38:19-38:37" name="shortDescription">
+              <type xsi:type="ocl:OclModelElement" name="EString"/>
+              <source xsi:type="ocl:VariableExp" location="38:19-38:20" referredVariable="/0/@elements.1/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="39:4-39:28" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="39:15-39:28" name="requirement">
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="Requirement"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="39:15-39:16" referredVariable="/0/@elements.1/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="40:4-40:26" propertyName="packages">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="40:16-40:26" name="children">
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="40:16-40:17" referredVariable="/0/@elements.1/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="33:2-34:37">
+        <elements xsi:type="atl:SimpleInPatternElement" location="34:3-34:37" varName="s" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source /0/@elements.1/@outPattern/@elements.0/@bindings.1/@value/@source /0/@elements.1/@outPattern/@elements.0/@bindings.2/@value/@source /0/@elements.1/@outPattern/@elements.0/@bindings.3/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="34:6-34:37" name="HierarchicalElement" model="/5"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="60:1-68:2" name="SpecialChapter" children="/0/@elements.3 /0/@elements.4 /0/@elements.5" isAbstract="true">
+      <commentsBefore>---this rule transformed to 4 rule to identify the source of each one</commentsBefore>
+      <commentsBefore>--rule Package2 {</commentsBefore>
+      <commentsBefore>--	from</commentsBefore>
+      <commentsBefore>--		s: requirement!SpecialChapter --()</commentsBefore>
+      <commentsBefore>--	</commentsBefore>
+      <commentsBefore>--	to</commentsBefore>
+      <commentsBefore>--		t: RequisitePro!Package (</commentsBefore>
+      <commentsBefore>--			name &lt;- 'special',</commentsBefore>
+      <commentsBefore>--			--			name &lt;- s.    s.identifier   --,</commentsBefore>
+      <commentsBefore>----			,description &lt;- s.shortDescription</commentsBefore>
+      <commentsBefore>--			content &lt;- s.requirement,</commentsBefore>
+      <commentsBefore>--			packages &lt;- s.hierarchicalElement</commentsBefore>
+      <commentsBefore>--		)</commentsBefore>
+      <commentsBefore>--}</commentsBefore>
+      <commentsBefore>---*******************************************************************</commentsBefore>
+      <outPattern location="63:5-67:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="64:3-67:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="64:5-64:25" name="Package" model="/8"/>
+          <bindings location="65:4-65:28" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="65:15-65:28" name="requirement">
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="Requirement"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="65:15-65:16" referredVariable="/0/@elements.2/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="SpecialChapter"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="66:4-66:37" propertyName="packages">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="66:16-66:37" name="hierarchicalElement">
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="HierarchicalElement"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="66:16-66:17" referredVariable="/0/@elements.2/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="SpecialChapter"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="61:2-62:32">
+        <elements xsi:type="atl:SimpleInPatternElement" location="62:3-62:32" varName="s" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.2/@outPattern/@elements.0/@bindings.1/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="62:6-62:32" name="SpecialChapter" model="/7"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="71:1-78:2" name="Package3" superRule="/0/@elements.2">
+      <outPattern location="74:2-77:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="75:3-77:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="75:6-75:26" name="Package" model="/10"/>
+          <bindings location="76:4-76:23" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="76:12-76:23" stringSymbol="Untraced_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="72:2-73:33">
+        <elements xsi:type="atl:SimpleInPatternElement" location="73:3-73:33" varName="s">
+          <type xsi:type="ocl:OclModelElement" location="73:6-73:33" name="UntracedChapter" model="/9"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="80:1-87:2" name="Package4" superRule="/0/@elements.2">
+      <outPattern location="83:2-86:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="84:3-86:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="84:6-84:26" name="Package" model="/12"/>
+          <bindings location="85:4-85:22" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="85:12-85:22" stringSymbol="Problem_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="81:2-82:32">
+        <elements xsi:type="atl:SimpleInPatternElement" location="82:3-82:32" varName="s">
+          <type xsi:type="ocl:OclModelElement" location="82:6-82:32" name="ProblemChapter" model="/11"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="89:1-96:2" name="Package5" superRule="/0/@elements.2">
+      <commentsAfter>---todo</commentsAfter>
+      <commentsAfter>----ce bout de code produit une erreur que je peut pas la comprendre.</commentsAfter>
+      <commentsAfter>---///</commentsAfter>
+      <commentsAfter>--rule Package7 extends Requirement{</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s: requirement!DeleteChapter </commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t: RequisitePro!Package (</commentsAfter>
+      <commentsAfter>--			name &lt;- 'Delete_'</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>---///</commentsAfter>
+      <commentsAfter>----**********************************************************************************</commentsAfter>
+      <commentsAfter>----------------Attribute-----------------------</commentsAfter>
+      <commentsAfter>---au niveau attribute, j'ai besoin de definir name,type et value</commentsAfter>
+      <outPattern location="92:2-95:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="93:3-95:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="93:6-93:26" name="Package" model="/14"/>
+          <bindings location="94:4-94:20" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="94:12-94:20" stringSymbol="Trash_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="90:2-91:30">
+        <elements xsi:type="atl:SimpleInPatternElement" location="91:3-91:30" varName="s">
+          <type xsi:type="ocl:OclModelElement" location="91:6-91:30" name="TrashChapter" model="/13"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="116:1-124:2" name="Attribute" children="/0/@elements.7 /0/@elements.8" isAbstract="true">
+      <commentsBefore>---todo</commentsBefore>
+      <commentsBefore>----ce bout de code produit une erreur que je peut pas la comprendre.</commentsBefore>
+      <commentsBefore>---///</commentsBefore>
+      <commentsBefore>--rule Package7 extends Requirement{</commentsBefore>
+      <commentsBefore>--	from</commentsBefore>
+      <commentsBefore>--		s: requirement!DeleteChapter </commentsBefore>
+      <commentsBefore>--	to</commentsBefore>
+      <commentsBefore>--		t: RequisitePro!Package (</commentsBefore>
+      <commentsBefore>--			name &lt;- 'Delete_'</commentsBefore>
+      <commentsBefore>--		)</commentsBefore>
+      <commentsBefore>--}</commentsBefore>
+      <commentsBefore>---///</commentsBefore>
+      <commentsBefore>----**********************************************************************************</commentsBefore>
+      <commentsBefore>----------------Attribute-----------------------</commentsBefore>
+      <commentsBefore>---au niveau attribute, j'ai besoin de definir name,type et value</commentsBefore>
+      <outPattern location="119:5-123:4">
+        <commentsBefore>--and not s.oclIsKindOf(requirement!a)</commentsBefore>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="120:3-123:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="120:5-120:27" name="Attribute" model="/18"/>
+        </elements>
+      </outPattern>
+      <inPattern location="117:2-118:118">
+        <commentsAfter>--and not s.oclIsKindOf(requirement!a)</commentsAfter>
+        <elements xsi:type="atl:SimpleInPatternElement" location="118:3-118:27" varName="s" variableExp="/0/@elements.6/@inPattern/@filter/@source/@source /0/@elements.6/@inPattern/@filter/@arguments.0/@source">
+          <type xsi:type="ocl:OclModelElement" location="118:6-118:27" name="Attribute" model="/15"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="118:29-118:115" operationName="or">
+          <source xsi:type="ocl:OperationCallExp" location="118:29-118:69" operationName="oclIsKindOf">
+            <source xsi:type="ocl:VariableExp" location="118:29-118:30" referredVariable="/0/@elements.6/@inPattern/@elements.0">
+              <type xsi:type="ocl:OclModelElement" name="Attribute"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="118:43-118:68" name="TextAttribute" model="/16"/>
+          </source>
+          <arguments xsi:type="ocl:OperationCallExp" location="118:73-118:115" operationName="oclIsKindOf">
+            <source xsi:type="ocl:VariableExp" location="118:73-118:74" referredVariable="/0/@elements.6/@inPattern/@elements.0">
+              <type xsi:type="ocl:OclModelElement" name="Attribute"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="118:87-118:114" name="ObjectAttribute" model="/17"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="127:1-136:2" name="TextAttribute" superRule="/0/@elements.6">
+      <commentsAfter>---todo</commentsAfter>
+      <commentsAfter>----value is a EReference:EObject</commentsAfter>
+      <commentsAfter>--abstract rule ObjectAttribute extends Attribute{</commentsAfter>
+      <commentsAfter>--	from </commentsAfter>
+      <commentsAfter>--		s: requirement!ObjectAttribute</commentsAfter>
+      <commentsAfter>--    to</commentsAfter>
+      <commentsAfter>--		t:RequisitePro!Attribute(</commentsAfter>
+      <commentsAfter>--			--value &lt;- s.value,--.toString()</commentsAfter>
+      <commentsAfter>--			type &lt;-'Object_' </commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>-----org.eclipse.m2m.atl.engine.emfvm.VMException: Trying to register several rules as default </commentsAfter>
+      <commentsAfter>-----for element org.topcased.requirement.impl.AttributeLinkImpl@9025a4 (name: #Link_to) </commentsAfter>
+      <commentsAfter>-----(partial: false) : ObjectAttribute and AttributeLink</commentsAfter>
+      <outPattern location="130:2-135:4">
+        <commentsBefore>--(s.oclIsKindOf(requirement!TextAttribute))	</commentsBefore>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="131:3-135:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="131:6-131:28" name="Attribute" model="/20"/>
+          <bindings location="133:4-133:20" propertyName="value">
+            <commentsBefore>---todo----this value is a EReference:EObject</commentsBefore>
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="133:13-133:20" name="value">
+              <type xsi:type="ocl:OclModelElement" name="EString"/>
+              <source xsi:type="ocl:VariableExp" location="133:13-133:14" referredVariable="/0/@elements.7/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="TextAttribute"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="134:4-134:19" propertyName="type">
+            <value xsi:type="ocl:StringExp" location="134:12-134:19" stringSymbol="Text_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="128:2-129:31">
+        <commentsBefore>--extends Attribute{</commentsBefore>
+        <commentsAfter>--(s.oclIsKindOf(requirement!TextAttribute))	</commentsAfter>
+        <elements xsi:type="atl:SimpleInPatternElement" location="129:3-129:31" varName="s" variableExp="/0/@elements.7/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <commentsAfter>--(s.oclIsKindOf(requirement!TextAttribute))	</commentsAfter>
+          <type xsi:type="ocl:OclModelElement" location="129:6-129:31" name="TextAttribute" model="/19">
+            <commentsAfter>--(s.oclIsKindOf(requirement!TextAttribute))	</commentsAfter>
+          </type>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="154:1-163:2" name="ObjectAttribute" children="/0/@elements.9 /0/@elements.10" superRule="/0/@elements.6">
+      <commentsBefore>---todo</commentsBefore>
+      <commentsBefore>----value is a EReference:EObject</commentsBefore>
+      <commentsBefore>--abstract rule ObjectAttribute extends Attribute{</commentsBefore>
+      <commentsBefore>--	from </commentsBefore>
+      <commentsBefore>--		s: requirement!ObjectAttribute</commentsBefore>
+      <commentsBefore>--    to</commentsBefore>
+      <commentsBefore>--		t:RequisitePro!Attribute(</commentsBefore>
+      <commentsBefore>--			--value &lt;- s.value,--.toString()</commentsBefore>
+      <commentsBefore>--			type &lt;-'Object_' </commentsBefore>
+      <commentsBefore>--		)</commentsBefore>
+      <commentsBefore>--}</commentsBefore>
+      <commentsBefore>-----org.eclipse.m2m.atl.engine.emfvm.VMException: Trying to register several rules as default </commentsBefore>
+      <commentsBefore>-----for element org.topcased.requirement.impl.AttributeLinkImpl@9025a4 (name: #Link_to) </commentsBefore>
+      <commentsBefore>-----(partial: false) : ObjectAttribute and AttributeLink</commentsBefore>
+      <outPattern location="157:5-162:4">
+        <commentsBefore>--(not s.oclIsTypeOf(requirement!TextAttribute))	</commentsBefore>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="158:3-162:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="158:5-158:27" name="Attribute" model="/22"/>
+          <bindings location="160:4-160:41" propertyName="value">
+            <value xsi:type="ocl:OperationCallExp" location="160:13-160:41" operationName="toString">
+              <source xsi:type="ocl:OperationCallExp" location="160:13-160:30" operationName="oclType">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="160:13-160:20" name="value">
+                  <type xsi:type="ocl:OclModelElement" name="EObject"/>
+                  <source xsi:type="ocl:VariableExp" location="160:13-160:14" referredVariable="/0/@elements.8/@inPattern/@elements.0">
+                    <type xsi:type="ocl:OclModelElement" name="ObjectAttribute"/>
+                  </source>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="161:4-161:20" propertyName="type">
+            <commentsBefore>--ident,--.toString()</commentsBefore>
+            <value xsi:type="ocl:StringExp" location="161:11-161:20" stringSymbol="Object_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="155:2-156:33">
+        <commentsBefore>-- extends Attribute{</commentsBefore>
+        <commentsAfter>--(not s.oclIsTypeOf(requirement!TextAttribute))	</commentsAfter>
+        <elements xsi:type="atl:SimpleInPatternElement" location="156:3-156:33" varName="s" variableExp="/0/@elements.8/@outPattern/@elements.0/@bindings.0/@value/@source/@source/@source">
+          <commentsAfter>--(not s.oclIsTypeOf(requirement!TextAttribute))	</commentsAfter>
+          <type xsi:type="ocl:OclModelElement" location="156:6-156:33" name="ObjectAttribute" model="/21">
+            <commentsAfter>--(not s.oclIsTypeOf(requirement!TextAttribute))	</commentsAfter>
+          </type>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="165:1-177:2" name="AttributeLink" superRule="/0/@elements.8">
+      <commentsAfter>--</commentsAfter>
+      <outPattern location="168:2-173:4">
+        <commentsAfter>--		,m: RequisitePro!&quot;Ecore::EObject&quot;(</commentsAfter>
+        <commentsAfter>--			value &lt;-  s.value</commentsAfter>
+        <commentsAfter>--		)</commentsAfter>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="169:3-173:4" varName="t">
+          <commentsAfter>--		,m: RequisitePro!&quot;Ecore::EObject&quot;(</commentsAfter>
+          <commentsAfter>--			value &lt;-  s.value</commentsAfter>
+          <commentsAfter>--		)</commentsAfter>
+          <type xsi:type="ocl:OclModelElement" location="169:6-169:28" name="Attribute" model="/24"/>
+          <bindings location="172:4-172:19" propertyName="type">
+            <commentsBefore>--value &lt;-  s.value.ident --oclType().toString()--.regexReplaceAll('^.*!', ''),--.toString</commentsBefore>
+            <commentsBefore>--</commentsBefore>
+            <value xsi:type="ocl:StringExp" location="172:12-172:19" stringSymbol="Link_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="166:2-167:31">
+        <elements xsi:type="atl:SimpleInPatternElement" location="167:3-167:31" varName="s">
+          <type xsi:type="ocl:OclModelElement" location="167:6-167:31" name="AttributeLink" model="/23"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="179:1-190:2" name="AttributeAllocate" superRule="/0/@elements.8">
+      <commentsBefore>--</commentsBefore>
+      <commentsAfter>---var---in this case, i can't present attribute with many value.</commentsAfter>
+      <commentsAfter>--- TODO : ok it done , in this case i affect the default value in the beginning of the list of attribute</commentsAfter>
+      <commentsAfter>--- seen the rule ConfiguratedAttribute</commentsAfter>
+      <commentsAfter>--rule DefaultAttribute {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s: requirement!DefaultAttributeValue --()</commentsAfter>
+      <commentsAfter>--	</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t: RequisitePro!Attribute (</commentsAfter>
+      <commentsAfter>--			value &lt;-'DefaultAttribute_'+ s.value</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>----*************************************************************</commentsAfter>
+      <commentsAfter>-------------------------Requirement------------------------------</commentsAfter>
+      <commentsAfter>---in this case, i have a big problem that i have 1 abstract element and i have 3 target element (requierment, requirementProject, hierarchicalElement)</commentsAfter>
+      <commentsAfter>---the problem is to difine the target model</commentsAfter>
+      <commentsAfter>--abstract rule IdentifiedElement{</commentsAfter>
+      <commentsAfter>--	from </commentsAfter>
+      <commentsAfter>--		s: requirement!IdentifiedElement</commentsAfter>
+      <commentsAfter>--    to</commentsAfter>
+      <commentsAfter>--		t:RequisitePro!??????(</commentsAfter>
+      <commentsAfter>--			children &lt;- s.externalResources,</commentsAfter>
+      <commentsAfter>--			attributes &lt;- s.attribute--- -> select(a | a.oclIsTypeOf(requirement!TextAttribute))	</commentsAfter>
+      <commentsAfter>--			,text &lt;- s.shortDescription</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>----verifier text, type, name =====>> ok pour text et name, pour le type pas de valeur qui lui correspend a la source</commentsAfter>
+      <outPattern location="182:2-189:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="183:3-189:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="183:6-183:28" name="Attribute" model="/26"/>
+          <bindings location="184:4-186:10" propertyName="value">
+            <commentsAfter>--s.value.oclType().toString()--.ident,</commentsAfter>
+            <value xsi:type="ocl:IfExp" location="184:13-186:10">
+              <commentsAfter>--s.value.oclType().toString()--.ident,</commentsAfter>
+              <thenExpression xsi:type="ocl:StringExp" location="184:46-184:48" stringSymbol=""/>
+              <condition xsi:type="ocl:OperationCallExp" location="184:16-184:40" operationName="oclIsUndefined">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="184:16-184:23" name="value">
+                  <type xsi:type="ocl:OclModelElement" name="EObject"/>
+                  <source xsi:type="ocl:VariableExp" location="184:16-184:17" referredVariable="/0/@elements.10/@inPattern/@elements.0">
+                    <type xsi:type="ocl:OclModelElement" name="AttributeAllocate"/>
+                  </source>
+                </source>
+              </condition>
+              <elseExpression xsi:type="ocl:StringExp" location="185:5-185:7" stringSymbol="">
+                <commentsAfter>--s.value.ident </commentsAfter>
+              </elseExpression>
+            </value>
+          </bindings>
+          <bindings location="188:5-188:24" propertyName="type">
+            <value xsi:type="ocl:StringExp" location="188:13-188:24" stringSymbol="Allocate_"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="180:2-181:35">
+        <elements xsi:type="atl:SimpleInPatternElement" location="181:3-181:35" varName="s" variableExp="/0/@elements.10/@outPattern/@elements.0/@bindings.0/@value/@condition/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="181:6-181:35" name="AttributeAllocate" model="/25"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="227:1-249:2" name="Requirement" children="/0/@elements.12 /0/@elements.13" isAbstract="true">
+      <commentsBefore>---var---in this case, i can't present attribute with many value.</commentsBefore>
+      <commentsBefore>--- TODO : ok it done , in this case i affect the default value in the beginning of the list of attribute</commentsBefore>
+      <commentsBefore>--- seen the rule ConfiguratedAttribute</commentsBefore>
+      <commentsBefore>--rule DefaultAttribute {</commentsBefore>
+      <commentsBefore>--	from</commentsBefore>
+      <commentsBefore>--		s: requirement!DefaultAttributeValue --()</commentsBefore>
+      <commentsBefore>--	</commentsBefore>
+      <commentsBefore>--	to</commentsBefore>
+      <commentsBefore>--		t: RequisitePro!Attribute (</commentsBefore>
+      <commentsBefore>--			value &lt;-'DefaultAttribute_'+ s.value</commentsBefore>
+      <commentsBefore>--		)</commentsBefore>
+      <commentsBefore>--}</commentsBefore>
+      <commentsBefore>----*************************************************************</commentsBefore>
+      <commentsBefore>-------------------------Requirement------------------------------</commentsBefore>
+      <commentsBefore>---in this case, i have a big problem that i have 1 abstract element and i have 3 target element (requierment, requirementProject, hierarchicalElement)</commentsBefore>
+      <commentsBefore>---the problem is to difine the target model</commentsBefore>
+      <commentsBefore>--abstract rule IdentifiedElement{</commentsBefore>
+      <commentsBefore>--	from </commentsBefore>
+      <commentsBefore>--		s: requirement!IdentifiedElement</commentsBefore>
+      <commentsBefore>--    to</commentsBefore>
+      <commentsBefore>--		t:RequisitePro!??????(</commentsBefore>
+      <commentsBefore>--			children &lt;- s.externalResources,</commentsBefore>
+      <commentsBefore>--			attributes &lt;- s.attribute--- -> select(a | a.oclIsTypeOf(requirement!TextAttribute))	</commentsBefore>
+      <commentsBefore>--			,text &lt;- s.shortDescription</commentsBefore>
+      <commentsBefore>--		)</commentsBefore>
+      <commentsBefore>--}</commentsBefore>
+      <commentsBefore>----verifier text, type, name =====>> ok pour text et name, pour le type pas de valeur qui lui correspend a la source</commentsBefore>
+      <commentsAfter>--helper context requirement!IdentifiedElement def : getTheRoot :Set( requirement!RequirementProject) =</commentsAfter>
+      <commentsAfter>--	if self.oclIsTypeOf(requirement!RequirementProject)   ---i can add a constraint that the element is OclIsTypeof(RequirementProject)</commentsAfter>
+      <commentsAfter>--	then 																	---or self.oclIsTypeOf( requirement!RequirementProject)</commentsAfter>
+      <commentsAfter>--		self</commentsAfter>
+      <commentsAfter>--	else</commentsAfter>
+      <commentsAfter>--		if   self.oclIsKindOf(requirement!SpecialChapter) then</commentsAfter>
+      <commentsAfter>--				OclUndefined</commentsAfter>
+      <commentsAfter>--			else</commentsAfter>
+      <commentsAfter>--				 self.refImmediateComposite().getTheRoot </commentsAfter>
+      <commentsAfter>--		endif</commentsAfter>
+      <commentsAfter>--	endif;</commentsAfter>
+      <commentsAfter>---todo i think is OK</commentsAfter>
+      <commentsAfter>---because is not well connected to other elements in the model</commentsAfter>
+      <commentsAfter>--rule UpStreamModel {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s : requirement!UpstreamModel</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t : RequisitePro!Document (</commentsAfter>
+      <commentsAfter>--			name &lt;- s.ident,</commentsAfter>
+      <commentsAfter>--			description &lt;- s.shortDescription</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <outPattern location="230:5-248:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="231:3-248:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="231:5-231:29" name="Requirement" model="/28"/>
+          <bindings location="232:4-232:30" propertyName="text">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="232:12-232:30" name="shortDescription">
+              <type xsi:type="ocl:OclModelElement" name="EString"/>
+              <source xsi:type="ocl:VariableExp" location="232:12-232:13" referredVariable="/0/@elements.11/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="Requirement"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="233:4-233:35" propertyName="children">
+            <commentsAfter>--,</commentsAfter>
+            <commentsAfter>---todo to delete for test only</commentsAfter>
+            <commentsAfter>--			,attributes &lt;- Sequence{}.debug(s.attribute->reject(a | a.oclIsTypeOf(requirement!AttributeAllocate) or a.oclIsTypeOf(requirement!AttributeLink) or a.oclIsTypeOf(requirement!TextAttribute) or a.oclIsTypeOf(requirement!ObjectAttribute))->collect(a | a.oclType().toString())),	--,--.oclIsTypeOf(requirement!TextAttribute)</commentsAfter>
+            <commentsAfter>--			</commentsAfter>
+            <commentsAfter>--			attributes &lt;- s.attribute-> select(a | a.oclIsTypeOf(requirement!TextAttribute)),</commentsAfter>
+            <commentsAfter>--			attributes &lt;- s.attribute-> select(a | a.oclIsTypeOf(requirement!AttributeAllocate)),</commentsAfter>
+            <commentsAfter>--			attributes &lt;- s.attribute-> select(a | a.oclIsTypeOf(requirement!AttributeLink))</commentsAfter>
+            <commentsAfter>--			location &lt;- thisModule.resolveTemp(s.getTheRoot.debug().toString(), k)</commentsAfter>
+            <commentsAfter>---todo verification of the model, if it need this attribute or not</commentsAfter>
+            <commentsAfter>--,location &lt;- s.getTheRoot.upstreamModel--.documents --s.getTheRoot.upstreamModel-----.documents</commentsAfter>
+            <commentsAfter>---just for execute the second transformation</commentsAfter>
+            <commentsAfter>---,location &lt;- s.getTheRoot.upstreamModel ---meme que sa marche,je ne trouve pas de resultat convenable puisque le modele cible commence par la balise XMI</commentsAfter>
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="233:16-233:35" name="externalResources">
+              <commentsAfter>--,</commentsAfter>
+              <commentsAfter>---todo to delete for test only</commentsAfter>
+              <commentsAfter>--			,attributes &lt;- Sequence{}.debug(s.attribute->reject(a | a.oclIsTypeOf(requirement!AttributeAllocate) or a.oclIsTypeOf(requirement!AttributeLink) or a.oclIsTypeOf(requirement!TextAttribute) or a.oclIsTypeOf(requirement!ObjectAttribute))->collect(a | a.oclType().toString())),	--,--.oclIsTypeOf(requirement!TextAttribute)</commentsAfter>
+              <commentsAfter>--			</commentsAfter>
+              <commentsAfter>--			attributes &lt;- s.attribute-> select(a | a.oclIsTypeOf(requirement!TextAttribute)),</commentsAfter>
+              <commentsAfter>--			attributes &lt;- s.attribute-> select(a | a.oclIsTypeOf(requirement!AttributeAllocate)),</commentsAfter>
+              <commentsAfter>--			attributes &lt;- s.attribute-> select(a | a.oclIsTypeOf(requirement!AttributeLink))</commentsAfter>
+              <commentsAfter>--			location &lt;- thisModule.resolveTemp(s.getTheRoot.debug().toString(), k)</commentsAfter>
+              <commentsAfter>---todo verification of the model, if it need this attribute or not</commentsAfter>
+              <commentsAfter>--,location &lt;- s.getTheRoot.upstreamModel--.documents --s.getTheRoot.upstreamModel-----.documents</commentsAfter>
+              <commentsAfter>---just for execute the second transformation</commentsAfter>
+              <commentsAfter>---,location &lt;- s.getTheRoot.upstreamModel ---meme que sa marche,je ne trouve pas de resultat convenable puisque le modele cible commence par la balise XMI</commentsAfter>
+              <type xsi:type="ocl:SetType">
+                <elementType xsi:type="ocl:OclModelElement" name="EString"/>
+              </type>
+              <source xsi:type="ocl:VariableExp" location="233:16-233:17" referredVariable="/0/@elements.11/@inPattern/@elements.0">
+                <type xsi:type="ocl:OclModelElement" name="Requirement"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="228:2-229:29">
+        <elements xsi:type="atl:SimpleInPatternElement" location="229:3-229:29" varName="s" variableExp="/0/@elements.11/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.11/@outPattern/@elements.0/@bindings.1/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="229:6-229:29" name="Requirement" model="/27"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="274:1-281:2" name="Requirement1" superRule="/0/@elements.11">
+      <commentsBefore>--helper context requirement!IdentifiedElement def : getTheRoot :Set( requirement!RequirementProject) =</commentsBefore>
+      <commentsBefore>--	if self.oclIsTypeOf(requirement!RequirementProject)   ---i can add a constraint that the element is OclIsTypeof(RequirementProject)</commentsBefore>
+      <commentsBefore>--	then 																	---or self.oclIsTypeOf( requirement!RequirementProject)</commentsBefore>
+      <commentsBefore>--		self</commentsBefore>
+      <commentsBefore>--	else</commentsBefore>
+      <commentsBefore>--		if   self.oclIsKindOf(requirement!SpecialChapter) then</commentsBefore>
+      <commentsBefore>--				OclUndefined</commentsBefore>
+      <commentsBefore>--			else</commentsBefore>
+      <commentsBefore>--				 self.refImmediateComposite().getTheRoot </commentsBefore>
+      <commentsBefore>--		endif</commentsBefore>
+      <commentsBefore>--	endif;</commentsBefore>
+      <commentsBefore>---todo i think is OK</commentsBefore>
+      <commentsBefore>---because is not well connected to other elements in the model</commentsBefore>
+      <commentsBefore>--rule UpStreamModel {</commentsBefore>
+      <commentsBefore>--	from</commentsBefore>
+      <commentsBefore>--		s : requirement!UpstreamModel</commentsBefore>
+      <commentsBefore>--	to</commentsBefore>
+      <commentsBefore>--		t : RequisitePro!Document (</commentsBefore>
+      <commentsBefore>--			name &lt;- s.ident,</commentsBefore>
+      <commentsBefore>--			description &lt;- s.shortDescription</commentsBefore>
+      <commentsBefore>--		)</commentsBefore>
+      <commentsBefore>--}</commentsBefore>
+      <outPattern location="277:2-280:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="278:3-280:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="278:6-278:30" name="Requirement" model="/30"/>
+          <bindings location="279:4-279:35" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="279:12-279:35" operationName="+">
+              <source xsi:type="ocl:StringExp" location="279:12-279:22" stringSymbol="Current_"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="279:23-279:35" name="identifier">
+                <type xsi:type="ocl:OclModelElement" name="EString"/>
+                <source xsi:type="ocl:VariableExp" location="279:23-279:24" referredVariable="/0/@elements.12/@inPattern/@elements.0">
+                  <type xsi:type="ocl:OclModelElement" name="CurrentRequirement"/>
+                </source>
+              </arguments>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="275:2-276:36">
+        <elements xsi:type="atl:SimpleInPatternElement" location="276:3-276:36" varName="s" variableExp="/0/@elements.12/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source">
+          <type xsi:type="ocl:OclModelElement" location="276:6-276:36" name="CurrentRequirement" model="/29"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="283:1-290:2" name="Requirement2" superRule="/0/@elements.11">
+      <commentsAfter>---it's deleted because the semantic</commentsAfter>
+      <commentsAfter>--rule ConfiguratedAttribute {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s: requirement!ConfiguratedAttribute 	</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t: RequisitePro!Attribute (</commentsAfter>
+      <commentsAfter>--		value &lt;- if s.listValue->notEmpty() then</commentsAfter>
+      <commentsAfter>--			'Configurated_'+ s.defaultValue + '{'+ s.getListValueToString +'}' </commentsAfter>
+      <commentsAfter>--		else </commentsAfter>
+      <commentsAfter>--			OclUndefined--else_statements </commentsAfter>
+      <commentsAfter>--		endif</commentsAfter>
+      <commentsAfter>--		,--listValue+s.listValue</commentsAfter>
+      <commentsAfter>--		type &lt;- s.type.toString()--,</commentsAfter>
+      <commentsAfter>--		--value.debug().toString()</commentsAfter>
+      <commentsAfter>--		--????&lt;- s.name	</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>--helper context requirement!ConfiguratedAttribute def : getListValueToString :String =</commentsAfter>
+      <commentsAfter>--	self.listValue->iterate(e; res : String = '' |</commentsAfter>
+      <commentsAfter>--		if not e.oclIsUndefined()</commentsAfter>
+      <commentsAfter>--			then res +' '+ e.value --+','</commentsAfter>
+      <commentsAfter>--			else res</commentsAfter>
+      <commentsAfter>--		endif</commentsAfter>
+      <commentsAfter>--);</commentsAfter>
+      <commentsAfter>---this rule have to identify the elements that is are in the second ecore.</commentsAfter>
+      <commentsAfter>---i have retrieve many problems that's why i trete this element in other ATL project &quot;tr3tst&quot;&quot;</commentsAfter>
+      <commentsAfter>--rule UpStreamModel {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s : requirement!UpstreamModel</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t : RequisitePro!Document (</commentsAfter>
+      <commentsAfter>--			name &lt;- s.ident,</commentsAfter>
+      <commentsAfter>--			description &lt;- s.shortDescription--,</commentsAfter>
+      <commentsAfter>--			--type &lt;- s.???????</commentsAfter>
+      <commentsAfter>--			</commentsAfter>
+      <commentsAfter>--			--package &lt;- s.</commentsAfter>
+      <commentsAfter>--			--name &lt;- s.documents.debug()</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>--rule UpStreamModel {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s : requirement!UpstreamModel </commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t : RequisitePro!Package (</commentsAfter>
+      <commentsAfter>--			name &lt;- s.documents.debug()</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>--</commentsAfter>
+      <commentsAfter>--rule Package7 {  </commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s: requirement!&quot;ttm::Project&quot; --UpstreamModel()</commentsAfter>
+      <commentsAfter>--	</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t: RequisitePro!Package (</commentsAfter>
+      <commentsAfter>--			name &lt;- 'Projet_'+s.anyDocumentCovered--,</commentsAfter>
+      <commentsAfter>--			--packages &lt;- s.documents</commentsAfter>
+      <commentsAfter>--			</commentsAfter>
+      <commentsAfter>----			packages &lt;- </commentsAfter>
+      <commentsAfter>--			--			name &lt;- s.    s.identifier   --,</commentsAfter>
+      <commentsAfter>----			,description &lt;- s.shortDescription</commentsAfter>
+      <commentsAfter>--			--content &lt;- s.--.requirement,</commentsAfter>
+      <commentsAfter>--			--packages &lt;- s.hierarchicalElement</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>--</commentsAfter>
+      <commentsAfter>--rule Package8 {</commentsAfter>
+      <commentsAfter>--	from</commentsAfter>
+      <commentsAfter>--		s: requirement!&quot;ttm::Document&quot; --UpstreamModel()</commentsAfter>
+      <commentsAfter>--	</commentsAfter>
+      <commentsAfter>--	to</commentsAfter>
+      <commentsAfter>--		t: RequisitePro!Requirement (</commentsAfter>
+      <commentsAfter>--			name &lt;- 'Document_'+s.filename--,</commentsAfter>
+      <commentsAfter>--			</commentsAfter>
+      <commentsAfter>--			--packages &lt;- s.documents</commentsAfter>
+      <commentsAfter>--			</commentsAfter>
+      <commentsAfter>----			packages &lt;- </commentsAfter>
+      <commentsAfter>--			--			name &lt;- s.    s.identifier   --,</commentsAfter>
+      <commentsAfter>----			,description &lt;- s.shortDescription</commentsAfter>
+      <commentsAfter>--			--content &lt;- s.--.requirement,</commentsAfter>
+      <commentsAfter>--			--packages &lt;- s.children --hierarchicalElement</commentsAfter>
+      <commentsAfter>--			----NO--il vois les atts mais les att de l'hierarchical et non pas de</commentsAfter>
+      <commentsAfter>--			--- Requirement</commentsAfter>
+      <commentsAfter>--			--text &lt;- s.externalResources.first(),--,</commentsAfter>
+      <commentsAfter>--			--name &lt;- 'Current_'+s.identifier,</commentsAfter>
+      <commentsAfter>--			---text &lt;- s.shortDescription,</commentsAfter>
+      <commentsAfter>--			----the type does not exist</commentsAfter>
+      <commentsAfter>--			--type &lt;- s.</commentsAfter>
+      <commentsAfter>--			---this item is not a valid feature</commentsAfter>
+      <commentsAfter>--			--children &lt;- s.children  --,</commentsAfter>
+      <commentsAfter>--			</commentsAfter>
+      <commentsAfter>--			</commentsAfter>
+      <commentsAfter>--			--attributes &lt;- s.attribute--- -> select(a | a.oclIsTypeOf(requirement!TextAttribute))</commentsAfter>
+      <commentsAfter>--		)</commentsAfter>
+      <commentsAfter>--}</commentsAfter>
+      <commentsAfter>---********************************************************</commentsAfter>
+      <outPattern location="286:2-289:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="287:3-289:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="287:6-287:30" name="Requirement" model="/32"/>
+          <bindings location="288:4-288:37" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="288:12-288:37" operationName="+">
+              <source xsi:type="ocl:StringExp" location="288:12-288:24" stringSymbol="Anonymous_"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="288:25-288:37" name="identifier">
+                <type xsi:type="ocl:OclModelElement" name="EString"/>
+                <source xsi:type="ocl:VariableExp" location="288:25-288:26" referredVariable="/0/@elements.13/@inPattern/@elements.0">
+                  <type xsi:type="ocl:OclModelElement" name="AnonymousRequirement"/>
+                </source>
+              </arguments>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="284:2-285:38">
+        <elements xsi:type="atl:SimpleInPatternElement" location="285:3-285:38" varName="s" variableExp="/0/@elements.13/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source">
+          <type xsi:type="ocl:OclModelElement" location="285:6-285:38" name="AnonymousRequirement" model="/31"/>
+        </elements>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="5:14-5:26" name="RequisitePro" model="/0/@outModels.0"/>
+  <ocl:OclModel location="5:37-5:48" name="requirement" model="/0/@inModels.0"/>
+  <ocl:OclModel location="9:6-9:17" name="requirement" elements="/0/@elements.0/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="11:6-11:18" name="RequisitePro" elements="/0/@elements.0/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="34:6-34:17" name="requirement" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="36:6-36:18" name="RequisitePro" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="62:6-62:17" name="requirement" elements="/0/@elements.2/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="64:5-64:17" name="RequisitePro" elements="/0/@elements.2/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="73:6-73:17" name="requirement" elements="/0/@elements.3/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="75:6-75:18" name="RequisitePro" elements="/0/@elements.3/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="82:6-82:17" name="requirement" elements="/0/@elements.4/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="84:6-84:18" name="RequisitePro" elements="/0/@elements.4/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="91:6-91:17" name="requirement" elements="/0/@elements.5/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="93:6-93:18" name="RequisitePro" elements="/0/@elements.5/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="118:6-118:17" name="requirement" elements="/0/@elements.6/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="118:43-118:54" name="requirement" elements="/0/@elements.6/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="118:87-118:98" name="requirement" elements="/0/@elements.6/@inPattern/@filter/@arguments.0/@arguments.0"/>
+  <ocl:OclModel location="120:5-120:17" name="RequisitePro" elements="/0/@elements.6/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="129:6-129:17" name="requirement" elements="/0/@elements.7/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="131:6-131:18" name="RequisitePro" elements="/0/@elements.7/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="156:6-156:17" name="requirement" elements="/0/@elements.8/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="158:5-158:17" name="RequisitePro" elements="/0/@elements.8/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="167:6-167:17" name="requirement" elements="/0/@elements.9/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="169:6-169:18" name="RequisitePro" elements="/0/@elements.9/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="181:6-181:17" name="requirement" elements="/0/@elements.10/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="183:6-183:18" name="RequisitePro" elements="/0/@elements.10/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="229:6-229:17" name="requirement" elements="/0/@elements.11/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="231:5-231:17" name="RequisitePro" elements="/0/@elements.11/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="276:6-276:17" name="requirement" elements="/0/@elements.12/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="278:6-278:18" name="RequisitePro" elements="/0/@elements.12/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="285:6-285:17" name="requirement" elements="/0/@elements.13/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="287:6-287:18" name="RequisitePro" elements="/0/@elements.13/@outPattern/@elements.0/@type"/>
+  <ocl:OclModelElement name="RequirementProject"/>
+  <ocl:OclModelElement name="RequirementProject"/>
+  <ocl:OclModelElement name="RequirementProject"/>
+  <ocl:OclModelElement name="RequirementProject"/>
+  <ocl:OclModelElement name="RequirementProject"/>
+  <ocl:OclModelElement name="HierarchicalElement"/>
+  <ocl:OclModelElement name="HierarchicalElement"/>
+  <ocl:OclModelElement name="HierarchicalElement"/>
+  <ocl:OclModelElement name="HierarchicalElement"/>
+  <ocl:OclModelElement name="SpecialChapter"/>
+  <ocl:OclModelElement name="SpecialChapter"/>
+  <ocl:OclModelElement name="TextAttribute"/>
+  <ocl:OclModelElement name="ObjectAttribute"/>
+  <ocl:OclModelElement name="AttributeAllocate"/>
+  <ocl:OclModelElement name="Requirement"/>
+  <ocl:OclModelElement name="Requirement"/>
+  <ocl:OclModelElement name="CurrentRequirement"/>
+  <ocl:OclModelElement name="AnonymousRequirement"/>
+</xmi:XMI>

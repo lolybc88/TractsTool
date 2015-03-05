@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ruletypesmm="http://ruletypesmm/1.0" name="SOOML2SOOPL">
+  <rules name="SOOMLNamedElement2SOOPLNamedElement">
+    <features>name</features>
+    <types>NamedElement</types>
+  </rules>
+  <rules name="SOOMLModel2SOOPLModel">
+    <features>classes</features>
+    <features>enumerations</features>
+    <types>Model</types>
+  </rules>
+  <rules name="SOOMLClass2SOOPLClass" inherits="//@rules.0">
+    <values>Constructor</values>
+    <values>state</values>
+    <values>1</values>
+    <values>2</values>
+    <values>getState</values>
+    <values>setState</values>
+    <values>State</values>
+    <features>operations</features>
+    <features>features</features>
+    <features>stateMachine</features>
+    <features>name</features>
+    <types>Class</types>
+    <types>Operation</types>
+    <types>Field</types>
+    <types>Parameter</types>
+  </rules>
+  <rules name="SOOMLOperation2SOOPLOperation" inherits="//@rules.0">
+    <values>State3</values>
+    <features>parameter</features>
+    <features>name</features>
+    <features>operations</features>
+    <types>Operation</types>
+    <types>Parameter</types>
+  </rules>
+  <rules name="SOOMLParameter2SOOPLParameter" inherits="//@rules.0">
+    <features>dataType</features>
+    <features>classType</features>
+    <features>name</features>
+    <types>Parameter</types>
+  </rules>
+  <rules name="SOOMLEnumeration2SOOPLEnumeration" inherits="//@rules.0">
+    <features>literal</features>
+    <types>Enumeration</types>
+  </rules>
+  <rules name="SOOMLLiteral2SOOPLLiteral" inherits="//@rules.0">
+    <types>Literal</types>
+  </rules>
+  <rules name="SOOMLAttribute2SOOPLField" inherits="//@rules.0">
+    <values>get</values>
+    <values>1</values>
+    <values>2</values>
+    <values>set</values>
+    <features>type</features>
+    <features>name</features>
+    <types>Attribute</types>
+    <types>Field</types>
+    <types>Operation</types>
+    <types>Parameter</types>
+  </rules>
+  <rules name="SOOMLReference2SOOPLField" inherits="//@rules.0">
+    <values>get</values>
+    <values>1</values>
+    <values>2</values>
+    <values>set</values>
+    <features>type</features>
+    <features>name</features>
+    <types>Reference</types>
+    <types>Field</types>
+    <types>Operation</types>
+    <types>Parameter</types>
+  </rules>
+  <rules name="SOOMLState2SOOPLClass" inherits="//@rules.0">
+    <values>State2</values>
+    <features>name</features>
+    <features>transitions</features>
+    <features>operation</features>
+    <features>event</features>
+    <types>State</types>
+    <types>Class</types>
+  </rules>
+  <rules name="SOOMLStateMachine2SOOPLClass">
+    <values>State</values>
+    <values>State1</values>
+    <features>name</features>
+    <features>operations</features>
+    <types>StateMachine</types>
+    <types>Class</types>
+  </rules>
+</ruletypesmm:Trafo>

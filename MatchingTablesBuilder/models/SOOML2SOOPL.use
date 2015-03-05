@@ -1,0 +1,244 @@
+model sooml
+enum src_DataType{src_String, src_Integer, src_Boolean}
+enum trg_DataType{trg_String, trg_Integer, trg_Boolean}
+
+class src_ModelElement
+attributes
+end
+
+class src_Model
+attributes
+end
+
+class src_NamedElement < src_ModelElement
+attributes 
+ name : String
+end
+
+class src_Class < src_NamedElement
+attributes
+end
+
+class src_Attribute < src_StructuralFeature
+attributes 
+ type : src_DataType
+end
+
+class src_Reference < src_StructuralFeature
+attributes
+end
+
+class src_Operation < src_NamedElement
+attributes
+end
+
+class src_Enumeration < src_NamedElement
+attributes
+end
+
+class src_Literal < src_NamedElement
+attributes
+end
+
+class src_StructuralFeature < src_NamedElement
+attributes 
+ upper : Integer 
+ lower : Integer
+end
+
+class src_StateMachine
+attributes
+end
+
+class src_State < src_NamedElement
+attributes
+end
+
+class src_Transition
+attributes
+end
+
+class src_Event
+attributes
+end
+
+class src_Parameter < src_NamedElement
+attributes 
+ dataType : src_DataType
+end
+
+class trg_Model
+attributes
+end
+
+class trg_NamedElement
+attributes 
+ name : String
+end
+
+class trg_Class < trg_ComplexType
+attributes 
+ isAbstract : Boolean
+end
+
+class trg_Operation < trg_NamedElement
+attributes 
+ returnDataType : trg_DataType
+end
+
+class trg_Enumeration < trg_ComplexType
+attributes
+end
+
+class trg_Literal < trg_NamedElement
+attributes
+end
+
+class trg_Field < trg_NamedElement
+attributes 
+ simpleType : trg_DataType
+end
+
+class trg_Parameter < trg_NamedElement
+attributes 
+ dataType : trg_DataType
+end
+
+class trg_Constructor < trg_Operation
+attributes
+end
+
+class trg_ComplexType < trg_NamedElement
+attributes
+end
+
+
+composition src_classes_Class_Model between
+src_Model [0..*] role classes_Class_Model_derived
+src_Class [0..*] role classes_Class_Model ordered
+end
+
+composition src_enumerations_Enumeration_Model between
+src_Model [0..*] role enumerations_Enumeration_Model_derived
+src_Enumeration [0..*] role enumerations_Enumeration_Model ordered
+end
+
+composition src_stateMachine_Class_StateMachine between
+src_Class [0..*] role stateMachine_Class_StateMachine_derived
+src_StateMachine [1..1] role stateMachine_Class_StateMachine
+end
+
+composition src_operations_Class_Operation between
+src_Class [0..*] role operations_Class_Operation_derived
+src_Operation [0..*] role operations_Class_Operation ordered
+end
+
+composition src_features_Class_StructuralFeature between
+src_Class [0..*] role features_Class_StructuralFeature_derived
+src_StructuralFeature [0..*] role features_Class_StructuralFeature ordered
+end
+
+association src_type_Class_Reference between
+src_Reference [0..*] role type_Class_Reference_derived
+src_Class [1..1] role type_Class_Reference
+end
+
+association src_opposite_Reference_Reference between
+src_Reference [0..*] role opposite_Reference_Reference_derived
+src_Reference [1..1] role opposite_Reference_Reference
+end
+
+composition src_parameter_Operation_Parameter between
+src_Operation [0..*] role parameter_Operation_Parameter_derived
+src_Parameter [0..*] role parameter_Operation_Parameter ordered
+end
+
+composition src_literal_Enumeration_Literal between
+src_Enumeration [0..*] role literal_Enumeration_Literal_derived
+src_Literal [2..*] role literal_Enumeration_Literal ordered
+end
+
+composition src_states_State_StateMachine between
+src_StateMachine [0..*] role states_State_StateMachine_derived
+src_State [0..*] role states_State_StateMachine ordered
+end
+
+association src_initialState_State_StateMachine between
+src_StateMachine [0..*] role initialState_State_StateMachine_derived
+src_State [1..1] role initialState_State_StateMachine
+end
+
+composition src_transitions_State_Transition between
+src_State [0..*] role transitions_State_Transition_derived
+src_Transition [0..*] role transitions_State_Transition ordered
+end
+
+composition src_event_Event_Transition between
+src_Transition [0..*] role event_Event_Transition_derived
+src_Event [0..1] role event_Event_Transition
+end
+
+association src_target_State_Transition between
+src_Transition [0..*] role target_State_Transition_derived
+src_State [1..1] role target_State_Transition
+end
+
+association src_operation_Event_Operation between
+src_Event [0..*] role operation_Event_Operation_derived
+src_Operation [1..1] role operation_Event_Operation
+end
+
+association src_classType_Class_Parameter between
+src_Parameter [0..*] role classType_Class_Parameter_derived
+src_Class [0..1] role classType_Class_Parameter
+end
+
+composition trg_classes_Class_Model between
+trg_Model [0..*] role classes_Class_Model_derived
+trg_Class [0..*] role classes_Class_Model ordered
+end
+
+composition trg_enumerations_Enumeration_Model between
+trg_Model [0..*] role enumerations_Enumeration_Model_derived
+trg_Enumeration [0..*] role enumerations_Enumeration_Model ordered
+end
+
+composition trg_operations_Class_Operation between
+trg_Class [0..*] role operations_Class_Operation_derived
+trg_Operation [0..*] role operations_Class_Operation ordered
+end
+
+composition trg_features_Class_Field between
+trg_Class [0..*] role features_Class_Field_derived
+trg_Field [0..*] role features_Class_Field ordered
+end
+
+association trg_superClass_Class_Class between
+trg_Class [0..*] role superClass_Class_Class_derived
+trg_Class [0..1] role superClass_Class_Class
+end
+
+composition trg_parameter_Operation_Parameter between
+trg_Operation [0..*] role parameter_Operation_Parameter_derived
+trg_Parameter [0..*] role parameter_Operation_Parameter ordered
+end
+
+association trg_returnComplexType_ComplexType_Operation between
+trg_Operation [0..*] role returnComplexType_ComplexType_Operation_derived
+trg_ComplexType [0..1] role returnComplexType_ComplexType_Operation
+end
+
+composition trg_literal_Enumeration_Literal between
+trg_Enumeration [0..*] role literal_Enumeration_Literal_derived
+trg_Literal [2..*] role literal_Enumeration_Literal ordered
+end
+
+association trg_complexType_ComplexType_Field between
+trg_Field [0..*] role complexType_ComplexType_Field_derived
+trg_ComplexType [0..1] role complexType_ComplexType_Field
+end
+
+association trg_complexType_ComplexType_Parameter between
+trg_Parameter [0..*] role complexType_ComplexType_Parameter_derived
+trg_ComplexType [0..1] role complexType_ComplexType_Parameter
+end

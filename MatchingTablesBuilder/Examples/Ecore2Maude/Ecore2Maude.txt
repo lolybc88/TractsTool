@@ -1,0 +1,3 @@
+trg_Operation.allInstances->forAll(p| src_EPackage.allInstances->exists(o | p.name = o.name) or	src_EClass.allInstances->exists(o | p.name = o.name) or	src_EReference.allInstances->exists(o | p.name = o.name) or	src_EAttribute.allInstances->exists(o | p.name = o.name) or	src_EEnum.allInstances->exists(o | p.name = o.name) or src_EEnumLiteral.allInstances->exists(o | p.name = o.name))
+src_EClass.allInstances->forAll(c | trg_Sort.allInstances->exists(s | c.name = s.name))
+trg_MaudeSpec.allInstances->size()=1 and trg_SModule.allInstances->size()=2 and trg_ModImportation.allInstances->size()=1 and trg_ModuleIdModExp.allInstances->size()=1 and trg_Sort.allInstances->size()>0

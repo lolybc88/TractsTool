@@ -1,0 +1,495 @@
+model ecore
+enum trg_SimpleTypes{Integer, Real, Boolean, String}
+enum trg_CollectionTypes{_Set, _Bag, _Sequence}
+enum trg_AssocKind{Association, Composition, Aggregation}
+
+class src_EAttribute < src_EStructuralFeature
+attributes 
+ iD : Boolean
+end
+
+class src_EAnnotation < src_EModelElement
+attributes 
+ source : String
+end
+
+class src_EClass < src_EClassifier
+attributes 
+ _abstract : Boolean 
+ interface : Boolean
+end
+
+class src_EClassifier < src_ENamedElement
+attributes 
+ instanceClassName : String 
+ instanceClass : Integer 
+ defaultValue : Integer 
+ instanceTypeName : String
+end
+
+class src_EDataType < src_EClassifier
+attributes 
+ serializable : Boolean
+end
+
+class src_EEnum < src_EDataType
+attributes
+end
+
+class src_EEnumLiteral < src_ENamedElement
+attributes 
+ value : Integer 
+ instance : Integer 
+ literal : String
+end
+
+class src_EFactory < src_EModelElement
+attributes
+end
+
+class src_EModelElement
+attributes
+end
+
+class src_ENamedElement < src_EModelElement
+attributes 
+ name : String
+end
+
+class src_EObject
+attributes
+end
+
+class src_EOperation < src_ETypedElement
+attributes
+end
+
+class src_EPackage < src_ENamedElement
+attributes 
+ nsURI : String 
+ nsPrefix : String
+end
+
+class src_EParameter < src_ETypedElement
+attributes
+end
+
+class src_EReference < src_EStructuralFeature
+attributes 
+ containment : Boolean 
+ container : Boolean 
+ resolveProxies : Boolean
+end
+
+class src_EStructuralFeature < src_ETypedElement
+attributes 
+ changeable : Boolean 
+ volatile : Boolean 
+ transient : Boolean 
+ defaultValueLiteral : String 
+ defaultValue : Integer 
+ unsettable : Boolean 
+ derived : Boolean
+end
+
+class src_ETypedElement < src_ENamedElement
+attributes 
+ _ordered : Boolean 
+ unique : Boolean 
+ lowerBound : Integer 
+ upperBound : Integer 
+ many : Boolean 
+ required : Boolean
+end
+
+class src_EStringToStringMapEntry
+attributes 
+ key : String 
+ value : String
+end
+
+class src_EGenericType
+attributes
+end
+
+class src_ETypeParameter < src_ENamedElement
+attributes
+end
+
+class trg_Class
+attributes 
+ name : String 
+ _abstract : Boolean
+end
+
+class trg_Model
+attributes 
+ name : String
+end
+
+class trg_Attribute
+attributes 
+ name : String
+end
+
+class trg_Operation
+attributes 
+ name : String
+end
+
+class trg_Parameter
+attributes 
+ name : String
+end
+
+class trg_OCLExpression
+attributes 
+ expr : String
+end
+
+class trg_Type
+attributes
+end
+
+class trg_EnumerationType < trg_Type
+attributes
+end
+
+class trg_CollectionType < trg_Type
+attributes 
+ type : trg_CollectionTypes
+end
+
+class trg_SimpleType < trg_Type
+attributes 
+ type : trg_SimpleTypes
+end
+
+class trg_ReferenceType < trg_Type
+attributes
+end
+
+class trg_Enumeration
+attributes 
+ name : String
+end
+
+class trg_Literal
+attributes 
+ name : String
+end
+
+class trg_Association
+attributes 
+ name : String 
+ kind : trg_AssocKind
+end
+
+class trg_Role
+attributes 
+ lowerBound : Integer 
+ name : String 
+ _ordered : Boolean 
+ upperBound : Integer
+end
+
+
+association eAttributeType_EAttribute_EDataType between
+src_EAttribute [0..*] role eAttributeType_EAttribute_EDataType_derived
+src_EDataType [1..1] role eAttributeType_EAttribute_EDataType
+end
+
+composition details_EAnnotation_EStringToStringMapEntry between
+src_EAnnotation [0..*] role details_EAnnotation_EStringToStringMapEntry_derived
+src_EStringToStringMapEntry [0..*] role details_EAnnotation_EStringToStringMapEntry ordered
+end
+
+composition contents_EAnnotation_EObject between
+src_EAnnotation [0..*] role contents_EAnnotation_EObject_derived
+src_EObject [0..*] role contents_EAnnotation_EObject ordered
+end
+
+association references_EAnnotation_EObject between
+src_EAnnotation [0..*] role references_EAnnotation_EObject_derived
+src_EObject [0..*] role references_EAnnotation_EObject ordered
+end
+
+association eSuperTypes_EClass_EClass between
+src_EClass [0..*] role eSuperTypes_EClass_EClass_derived
+src_EClass [0..*] role eSuperTypes_EClass_EClass ordered
+end
+
+association eAllAttributes_EAttribute_EClass between
+src_EClass [0..*] role eAllAttributes_EAttribute_EClass_derived
+src_EAttribute [0..*] role eAllAttributes_EAttribute_EClass ordered
+end
+
+association eAllReferences_EClass_EReference between
+src_EClass [0..*] role eAllReferences_EClass_EReference_derived
+src_EReference [0..*] role eAllReferences_EClass_EReference ordered
+end
+
+association eReferences_EClass_EReference between
+src_EClass [0..*] role eReferences_EClass_EReference_derived
+src_EReference [0..*] role eReferences_EClass_EReference ordered
+end
+
+association eAttributes_EAttribute_EClass between
+src_EClass [0..*] role eAttributes_EAttribute_EClass_derived
+src_EAttribute [0..*] role eAttributes_EAttribute_EClass ordered
+end
+
+association eAllContainments_EClass_EReference between
+src_EClass [0..*] role eAllContainments_EClass_EReference_derived
+src_EReference [0..*] role eAllContainments_EClass_EReference ordered
+end
+
+association eAllOperations_EClass_EOperation between
+src_EClass [0..*] role eAllOperations_EClass_EOperation_derived
+src_EOperation [0..*] role eAllOperations_EClass_EOperation ordered
+end
+
+association eAllStructuralFeatures_EClass_EStructuralFeature between
+src_EClass [0..*] role eAllStructuralFeatures_EClass_EStructuralFeature_derived
+src_EStructuralFeature [0..*] role eAllStructuralFeatures_EClass_EStructuralFeature ordered
+end
+
+association eAllSuperTypes_EClass_EClass between
+src_EClass [0..*] role eAllSuperTypes_EClass_EClass_derived
+src_EClass [0..*] role eAllSuperTypes_EClass_EClass ordered
+end
+
+association eIDAttribute_EAttribute_EClass between
+src_EClass [0..*] role eIDAttribute_EAttribute_EClass_derived
+src_EAttribute [0..1] role eIDAttribute_EAttribute_EClass
+end
+
+composition eGenericSuperTypes_EClass_EGenericType between
+src_EClass [0..*] role eGenericSuperTypes_EClass_EGenericType_derived
+src_EGenericType [0..*] role eGenericSuperTypes_EClass_EGenericType ordered
+end
+
+association eAllGenericSuperTypes_EClass_EGenericType between
+src_EClass [0..*] role eAllGenericSuperTypes_EClass_EGenericType_derived
+src_EGenericType [0..*] role eAllGenericSuperTypes_EClass_EGenericType ordered
+end
+
+composition eTypeParameters_EClassifier_ETypeParameter between
+src_EClassifier [0..*] role eTypeParameters_EClassifier_ETypeParameter_derived
+src_ETypeParameter [0..*] role eTypeParameters_EClassifier_ETypeParameter ordered
+end
+
+composition eTypeParameters_EOperation_ETypeParameter between
+src_EOperation [0..*] role eTypeParameters_EOperation_ETypeParameter_derived
+src_ETypeParameter [0..*] role eTypeParameters_EOperation_ETypeParameter ordered
+end
+
+association eExceptions_EClassifier_EOperation between
+src_EOperation [0..*] role eExceptions_EClassifier_EOperation_derived
+src_EClassifier [0..*] role eExceptions_EClassifier_EOperation ordered
+end
+
+composition eGenericExceptions_EGenericType_EOperation between
+src_EOperation [0..*] role eGenericExceptions_EGenericType_EOperation_derived
+src_EGenericType [0..*] role eGenericExceptions_EGenericType_EOperation ordered
+end
+
+association eOpposite_EReference_EReference between
+src_EReference [0..*] role eOpposite_EReference_EReference_derived
+src_EReference [0..1] role eOpposite_EReference_EReference
+end
+
+association eReferenceType_EClass_EReference between
+src_EReference [0..*] role eReferenceType_EClass_EReference_derived
+src_EClass [1..1] role eReferenceType_EClass_EReference
+end
+
+association eKeys_EAttribute_EReference between
+src_EReference [0..*] role eKeys_EAttribute_EReference_derived
+src_EAttribute [0..*] role eKeys_EAttribute_EReference ordered
+end
+
+association eType_EClassifier_ETypedElement between
+src_ETypedElement [0..*] role eType_EClassifier_ETypedElement_derived
+src_EClassifier [0..1] role eType_EClassifier_ETypedElement
+end
+
+composition eGenericType_EGenericType_ETypedElement between
+src_ETypedElement [0..*] role eGenericType_EGenericType_ETypedElement_derived
+src_EGenericType [0..1] role eGenericType_EGenericType_ETypedElement
+end
+
+composition eUpperBound_EGenericType_EGenericType between
+src_EGenericType [0..*] role eUpperBound_EGenericType_EGenericType_derived
+src_EGenericType [0..1] role eUpperBound_EGenericType_EGenericType
+end
+
+composition eTypeArguments_EGenericType_EGenericType between
+src_EGenericType [0..*] role eTypeArguments_EGenericType_EGenericType_derived
+src_EGenericType [0..*] role eTypeArguments_EGenericType_EGenericType ordered
+end
+
+association eRawType_EClassifier_EGenericType between
+src_EGenericType [0..*] role eRawType_EClassifier_EGenericType_derived
+src_EClassifier [1..1] role eRawType_EClassifier_EGenericType
+end
+
+composition eLowerBound_EGenericType_EGenericType between
+src_EGenericType [0..*] role eLowerBound_EGenericType_EGenericType_derived
+src_EGenericType [0..1] role eLowerBound_EGenericType_EGenericType
+end
+
+association eTypeParameter_EGenericType_ETypeParameter between
+src_EGenericType [0..*] role eTypeParameter_EGenericType_ETypeParameter_derived
+src_ETypeParameter [0..1] role eTypeParameter_EGenericType_ETypeParameter
+end
+
+association eClassifier_EClassifier_EGenericType between
+src_EGenericType [0..*] role eClassifier_EClassifier_EGenericType_derived
+src_EClassifier [0..1] role eClassifier_EClassifier_EGenericType
+end
+
+composition eBounds_EGenericType_ETypeParameter between
+src_ETypeParameter [0..*] role eBounds_EGenericType_ETypeParameter_derived
+src_EGenericType [0..*] role eBounds_EGenericType_ETypeParameter ordered
+end
+
+association eAnnotations_eModelElement_EAnnotation_EModelElement between
+src_EModelElement [0..1] role eModelElement_EAnnotation_EModelElement
+src_EAnnotation [0..*] role eAnnotations_EAnnotation_EModelElement ordered
+end
+
+composition eContainingClass_eOperations_EClass_EOperation between
+src_EClass [0..1] role eContainingClass_EClass_EOperation
+src_EOperation [0..*] role eOperations_EClass_EOperation ordered
+end
+
+composition eContainingClass_eStructuralFeatures_EClass_EStructuralFeature between
+src_EClass [0..1] role eContainingClass_EClass_EStructuralFeature
+src_EStructuralFeature [0..*] role eStructuralFeatures_EClass_EStructuralFeature ordered
+end
+
+association eClassifiers_ePackage_EClassifier_EPackage between
+src_EPackage [0..1] role ePackage_EClassifier_EPackage
+src_EClassifier [0..*] role eClassifiers_EClassifier_EPackage ordered
+end
+
+composition eEnum_eLiterals_EEnum_EEnumLiteral between
+src_EEnum [0..1] role eEnum_EEnum_EEnumLiteral
+src_EEnumLiteral [0..*] role eLiterals_EEnum_EEnumLiteral ordered
+end
+
+association eFactoryInstance_ePackage_EFactory_EPackage between
+src_EPackage [1..1] role ePackage_EFactory_EPackage
+src_EFactory [1..1] role eFactoryInstance_EFactory_EPackage
+end
+
+composition eOperation_eParameters_EOperation_EParameter between
+src_EOperation [0..1] role eOperation_EOperation_EParameter
+src_EParameter [0..*] role eParameters_EOperation_EParameter ordered
+end
+
+composition eSubpackages_eSuperPackage_EPackage_EPackage between
+src_EPackage [0..1] role eSuperPackage_EPackage_EPackage
+src_EPackage [0..*] role eSubpackages_EPackage_EPackage ordered
+end
+
+association superClasses_Class_Class between
+trg_Class [0..*] role superClasses_Class_Class_derived
+trg_Class [0..*] role superClasses_Class_Class ordered
+end
+
+composition attributes_Attribute_Class between
+trg_Class [0..*] role attributes_Attribute_Class_derived
+trg_Attribute [0..*] role attributes_Attribute_Class ordered
+end
+
+composition operations_Class_Operation between
+trg_Class [0..*] role operations_Class_Operation_derived
+trg_Operation [0..*] role operations_Class_Operation ordered
+end
+
+composition invariants_Class_OCLExpression between
+trg_Class [0..*] role invariants_Class_OCLExpression_derived
+trg_OCLExpression [0..*] role invariants_Class_OCLExpression ordered
+end
+
+composition classes_Class_Model between
+trg_Model [0..*] role classes_Class_Model_derived
+trg_Class [1..*] role classes_Class_Model ordered
+end
+
+composition enumerations_Enumeration_Model between
+trg_Model [0..*] role enumerations_Enumeration_Model_derived
+trg_Enumeration [0..*] role enumerations_Enumeration_Model ordered
+end
+
+composition associations_Association_Model between
+trg_Model [0..*] role associations_Association_Model_derived
+trg_Association [0..*] role associations_Association_Model ordered
+end
+
+composition type_Attribute_Type between
+trg_Attribute [0..*] role type_Attribute_Type_derived
+trg_Type [1..1] role type_Attribute_Type
+end
+
+composition parameters_Operation_Parameter between
+trg_Operation [0..*] role parameters_Operation_Parameter_derived
+trg_Parameter [0..*] role parameters_Operation_Parameter ordered
+end
+
+composition implementation_OCLExpression_Operation between
+trg_Operation [0..*] role implementation_OCLExpression_Operation_derived
+trg_OCLExpression [0..1] role implementation_OCLExpression_Operation
+end
+
+composition type_Operation_Type between
+trg_Operation [0..*] role type_Operation_Type_derived
+trg_Type [0..1] role type_Operation_Type
+end
+
+composition preCondition_OCLExpression_Operation between
+trg_Operation [0..*] role preCondition_OCLExpression_Operation_derived
+trg_OCLExpression [0..*] role preCondition_OCLExpression_Operation ordered
+end
+
+composition postCondition_OCLExpression_Operation between
+trg_Operation [0..*] role postCondition_OCLExpression_Operation_derived
+trg_OCLExpression [0..*] role postCondition_OCLExpression_Operation ordered
+end
+
+composition type_Parameter_Type between
+trg_Parameter [0..*] role type_Parameter_Type_derived
+trg_Type [1..1] role type_Parameter_Type
+end
+
+association enum_Enumeration_EnumerationType between
+trg_EnumerationType [0..*] role enum_Enumeration_EnumerationType_derived
+trg_Enumeration [1..1] role enum_Enumeration_EnumerationType
+end
+
+composition baseType_CollectionType_Type between
+trg_CollectionType [0..*] role baseType_CollectionType_Type_derived
+trg_Type [1..1] role baseType_CollectionType_Type
+end
+
+association class_Class_ReferenceType between
+trg_ReferenceType [0..*] role class_Class_ReferenceType_derived
+trg_Class [1..1] role class_Class_ReferenceType
+end
+
+composition literals_Enumeration_Literal between
+trg_Enumeration [0..*] role literals_Enumeration_Literal_derived
+trg_Literal [0..*] role literals_Enumeration_Literal ordered
+end
+
+composition role_Association_Role between
+trg_Association [0..*] role role_Association_Role_derived
+trg_Role [2..*] role role_Association_Role ordered
+end
+
+association className_Class_Role between
+trg_Role [0..*] role className_Class_Role_derived
+trg_Class [1..1] role className_Class_Role
+end

@@ -1,0 +1,31 @@
+<project name="ATL2TM" default="all">
+  
+  <target name="all" depends="it1"/>
+  
+  <target name="loadMetametamodels">
+    <atl.loadModel modelHandler="EMF" name="Ecore" metamodel="MOF" nsuri="http://www.eclipse.org/emf/2002/Ecore"/>
+    <atl.loadModel modelHandler="EMF" name="ATL" metamodel="MOF" path="metamodels/ATL/ATL.ecore" />
+  </target>	
+  
+  <target name="it1" depends="loadMetametamodels">
+   <!-- <atl.loadModel modelHandler="EMF" name="BT" metamodel="Ecore" path="models/BasicTypes.ecore" />-->
+  	<!--<atl.loadModel modelHandler="EMF" name="SRC" metamodel="Ecore" path="models/ER.ecore" />-->
+  	<atl.loadModel modelHandler="EMF" name="SRC" metamodel="Ecore" path="models/requirement.ecore" />
+    <!--<atl.loadModel modelHandler="EMF" name="DST" metamodel="Ecore" path="models/REL.ecore" />-->
+    <atl.loadModel modelHandler="EMF" name="DST" metamodel="Ecore" path="models/RequisitePro.ecore" />
+ 	<!--<atl.loadModel name="IN" metamodel="ATL" path="transformations/ER2REL_Version_1.atl">-->
+  	<atl.loadModel name="IN" metamodel="ATL" path="transformations/formF.atl">
+      <injector name="ATL" />
+    </atl.loadModel>
+    <atl.saveModel model="IN" path="models/Untyped.xmi"/>
+    <atl.launch path="transformations/AddTypes.atl" >
+     <!-- <option name="allowInterModelReferences" value="true"/>-->
+      <inmodel name="IN" model="IN"/>
+      <inmodel name="SRC" model="SRC"/>
+      <inmodel name="DST" model="DST"/>
+      <outmodel name="OUT" model="IN2" metamodel="ATL"/>
+    </atl.launch>
+    <atl.saveModel model="IN2" path="models/Typed.xmi"/>
+  </target>
+
+</project>

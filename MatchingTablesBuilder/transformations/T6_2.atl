@@ -1,0 +1,122 @@
+-- @path SimpleUML=/Tracts2ATL/metamodels/SimpleUml.ecore
+-- @path ER=/Tracts2ATL/metamodels/ER.ecore
+
+module UML2ER;
+create OUT : ER from IN : SimpleUML;
+
+--R1
+-- Type: NamedElement, Element
+-- Feature: NamedElement.name, Element.name
+rule NamedElement2Element{
+	from
+		s: SimpleUML!NamedElement
+	to
+		t: ER!Element (
+			name <- s.name	
+		)	
+}
+
+--R2
+-- Type: Package, ERModel
+-- Feature: Package.ownedElements, ERModel.entities
+rule Package extends NamedElement2Element {
+	from
+		s: SimpleUML!Package
+	to
+		t: ER!ERModel (
+			entities <- s.ownedElements	
+		)
+}
+
+--R3
+-- Type: Class, EntityType
+-- Feature: Class.ownedProperty, EntityType.featues
+rule Class extends NamedElement2Element {
+	from s: SimpleUML!Class
+	to t: ER!EntityType (
+			features <- s.ownedProperty->collect (e | thisModule.Property(e)) )}
+
+--R4
+-- Type: Property, Feature
+lazy abstract rule Property extends NamedElement2Element{
+	from s: SimpleUML!Property
+	to t: ER!Feature ()
+}
+
+--R5
+-- Type: Attribute, Property
+-- Feature: Property.primitiveType, Attribute.type
+lazy rule Attributes extends Property{
+	from s: SimpleUML!Property (not s.primitiveType.oclIsUndefined())
+	to	t: ER!Attribute (
+			type <- s.primitiveType	
+	)
+}
+
+--R6
+-- Type: Property, Reference
+-- Feature: Property.complexType, Reference.type
+lazy abstract rule References extends Property {
+	from s: SimpleUML!Property (not s.complexType.oclIsUndefined() )
+	to t: ER!Reference (
+			type <- s.complexType
+	)
+}
+
+--R7
+-- Type: Property, WeakReference
+-- Feature: Property.isContainment
+lazy rule WeakReferences extends References {
+	from s: SimpleUML!Property (not s.isContainment)
+	to t: ER!WeakReference 
+}
+
+--R8
+-- Type: Property, StrongReference
+-- Feature: Property.isContainment
+lazy rule StrongReferences extends References{
+	from s: SimpleUML!Property (s.isContainment)
+	to t: ER!StrongReference 
+}
+
+
+
+
+-- Contracts begin here...
+
+-- Type: Package, ERModel
+-- Feature: Package.name, ERModel.name
+--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name))
+
+-- Type: Package, ERModel, Class, EntityType
+-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name
+--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->
+--forAll(class | e.entities->one(entity | entity.name = class.name))))
+
+-- Type: Package, ERModel, Class, EntityType, Property, Feature
+-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.feature, Property.name, Feature.name
+--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | entity.features->forAll(f | f.name = prop.name))))))
+
+-- Type: NamedElement, Element
+--NamedElement.allInstances-> size() = Element.allInstances->size()
+
+-- Type: Package, ERModel
+--Package.allInstances->size() = ERModel.allInstances->size()
+
+-- Type: Class, EntityType
+--Class.allInstances->size() = EntityType.allInstances->size()
+
+-- Type: Property, Feature
+--Property.allInstances->size() = Feature.allInstances->size()
+
+-- Type: Package, ERModel, Class, EntityType, Property, Feature, Attribute
+-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.primitiveType, Attribute.name
+--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.primitiveType<> "" and (not prop.primitiveType.oclIsUndefined()) implies entity.features-> select(f|f.oclIsTypeOf(Attribute)) -> one(f | f.name = prop.name))))))
+
+-- Type: Package, ERModel, Class, EntityType, Property, Feature, Reference, WeakReference
+-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.complexType, Reference.name, Property.isContainment
+--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name andp.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType <> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and prop.isContainment impliesf.oclIsTypeOf(WeakReference)))))))
+
+-- Type: Package, ERModel, Class, EntityType, Property, Feature, Reference, StrongReference
+-- Feature: Package.name, ERModel.name, Package.ownedElements, EntityType.entities, Class.name, EntityType.name, Class.ownedProperty, EntityType.features, Property.name, Feature.name, Property.complexType, Reference.name, Property.isContainment
+--Package.allInstances->forAll(p | ERModel.allInstances->one(e | p.name = e.name and p.ownedElements->forAll(class | e.entities->one(entity | entity.name = class.name and class.ownedProperty->forAll(prop | prop.complexType <> null implies entity.features-> select(f|f.oclIsTypeOf(Reference)) -> one(f | f.name = prop.name and not prop.isContainment impliesf.oclIsTypeOf(StrongReference)))))))

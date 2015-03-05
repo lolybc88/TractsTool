@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ruletypesmm:Trafo xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ruletypesmm="http://ruletypesmm/1.0" name="Families2Persons">
+  <rules name="Member2Male">
+    <inTypes>src_Member</inTypes>
+    <outTypes>trg_Male</outTypes>
+    <allNavigationPaths>src_Member</allNavigationPaths>
+    <allNavigationPaths>trg_Male</allNavigationPaths>
+    <allNavigationPaths>src_Member.firstName</allNavigationPaths>
+    <allNavigationPaths>src_Member.familyName</allNavigationPaths>
+    <allNavigationPaths>trg_Male.fullName</allNavigationPaths>
+    <bindingFeatures>trg_Male.fullName</bindingFeatures>
+    <allFootPrints>src_Member</allFootPrints>
+    <allFootPrints>trg_Male</allFootPrints>
+    <allFootPrints>src_Member.firstName</allFootPrints>
+    <allFootPrints>trg_Male.fullName</allFootPrints>
+    <outFeatures>src_Member.firstName</outFeatures>
+    <outFeatures>src_Member.familyName</outFeatures>
+  </rules>
+  <rules name="Member2Female">
+    <inTypes>src_Member</inTypes>
+    <outTypes>trg_Female</outTypes>
+    <allNavigationPaths>src_Member</allNavigationPaths>
+    <allNavigationPaths>trg_Female</allNavigationPaths>
+    <allNavigationPaths>src_Member.firstName</allNavigationPaths>
+    <allNavigationPaths>src_Member.familyName</allNavigationPaths>
+    <allNavigationPaths>trg_Female.fullName</allNavigationPaths>
+    <bindingFeatures>trg_Female.fullName</bindingFeatures>
+    <allFootPrints>src_Member</allFootPrints>
+    <allFootPrints>trg_Female</allFootPrints>
+    <allFootPrints>src_Member.firstName</allFootPrints>
+    <allFootPrints>trg_Female.fullName</allFootPrints>
+    <outFeatures>src_Member.firstName</outFeatures>
+    <outFeatures>src_Member.familyName</outFeatures>
+  </rules>
+  <mms inputMM="Families"/>
+  <mms inputMM="PrimitiveTypes"/>
+  <mms outputMM="Persons"/>
+  <mms outputMM="PrimitiveTypes"/>
+</ruletypesmm:Trafo>

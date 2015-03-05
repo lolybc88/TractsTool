@@ -1,0 +1,915 @@
+model CPL
+enum trg_Direction{inout, inn, out}
+enum trg_SIPMethod{ACK, BYE, CANCEL, INVITE, NOTIFY, OPTIONS, REACK, REGISTER, REINVITE, REREGISTER, RESUBSCRIBE, SUBSCRIBE}
+enum trg_ControlMethod{deploy, undeploy, uninvite, unregister, unsubscribe}
+enum trg_PrimitiveType{void, bool, int, request, response, string, time, uri}
+enum trg_Modifier{LIFO, FIFO}
+enum trg_FunctionLocation{remote, local}
+enum trg_SIPHeader{CALL_ID, CONTACT, CSEQ, EVENT, FROM, MAX_FORWARDS, SUBSCRIPTION_STATE, TO, VIA}
+enum trg_SuccessKind{OK, ACCEPTED}
+enum trg_ClientErrorKind{ADDRESS_INCOMPLETE, AMBIGUOUS, BAD_EXTENSION, BAD_REQUEST, BUSY_HERE, CALL_OR_TRANSACTION_DOES_NOT_EXIST, EXTENSION_REQUIRED, FORBIDDEN, GONE, INTERVAL_TOO_BRIEF, LOOP_DETECTED, METHOD_NOT_ALLOWED, NOT_ACCEPTABLE_HERE, NOT_ACCEPTABLE, NOT_FOUND, PAYMENT_REQUIRED, PROXY_AUTHENTICATION_REQUIRED, REQUESTURI_TOO_LONG, REQUEST_ENTITY_TOO_LARGE, REQUEST_PENDING, REQUEST_TERMINATED, REQUEST_TIMEOUT, TEMPORARILY_UNAVAILABLE, TOO_MANY_HOPS, UNAUTHORIZED, UNDECIPHERABLE, UNSUPPORTED_MEDIA_TYPE, UNSUPPORTED_URI_SCHEME}
+enum trg_GlobalErrorKind{BUSY_EVERYWHERE, DECLINE, DOES_NOT_EXIST_ANYWHERE, NOT_ACCEPTABLE}
+enum trg_RedirectionErrorKind{ALTERNATIVE_SERVICE, MOVED_PERMANENTLY, MOVED_TEMPORARILY, MULTIPLE_CHOICES, USE_PROXY}
+enum trg_ServerErrorKind{BAD_GATEWAY, MESSAGE_TOO_LARGE, NOT_IMPLEMENTED, SERVER_INTERNAL_ERROR, SERVER_TIMEOUT, SERVICE_UNAVAILABLE, VERSION_NOT_SUPPORTED}
+
+class src_Element
+attributes
+end
+
+class src_CPL < src_Element
+attributes
+end
+
+class src_NodeContainer < src_Element
+attributes
+end
+
+class src_SubAction < src_NodeContainer
+attributes 
+ id : String
+end
+
+class src_Outgoing < src_NodeContainer
+attributes
+end
+
+class src_Incoming < src_NodeContainer
+attributes
+end
+
+class src_NotPresent < src_NodeContainer
+attributes
+end
+
+class src_Otherwise < src_NodeContainer
+attributes
+end
+
+class src_SwitchedAddress < src_NodeContainer
+attributes 
+ is : String 
+ contains : String 
+ subDomainOf : String
+end
+
+class src_SwitchedString < src_NodeContainer
+attributes 
+ is : String 
+ contains : String
+end
+
+class src_SwitchedLanguage < src_NodeContainer
+attributes 
+ matches : String
+end
+
+class src_SwitchedTime < src_NodeContainer
+attributes 
+ dtstart : String 
+ dtend : String 
+ duration : String 
+ freq : String 
+ until : String 
+ count : String 
+ interval : String 
+ bySecond : String 
+ byMinute : String 
+ byHour : String 
+ byDay : String 
+ byMonthDay : String 
+ byYearDay : String 
+ byWeekNo : String 
+ byMonth : String 
+ wkst : String 
+ bySetPos : String
+end
+
+class src_SwitchedPriority < src_NodeContainer
+attributes 
+ less : String 
+ greater : String 
+ equal : String
+end
+
+class src_Busy < src_NodeContainer
+attributes
+end
+
+class src_NoAnswer < src_NodeContainer
+attributes
+end
+
+class src_Redirection < src_NodeContainer
+attributes
+end
+
+class src_Failure < src_NodeContainer
+attributes
+end
+
+class src_Default < src_NodeContainer
+attributes
+end
+
+class src_Node < src_Element
+attributes
+end
+
+class src_Switch < src_Node
+attributes
+end
+
+class src_AddressSwitch < src_Switch
+attributes 
+ field : String 
+ subField : String
+end
+
+class src_StringSwitch < src_Switch
+attributes 
+ field : String
+end
+
+class src_LanguageSwitch < src_Switch
+attributes
+end
+
+class src_TimeSwitch < src_Switch
+attributes 
+ tzid : String 
+ tzurl : String
+end
+
+class src_PrioritySwitch < src_Switch
+attributes
+end
+
+class src_Location < src_Node, src_NodeContainer
+attributes 
+ url : String 
+ priority : String 
+ clear : String
+end
+
+class src_SubCall < src_Node
+attributes 
+ ref : String
+end
+
+class src_Action < src_Node
+attributes
+end
+
+class src_SignallingAction < src_Action
+attributes
+end
+
+class src_Proxy < src_SignallingAction
+attributes 
+ timeout : String 
+ recurse : String 
+ ordering : String
+end
+
+class src_Redirect < src_SignallingAction
+attributes 
+ permanent : String
+end
+
+class src_Reject < src_SignallingAction
+attributes 
+ status : String 
+ reason : String
+end
+
+class trg_LocatedElement
+attributes 
+ location : String 
+ commentsBefore : Sequence(String) 
+ commentsAfter : Sequence(String)
+end
+
+class trg_Program < trg_LocatedElement
+attributes
+end
+
+class trg_Service < trg_LocatedElement
+attributes 
+ name : String
+end
+
+class trg_Session < trg_LocatedElement
+attributes
+end
+
+class trg_Registration < trg_Session
+attributes
+end
+
+class trg_Dialog < trg_Session
+attributes
+end
+
+class trg_Event < trg_Session
+attributes 
+ eventId : String
+end
+
+class trg_Method < trg_Session
+attributes 
+ direction : trg_Direction
+end
+
+class trg_Argument < trg_VariableDeclaration
+attributes
+end
+
+class trg_MethodName < trg_LocatedElement
+attributes
+end
+
+class trg_SIPMethodName < trg_MethodName
+attributes 
+ name : trg_SIPMethod
+end
+
+class trg_ControlMethodName < trg_MethodName
+attributes 
+ name : trg_ControlMethod
+end
+
+class trg_Branch < trg_LocatedElement
+attributes
+end
+
+class trg_DefaultBranch < trg_Branch
+attributes
+end
+
+class trg_NamedBranch < trg_Branch
+attributes 
+ name : Sequence(String)
+end
+
+class trg_TypeExpression < trg_LocatedElement
+attributes
+end
+
+class trg_SimpleType < trg_TypeExpression
+attributes 
+ type : trg_PrimitiveType
+end
+
+class trg_SequenceType < trg_TypeExpression
+attributes 
+ modifier : trg_Modifier 
+ type : trg_PrimitiveType 
+ size : Integer
+end
+
+class trg_DefinedType < trg_TypeExpression
+attributes 
+ typeName : String
+end
+
+class trg_Declaration < trg_LocatedElement
+attributes 
+ name : String
+end
+
+class trg_VariableDeclaration < trg_Declaration
+attributes
+end
+
+class trg_FunctionDeclaration < trg_Declaration
+attributes
+end
+
+class trg_RemoteFunctionDeclaration < trg_FunctionDeclaration
+attributes 
+ functionLocation : trg_FunctionLocation
+end
+
+class trg_LocalFunctionDeclaration < trg_FunctionDeclaration
+attributes
+end
+
+class trg_StructureDeclaration < trg_Declaration
+attributes
+end
+
+class trg_StructureProperty < trg_LocatedElement
+attributes 
+ name : String
+end
+
+class trg_FunctionCall < trg_LocatedElement
+attributes
+end
+
+class trg_Statement < trg_LocatedElement
+attributes
+end
+
+class trg_CompoundStat < trg_Statement
+attributes
+end
+
+class trg_SetStat < trg_Statement
+attributes
+end
+
+class trg_DeclarationStat < trg_Statement
+attributes
+end
+
+class trg_ReturnStat < trg_Statement
+attributes
+end
+
+class trg_IfStat < trg_Statement
+attributes
+end
+
+class trg_WhenStat < trg_Statement
+attributes
+end
+
+class trg_ForeachStat < trg_Statement
+attributes 
+ iteratorName : String
+end
+
+class trg_SelectStat < trg_Statement
+attributes
+end
+
+class trg_FunctionCallStat < trg_Statement
+attributes
+end
+
+class trg_ContinueStat < trg_Statement
+attributes
+end
+
+class trg_BreakStat < trg_Statement
+attributes
+end
+
+class trg_PushStat < trg_Statement
+attributes
+end
+
+class trg_WhenHeader < trg_VariableDeclaration
+attributes 
+ headerId : String
+end
+
+class trg_SelectMember < trg_LocatedElement
+attributes
+end
+
+class trg_SelectDefault < trg_SelectMember
+attributes
+end
+
+class trg_SelectCase < trg_SelectMember
+attributes
+end
+
+class trg_Expression < trg_LocatedElement
+attributes
+end
+
+class trg_ConstantExp < trg_Expression
+attributes
+end
+
+class trg_OperatorExp < trg_Expression
+attributes 
+ opName : String
+end
+
+class trg_ForwardExp < trg_Expression
+attributes 
+ isParallel : Boolean
+end
+
+class trg_WithExp < trg_Expression
+attributes
+end
+
+class trg_BlockExp < trg_Expression
+attributes
+end
+
+class trg_ReasonExp < trg_Expression
+attributes
+end
+
+class trg_BODYExp < trg_Expression
+attributes
+end
+
+class trg_RequestURIExp < trg_Expression
+attributes
+end
+
+class trg_PopExp < trg_Expression
+attributes
+end
+
+class trg_FunctionCallExp < trg_Expression
+attributes
+end
+
+class trg_Place < trg_Expression
+attributes
+end
+
+class trg_SIPHeaderPlace < trg_Place
+attributes 
+ header : trg_SIPHeader
+end
+
+class trg_VariablePlace < trg_Place
+attributes
+end
+
+class trg_PropertyCallPlace < trg_VariablePlace
+attributes 
+ propName : String
+end
+
+class trg_Variable < trg_VariablePlace
+attributes
+end
+
+class trg_MessageField < trg_LocatedElement
+attributes
+end
+
+class trg_ReasonMessageField < trg_MessageField
+attributes
+end
+
+class trg_HeadedMessageField < trg_MessageField
+attributes 
+ headerId : String
+end
+
+class trg_Constant < trg_LocatedElement
+attributes
+end
+
+class trg_BooleanConstant < trg_Constant
+attributes 
+ value : Boolean
+end
+
+class trg_IntegerConstant < trg_Constant
+attributes 
+ value : Integer
+end
+
+class trg_StringConstant < trg_Constant
+attributes 
+ value : String
+end
+
+class trg_URIConstant < trg_Constant
+attributes 
+ uri : String
+end
+
+class trg_SequenceConstant < trg_Constant
+attributes
+end
+
+class trg_ResponseConstant < trg_Constant
+attributes
+end
+
+class trg_Response < trg_LocatedElement
+attributes
+end
+
+class trg_SuccessResponse < trg_Response
+attributes 
+ successKind : trg_SuccessKind
+end
+
+class trg_ErrorResponse < trg_Response
+attributes
+end
+
+class trg_ClientErrorResponse < trg_ErrorResponse
+attributes 
+ errorKind : trg_ClientErrorKind
+end
+
+class trg_GlobalErrorResponse < trg_ErrorResponse
+attributes 
+ errorKind : trg_GlobalErrorKind
+end
+
+class trg_RedirectionErrorResponse < trg_ErrorResponse
+attributes 
+ errorKind : trg_RedirectionErrorKind
+end
+
+class trg_ServerErrorResponse < trg_ErrorResponse
+attributes 
+ errorKind : trg_ServerErrorKind
+end
+
+
+composition src_subActions_CPL_SubAction between
+src_CPL [0..*] role subActions_CPL_SubAction_derived
+src_SubAction [0..*] role subActions_CPL_SubAction ordered
+end
+
+composition src_outgoing_CPL_Outgoing between
+src_CPL [0..*] role outgoing_CPL_Outgoing_derived
+src_Outgoing [0..1] role outgoing_CPL_Outgoing
+end
+
+composition src_incoming_CPL_Incoming between
+src_CPL [0..*] role incoming_CPL_Incoming_derived
+src_Incoming [0..1] role incoming_CPL_Incoming
+end
+
+composition src_contents_Node_NodeContainer between
+src_NodeContainer [0..*] role contents_Node_NodeContainer_derived
+src_Node [0..1] role contents_Node_NodeContainer
+end
+
+composition src_notPresent_NotPresent_Switch between
+src_Switch [0..*] role notPresent_NotPresent_Switch_derived
+src_NotPresent [0..1] role notPresent_NotPresent_Switch
+end
+
+composition src_otherwise_Otherwise_Switch between
+src_Switch [0..*] role otherwise_Otherwise_Switch_derived
+src_Otherwise [0..1] role otherwise_Otherwise_Switch
+end
+
+composition src_addresses_AddressSwitch_SwitchedAddress between
+src_AddressSwitch [0..*] role addresses_AddressSwitch_SwitchedAddress_derived
+src_SwitchedAddress [0..*] role addresses_AddressSwitch_SwitchedAddress ordered
+end
+
+composition src_strings_StringSwitch_SwitchedString between
+src_StringSwitch [0..*] role strings_StringSwitch_SwitchedString_derived
+src_SwitchedString [0..*] role strings_StringSwitch_SwitchedString ordered
+end
+
+composition src_languages_LanguageSwitch_SwitchedLanguage between
+src_LanguageSwitch [0..*] role languages_LanguageSwitch_SwitchedLanguage_derived
+src_SwitchedLanguage [0..*] role languages_LanguageSwitch_SwitchedLanguage ordered
+end
+
+composition src_times_SwitchedTime_TimeSwitch between
+src_TimeSwitch [0..*] role times_SwitchedTime_TimeSwitch_derived
+src_SwitchedTime [0..*] role times_SwitchedTime_TimeSwitch ordered
+end
+
+composition src_priorities_PrioritySwitch_SwitchedPriority between
+src_PrioritySwitch [0..*] role priorities_PrioritySwitch_SwitchedPriority_derived
+src_SwitchedPriority [0..*] role priorities_PrioritySwitch_SwitchedPriority ordered
+end
+
+composition src_busy_Busy_Proxy between
+src_Proxy [0..*] role busy_Busy_Proxy_derived
+src_Busy [0..1] role busy_Busy_Proxy
+end
+
+composition src_noAnswer_NoAnswer_Proxy between
+src_Proxy [0..*] role noAnswer_NoAnswer_Proxy_derived
+src_NoAnswer [0..1] role noAnswer_NoAnswer_Proxy
+end
+
+composition src_redirection_Proxy_Redirection between
+src_Proxy [0..*] role redirection_Proxy_Redirection_derived
+src_Redirection [0..1] role redirection_Proxy_Redirection
+end
+
+composition src_failure_Failure_Proxy between
+src_Proxy [0..*] role failure_Failure_Proxy_derived
+src_Failure [0..1] role failure_Failure_Proxy
+end
+
+composition src_default_Default_Proxy between
+src_Proxy [0..*] role default_Default_Proxy_derived
+src_Default [0..1] role default_Default_Proxy
+end
+
+composition trg_service_Program_Service between
+trg_Program [0..*] role service_Program_Service_derived
+trg_Service [1..1] role service_Program_Service
+end
+
+composition trg_declarations_Declaration_Service between
+trg_Service [0..*] role declarations_Declaration_Service_derived
+trg_Declaration [0..*] role declarations_Declaration_Service ordered
+end
+
+composition trg_sessions_Service_Session between
+trg_Service [0..*] role sessions_Service_Session_derived
+trg_Session [0..*] role sessions_Service_Session ordered
+end
+
+composition trg_declarations_Declaration_Registration between
+trg_Registration [0..*] role declarations_Declaration_Registration_derived
+trg_Declaration [0..*] role declarations_Declaration_Registration ordered
+end
+
+composition trg_sessions_Registration_Session between
+trg_Registration [0..*] role sessions_Registration_Session_derived
+trg_Session [0..*] role sessions_Registration_Session ordered
+end
+
+composition trg_declarations_Declaration_Dialog between
+trg_Dialog [0..*] role declarations_Declaration_Dialog_derived
+trg_Declaration [0..*] role declarations_Declaration_Dialog ordered
+end
+
+composition trg_methods_Dialog_Method between
+trg_Dialog [0..*] role methods_Dialog_Method_derived
+trg_Method [1..*] role methods_Dialog_Method ordered
+end
+
+composition trg_declarations_Declaration_Event between
+trg_Event [0..*] role declarations_Declaration_Event_derived
+trg_Declaration [0..*] role declarations_Declaration_Event ordered
+end
+
+composition trg_methods_Event_Method between
+trg_Event [0..*] role methods_Event_Method_derived
+trg_Method [1..*] role methods_Event_Method ordered
+end
+
+composition trg_type_Method_TypeExpression between
+trg_Method [0..*] role type_Method_TypeExpression_derived
+trg_TypeExpression [1..1] role type_Method_TypeExpression
+end
+
+composition trg_methodName_Method_MethodName between
+trg_Method [0..*] role methodName_Method_MethodName_derived
+trg_MethodName [1..1] role methodName_Method_MethodName
+end
+
+composition trg_arguments_Argument_Method between
+trg_Method [0..*] role arguments_Argument_Method_derived
+trg_Argument [0..*] role arguments_Argument_Method ordered
+end
+
+composition trg_statements_Method_Statement between
+trg_Method [0..*] role statements_Method_Statement_derived
+trg_Statement [1..*] role statements_Method_Statement ordered
+end
+
+composition trg_branches_Branch_Method between
+trg_Method [0..*] role branches_Branch_Method_derived
+trg_Branch [1..*] role branches_Branch_Method ordered
+end
+
+composition trg_statements_Branch_Statement between
+trg_Branch [0..*] role statements_Branch_Statement_derived
+trg_Statement [1..*] role statements_Branch_Statement ordered
+end
+
+composition trg_type_TypeExpression_VariableDeclaration between
+trg_VariableDeclaration [0..*] role type_TypeExpression_VariableDeclaration_derived
+trg_TypeExpression [1..1] role type_TypeExpression_VariableDeclaration
+end
+
+composition trg_initExp_Expression_VariableDeclaration between
+trg_VariableDeclaration [0..*] role initExp_Expression_VariableDeclaration_derived
+trg_Expression [0..1] role initExp_Expression_VariableDeclaration
+end
+
+composition trg_returnType_FunctionDeclaration_TypeExpression between
+trg_FunctionDeclaration [0..*] role returnType_FunctionDeclaration_TypeExpression_derived
+trg_TypeExpression [1..1] role returnType_FunctionDeclaration_TypeExpression
+end
+
+composition trg_arguments_Argument_FunctionDeclaration between
+trg_FunctionDeclaration [0..*] role arguments_Argument_FunctionDeclaration_derived
+trg_Argument [0..*] role arguments_Argument_FunctionDeclaration ordered
+end
+
+composition trg_statements_LocalFunctionDeclaration_Statement between
+trg_LocalFunctionDeclaration [0..*] role statements_LocalFunctionDeclaration_Statement_derived
+trg_Statement [1..*] role statements_LocalFunctionDeclaration_Statement ordered
+end
+
+composition trg_properties_Argument_StructureDeclaration between
+trg_StructureDeclaration [0..*] role properties_Argument_StructureDeclaration_derived
+trg_Argument [1..*] role properties_Argument_StructureDeclaration ordered
+end
+
+composition trg_type_StructureProperty_TypeExpression between
+trg_StructureProperty [0..*] role type_StructureProperty_TypeExpression_derived
+trg_TypeExpression [1..1] role type_StructureProperty_TypeExpression
+end
+
+association trg_function_FunctionCall_FunctionDeclaration between
+trg_FunctionCall [0..*] role function_FunctionCall_FunctionDeclaration_derived
+trg_FunctionDeclaration [1..1] role function_FunctionCall_FunctionDeclaration
+end
+
+composition trg_parameters_Expression_FunctionCall between
+trg_FunctionCall [0..*] role parameters_Expression_FunctionCall_derived
+trg_Expression [0..*] role parameters_Expression_FunctionCall ordered
+end
+
+composition trg_statements_CompoundStat_Statement between
+trg_CompoundStat [0..*] role statements_CompoundStat_Statement_derived
+trg_Statement [1..*] role statements_CompoundStat_Statement
+end
+
+composition trg_target_Place_SetStat between
+trg_SetStat [0..*] role target_Place_SetStat_derived
+trg_Place [1..1] role target_Place_SetStat
+end
+
+composition trg_setValue_Expression_SetStat between
+trg_SetStat [0..*] role setValue_Expression_SetStat_derived
+trg_Expression [1..1] role setValue_Expression_SetStat
+end
+
+composition trg_declaration_Declaration_DeclarationStat between
+trg_DeclarationStat [0..*] role declaration_Declaration_DeclarationStat_derived
+trg_Declaration [1..1] role declaration_Declaration_DeclarationStat
+end
+
+composition trg_returnedValue_Expression_ReturnStat between
+trg_ReturnStat [0..*] role returnedValue_Expression_ReturnStat_derived
+trg_Expression [0..1] role returnedValue_Expression_ReturnStat
+end
+
+association trg_branch_NamedBranch_ReturnStat between
+trg_ReturnStat [0..*] role branch_NamedBranch_ReturnStat_derived
+trg_NamedBranch [0..1] role branch_NamedBranch_ReturnStat
+end
+
+composition trg_condition_Expression_IfStat between
+trg_IfStat [0..*] role condition_Expression_IfStat_derived
+trg_Expression [1..1] role condition_Expression_IfStat
+end
+
+composition trg_thenStatements_IfStat_Statement between
+trg_IfStat [0..*] role thenStatements_IfStat_Statement_derived
+trg_Statement [1..*] role thenStatements_IfStat_Statement ordered
+end
+
+composition trg_elseStatements_IfStat_Statement between
+trg_IfStat [0..*] role elseStatements_IfStat_Statement_derived
+trg_Statement [0..*] role elseStatements_IfStat_Statement ordered
+end
+
+composition trg_idExp_Variable_WhenStat between
+trg_WhenStat [0..*] role idExp_Variable_WhenStat_derived
+trg_Variable [1..1] role idExp_Variable_WhenStat
+end
+
+composition trg_whenHeaders_WhenHeader_WhenStat between
+trg_WhenStat [0..*] role whenHeaders_WhenHeader_WhenStat_derived
+trg_WhenHeader [1..*] role whenHeaders_WhenHeader_WhenStat ordered
+end
+
+composition trg_statements_Statement_WhenStat between
+trg_WhenStat [0..*] role statements_Statement_WhenStat_derived
+trg_Statement [1..*] role statements_Statement_WhenStat ordered
+end
+
+composition trg_elseStatements_Statement_WhenStat between
+trg_WhenStat [0..*] role elseStatements_Statement_WhenStat_derived
+trg_Statement [0..*] role elseStatements_Statement_WhenStat ordered
+end
+
+composition trg_sequenceExp_Expression_ForeachStat between
+trg_ForeachStat [0..*] role sequenceExp_Expression_ForeachStat_derived
+trg_Expression [1..1] role sequenceExp_Expression_ForeachStat
+end
+
+composition trg_statements_ForeachStat_Statement between
+trg_ForeachStat [0..*] role statements_ForeachStat_Statement_derived
+trg_Statement [1..*] role statements_ForeachStat_Statement ordered
+end
+
+composition trg_matchedExp_Expression_SelectStat between
+trg_SelectStat [0..*] role matchedExp_Expression_SelectStat_derived
+trg_Expression [1..1] role matchedExp_Expression_SelectStat
+end
+
+composition trg_selectCases_SelectCase_SelectStat between
+trg_SelectStat [0..*] role selectCases_SelectCase_SelectStat_derived
+trg_SelectCase [0..*] role selectCases_SelectCase_SelectStat ordered
+end
+
+composition trg_selectDefault_SelectDefault_SelectStat between
+trg_SelectStat [0..*] role selectDefault_SelectDefault_SelectStat_derived
+trg_SelectDefault [0..1] role selectDefault_SelectDefault_SelectStat
+end
+
+composition trg_functionCall_FunctionCall_FunctionCallStat between
+trg_FunctionCallStat [0..*] role functionCall_FunctionCall_FunctionCallStat_derived
+trg_FunctionCall [1..1] role functionCall_FunctionCall_FunctionCallStat
+end
+
+composition trg_target_Place_PushStat between
+trg_PushStat [0..*] role target_Place_PushStat_derived
+trg_Place [1..1] role target_Place_PushStat
+end
+
+composition trg_pushedValue_Expression_PushStat between
+trg_PushStat [0..*] role pushedValue_Expression_PushStat_derived
+trg_Expression [1..1] role pushedValue_Expression_PushStat
+end
+
+composition trg_value_Constant_WhenHeader between
+trg_WhenHeader [0..*] role value_Constant_WhenHeader_derived
+trg_Constant [0..1] role value_Constant_WhenHeader
+end
+
+composition trg_statements_SelectMember_Statement between
+trg_SelectMember [0..*] role statements_SelectMember_Statement_derived
+trg_Statement [0..*] role statements_SelectMember_Statement ordered
+end
+
+composition trg_values_Constant_SelectCase between
+trg_SelectCase [0..*] role values_Constant_SelectCase_derived
+trg_Constant [1..*] role values_Constant_SelectCase ordered
+end
+
+composition trg_value_Constant_ConstantExp between
+trg_ConstantExp [0..*] role value_Constant_ConstantExp_derived
+trg_Constant [1..1] role value_Constant_ConstantExp
+end
+
+composition trg_leftExp_Expression_OperatorExp between
+trg_OperatorExp [0..*] role leftExp_Expression_OperatorExp_derived
+trg_Expression [1..1] role leftExp_Expression_OperatorExp
+end
+
+composition trg_rightExp_Expression_OperatorExp between
+trg_OperatorExp [0..*] role rightExp_Expression_OperatorExp_derived
+trg_Expression [0..1] role rightExp_Expression_OperatorExp
+end
+
+composition trg_exp_Expression_ForwardExp between
+trg_ForwardExp [0..*] role exp_Expression_ForwardExp_derived
+trg_Expression [0..1] role exp_Expression_ForwardExp
+end
+
+composition trg_exp_Expression_WithExp between
+trg_WithExp [0..*] role exp_Expression_WithExp_derived
+trg_Expression [1..1] role exp_Expression_WithExp
+end
+
+composition trg_msgFields_MessageField_WithExp between
+trg_WithExp [0..*] role msgFields_MessageField_WithExp_derived
+trg_MessageField [1..*] role msgFields_MessageField_WithExp ordered
+end
+
+composition trg_exp_BlockExp_Expression between
+trg_BlockExp [0..*] role exp_BlockExp_Expression_derived
+trg_Expression [1..1] role exp_BlockExp_Expression
+end
+
+composition trg_source_Place_PopExp between
+trg_PopExp [0..*] role source_Place_PopExp_derived
+trg_Place [1..1] role source_Place_PopExp
+end
+
+composition trg_functionCall_FunctionCall_FunctionCallExp between
+trg_FunctionCallExp [0..*] role functionCall_FunctionCall_FunctionCallExp_derived
+trg_FunctionCall [1..1] role functionCall_FunctionCall_FunctionCallExp
+end
+
+composition trg_source_PropertyCallPlace_VariablePlace between
+trg_PropertyCallPlace [0..*] role source_PropertyCallPlace_VariablePlace_derived
+trg_VariablePlace [1..1] role source_PropertyCallPlace_VariablePlace
+end
+
+association trg_source_Declaration_Variable between
+trg_Variable [0..*] role source_Declaration_Variable_derived
+trg_Declaration [1..1] role source_Declaration_Variable
+end
+
+composition trg_exp_Expression_MessageField between
+trg_MessageField [0..*] role exp_Expression_MessageField_derived
+trg_Expression [1..1] role exp_Expression_MessageField
+end
+
+composition trg_values_Constant_SequenceConstant between
+trg_SequenceConstant [0..*] role values_Constant_SequenceConstant_derived
+trg_Constant [0..*] role values_Constant_SequenceConstant ordered
+end
+
+composition trg_response_Response_ResponseConstant between
+trg_ResponseConstant [0..*] role response_Response_ResponseConstant_derived
+trg_Response [1..1] role response_Response_ResponseConstant
+end
