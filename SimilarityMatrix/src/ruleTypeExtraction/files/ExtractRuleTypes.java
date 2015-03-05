@@ -144,14 +144,14 @@ public class ExtractRuleTypes {
 	public void loadModels(String inModelPath, String in_srcModelPath, String in_trgModelPath) throws ATLCoreException {
 		ModelFactory factory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
-	 	IReferenceModel mm_srcMetamodel = factory.newReferenceModel();
-		injector.inject(mm_srcMetamodel, getMetamodelUri("MM_Src"));
 	 	IReferenceModel mm_outMetamodel = factory.newReferenceModel();
 		injector.inject(mm_outMetamodel, getMetamodelUri("MM_Out"));
 	 	IReferenceModel mm_atlMetamodel = factory.newReferenceModel();
 		injector.inject(mm_atlMetamodel, getMetamodelUri("MM_ATL"));
 	 	IReferenceModel mm_trgMetamodel = factory.newReferenceModel();
 		injector.inject(mm_trgMetamodel, getMetamodelUri("MM_Trg"));
+	 	IReferenceModel mm_srcMetamodel = factory.newReferenceModel();
+		injector.inject(mm_srcMetamodel, getMetamodelUri("MM_Src"));
 		this.inModel = factory.newModel(mm_atlMetamodel);
 		injector.inject(inModel, inModelPath);
 		this.in_srcModel = factory.newModel(mm_srcMetamodel);
